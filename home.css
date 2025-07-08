@@ -1,0 +1,41 @@
+*{
+    padding: 40px;
+    font-family: "Inter", sans-serif;
+}
+
+body{
+     background: #0A0A0A;
+background: linear-gradient(90deg, rgba(10, 10, 10, 1) 0%, rgba(38, 38, 38, 1) 36%, rgba(115, 115, 115, 1) 100%);
+
+}
+.card img {
+    width: 700px;
+    height: 500px;
+    float: right;
+    margin-top: 100px;
+}
+
+.card-isi h3{
+    font-size: 70px;
+    color: white;
+
+}
+
+.card-isi p{
+    font-size: 19px;
+    margin-top: -5rem;
+    width: 750px;
+    color: white;
+}
+.atas a{
+    .card-isi .baca {
+    display: inline-block;
+    padding: 8px;
+    background-color: #333;
+    text-decoration: none;
+    border-radius: 20px;
+    margin-top: 16px;
+    color: white;
+    font-size: 15px;
+   }
+}
