@@ -191,12 +191,21 @@ function Navbar({ setIsCommandOpen }) {
               </MagneticButton>
             </div>
 
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 rounded-xl border-none active:scale-90 transition-transform"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            <div className="md:hidden flex items-center gap-3">
+              <button
+                onClick={() => setIsCommandOpen(true)}
+                className="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white bg-white/5 rounded-xl border-none active:scale-90 transition-all"
+                title="Terminal"
+              >
+                <TerminalIcon size={18} />
+              </button>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="w-10 h-10 flex items-center justify-center text-white bg-white/5 rounded-xl border-none active:scale-90 transition-transform"
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
