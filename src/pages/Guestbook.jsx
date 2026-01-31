@@ -29,7 +29,7 @@ const MessageCard = ({ msg }) => {
                         <h4 className="font-bold text-white truncate">{msg.name}</h4>
                         <span className="text-[10px] font-medium text-white/20 whitespace-nowrap">{date}</span>
                     </div>
-                    <p className="text-white/60 text-sm leading-relaxed break-words">
+                    <p className="text-white/60 text-sm leading-relaxed wrap-break-word">
                         {msg.message}
                     </p>
                 </div>
