@@ -5,6 +5,8 @@ import { Menu, X, Github, Instagram, Mail } from 'lucide-react';
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
+import Services from './pages/Services';
+import Experience from './pages/Experience';
 
 function BackgroundSystem() {
   return (
@@ -129,29 +131,32 @@ function Navbar() {
             </div>
 
             <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((item) => (
-                item === 'Work' ? (
-                  <Link key={item} to="/projects" className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
-                    {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
-                  </Link>
-                ) : isHome ? (
-                  <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
+              {navLinks.map((item) => {
+                const linkMap = {
+                  'Work': '/projects',
+                  'Services': '/services',
+                  'Experience': '/experience',
+                  'Contact': '/#contact'
+                };
+                const to = linkMap[item] || '/';
+
+                return item === 'Contact' && isHome ? (
+                  <a key={item} href="#contact" className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
                     {item}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
                   </a>
                 ) : (
-                  <Link key={item} to={`/#${item.toLowerCase()}`} className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
+                  <Link key={item} to={to} className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
                     {item}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
                   </Link>
-                )
-              ))}
+                );
+              })}
               <Link to="/about" className={`text-sm font-medium transition-colors relative group border-none ${location.pathname === '/about' ? 'text-white' : 'text-white/50 hover:text-white'}`}>
                 About
                 <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === '/about' ? 'w-full' : 'w-0 group-hover:w-full'}`} />
               </Link>
-              <button className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all">Let's Chat</button>
+              <a href="mailto:arroudhilanfi01@gmail.com" className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all">Let's Chat</a>
             </div>
 
             <button
@@ -175,20 +180,19 @@ function Navbar() {
             className="fixed inset-0 z-[49] bg-[#030303]/95 backdrop-blur-2xl md:hidden flex flex-col pt-32 px-10"
           >
             <div className="flex flex-col gap-8">
-              {navLinks.map((item) => (
-                item === 'Work' ? (
-                  <Link
-                    key={item}
-                    to="/projects"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-4xl font-bold tracking-tighter text-white/40 hover:text-white transition-colors border-none"
-                  >
-                    {item}
-                  </Link>
-                ) : isHome ? (
+              {navLinks.map((item) => {
+                const linkMap = {
+                  'Work': '/projects',
+                  'Services': '/services',
+                  'Experience': '/experience',
+                  'Contact': '/#contact'
+                };
+                const to = linkMap[item] || '/';
+
+                return item === 'Contact' && isHome ? (
                   <a
                     key={item}
-                    href={`#${item.toLowerCase()}`}
+                    href="#contact"
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-4xl font-bold tracking-tighter text-white/40 hover:text-white transition-colors border-none"
                   >
@@ -197,14 +201,14 @@ function Navbar() {
                 ) : (
                   <Link
                     key={item}
-                    to={`/#${item.toLowerCase()}`}
+                    to={to}
                     onClick={() => setMobileMenuOpen(false)}
                     className="text-4xl font-bold tracking-tighter text-white/40 hover:text-white transition-colors border-none"
                   >
                     {item}
                   </Link>
-                )
-              ))}
+                );
+              })}
               <Link
                 to="/about"
                 onClick={() => setMobileMenuOpen(false)}
@@ -221,10 +225,14 @@ function Navbar() {
 
             <div className="mt-auto pb-12 flex gap-6">
               <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors border-none">
-                <Instagram />
+                <Instagram size={28} />
               </a>
-              <Github className="text-white/20 hover:text-white transition-colors" />
-              <Mail className="text-white/20 hover:text-white transition-colors" />
+              <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors border-none">
+                <Github size={28} />
+              </a>
+              <a href="mailto:arroudhilanfi01@gmail.com" className="text-white/20 hover:text-white transition-colors border-none">
+                <Mail size={28} />
+              </a>
             </div>
           </motion.div>
         )}
@@ -247,8 +255,8 @@ function Footer() {
           <div>
             <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Explore</p>
             <ul className="space-y-4 text-sm font-medium text-white/50">
-              <li><Link to="/" className="hover:text-white transition-colors border-none">Home</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors border-none">About</Link></li>
+              <li><Link to="/services" className="hover:text-white transition-colors border-none">Services</Link></li>
+              <li><Link to="/experience" className="hover:text-white transition-colors border-none">Experience</Link></li>
               <li><Link to="/projects" className="hover:text-white transition-colors border-none">Work</Link></li>
             </ul>
           </div>
@@ -256,8 +264,7 @@ function Footer() {
             <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Socials</p>
             <ul className="space-y-4 text-sm font-medium text-white/50">
               <li><a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors border-none">Instagram</a></li>
-              <li><a href="#" className="hover:text-white transition-colors border-none">LinkedIn</a></li>
-              <li><a href="#" className="hover:text-white transition-colors border-none">GitHub</a></li>
+              <li><a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors border-none">GitHub</a></li>
             </ul>
           </div>
           <div className="col-span-2 md:col-span-1">
@@ -298,6 +305,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/experience" element={<Experience />} />
           </Routes>
         </AnimatePresence>
         <Footer />

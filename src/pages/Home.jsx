@@ -157,31 +157,34 @@ function ProjectModal({ project, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-xl bg-black/80"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
             onClick={onClose}
         >
             <motion.div
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="glass-card max-w-2xl w-full overflow-hidden"
+                className="glass-card max-w-2xl w-full overflow-hidden border-white/10"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="aspect-video relative">
+                <div className="aspect-video relative bg-zinc-950">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
-                    <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none">
-                        <X size={20} />
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 w-12 h-12 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none"
+                    >
+                        <X size={24} />
                     </button>
                 </div>
-                <div className="p-8">
+                <div className="p-6 md:p-10 bg-zinc-900">
                     <div className="flex items-center gap-3 mb-4">
-                        <span className="text-xs font-black uppercase tracking-widest text-blue-500 py-1 px-3 bg-blue-500/10 rounded-lg">{project.category}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 py-1 px-3 bg-blue-500/10 rounded-lg">{project.category}</span>
                     </div>
-                    <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
-                    <p className="text-white/50 mb-8 leading-relaxed italic border-l-2 border-white/10 pl-6">
+                    <h3 className="text-2xl md:text-4xl font-bold mb-4 tracking-tighter">{project.title}</h3>
+                    <p className="text-white/50 mb-8 leading-relaxed italic border-l-2 border-white/10 pl-6 text-sm md:text-base">
                         {project.desc}
                     </p>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-2">
                         {project.tech.map(t => (
                             <span key={t} className="text-[10px] font-bold uppercase tracking-widest py-1.5 px-3 bg-white/5 rounded-lg border border-white/5">{t}</span>
                         ))}
@@ -251,7 +254,7 @@ export default function Home() {
                 </motion.div>
 
                 {/* Trusted/Tools Cloud */}
-                <div className="mt-24 w-full max-w-5xl">
+                <div id="services" className="mt-24 w-full max-w-5xl scroll-mt-32">
                     <p className="text-center text-xs font-bold text-white/30 uppercase tracking-[0.3em] mb-10">Built with Industrial Standards</p>
                     <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-700">
                         {partners.map((p) => (
@@ -480,7 +483,7 @@ export default function Home() {
                         <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">Ready to start a <br /> <span className="text-linear">project?</span></h2>
                         <p className="text-white/50 text-lg mb-12 max-w-md mx-auto">Let's collaborate on something extraordinary. Available for remote work and collaborations.</p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <a href="mailto:hello@arroudhil.com" className="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all border-none">
+                            <a href="mailto:arroudhilanfi01@gmail.com" className="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all border-none">
                                 Get in Touch
                             </a>
                             <div className="mt-12 md:hidden">
@@ -489,9 +492,9 @@ export default function Home() {
                                 </Link>
                             </div>
                             <div className="flex gap-4">
-                                <button className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
+                                <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
                                     <Github />
-                                </button>
+                                </a>
                                 <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
                                     <Instagram />
                                 </a>

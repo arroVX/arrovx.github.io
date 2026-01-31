@@ -115,8 +115,8 @@ export default function Projects() {
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
                                 className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none ${selectedCategory === cat
-                                        ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-                                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                    ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                                    : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
                                     }`}
                             >
                                 {cat}
@@ -155,29 +155,32 @@ export default function Projects() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/80"
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
-                            className="glass-card max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]"
+                            className="glass-card max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh] border-white/10"
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="relative flex-1 overflow-hidden min-h-[300px]">
+                            <div className="relative flex-1 overflow-hidden min-h-[300px] bg-zinc-950">
                                 <img
                                     src={selectedProject.image}
                                     alt={selectedProject.title}
-                                    className="w-full h-full object-contain bg-black"
+                                    className="w-full h-full object-contain bg-zinc-950"
                                 />
-                                <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none">
-                                    <X size={20} />
+                                <button
+                                    onClick={() => setSelectedProject(null)}
+                                    className="absolute top-4 right-4 w-12 h-12 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none"
+                                >
+                                    <X size={24} />
                                 </button>
                             </div>
-                            <div className="p-6 md:p-8 bg-zinc-900/50 backdrop-blur-md border-t border-white/5">
+                            <div className="p-6 md:p-8 bg-zinc-900 border-t border-white/5">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 py-1 px-3 bg-blue-500/10 rounded-lg mb-4 inline-block">{selectedProject.category}</span>
-                                <h3 className="text-2xl md:text-3xl font-bold mb-4">{selectedProject.title}</h3>
+                                <h3 className="text-2xl md:text-3xl font-bold mb-4 tracking-tighter">{selectedProject.title}</h3>
                                 <p className="text-white/50 text-sm mb-6 leading-relaxed italic border-l-2 border-white/10 pl-4">
                                     {selectedProject.desc}
                                 </p>
