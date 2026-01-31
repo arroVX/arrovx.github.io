@@ -7,6 +7,7 @@ import About from './pages/About';
 import Projects from './pages/Projects';
 import Services from './pages/Services';
 import Experience from './pages/Experience';
+import Contact from './pages/Contact';
 import CommandCenter from './components/CommandCenter';
 import { Terminal as TerminalIcon, Search } from 'lucide-react';
 import { useMagnetic } from './utils/animations';
@@ -156,16 +157,11 @@ function Navbar({ setIsCommandOpen }) {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
-                  'Contact': '/#contact'
+                  'Contact': '/contact'
                 };
                 const to = linkMap[item] || '/';
 
-                return item === 'Contact' && isHome ? (
-                  <a key={item} href="#contact" className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
-                    {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
-                  </a>
-                ) : (
+                return (
                   <Link key={item} to={to} className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
                     {item}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
@@ -187,7 +183,7 @@ function Navbar({ setIsCommandOpen }) {
                 </button>
               </MagneticButton>
               <MagneticButton>
-                <a href="mailto:arroudhilanfi01@gmail.com" className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all inline-block">Let's Chat</a>
+                <Link to="/contact" className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all inline-block text-center">Let's Chat</Link>
               </MagneticButton>
             </div>
 
@@ -226,20 +222,11 @@ function Navbar({ setIsCommandOpen }) {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
-                  'Contact': '/#contact'
+                  'Contact': '/contact'
                 };
                 const to = linkMap[item] || '/';
 
-                return item === 'Contact' && isHome ? (
-                  <a
-                    key={item}
-                    href="#contact"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-4xl font-bold tracking-tighter text-white/40 hover:text-white transition-colors border-none"
-                  >
-                    {item}
-                  </a>
-                ) : (
+                return (
                   <Link
                     key={item}
                     to={to}
@@ -267,11 +254,11 @@ function Navbar({ setIsCommandOpen }) {
                 >
                   <TerminalIcon size={18} /> OPEN TERMINAL
                 </button>
-                <a href="mailto:arroudhilanfi01@gmail.com">
+                <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
                   <button className="w-full bg-white text-black py-4 rounded-2xl font-black text-sm border-none">
                     LET'S CHAT
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -372,6 +359,7 @@ export default function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/services" element={<Services />} />
             <Route path="/experience" element={<Experience />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </AnimatePresence>
         <AnimatePresence>

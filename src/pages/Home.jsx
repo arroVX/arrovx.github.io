@@ -532,9 +532,9 @@ export default function Home() {
                         <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">Ready to start a <br /> <span className="text-linear">project?</span></h2>
                         <p className="text-white/50 text-lg mb-12 max-w-md mx-auto">Let's collaborate on something extraordinary. Available for remote work and collaborations.</p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <a href="mailto:arroudhilanfi01@gmail.com" className="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all border-none">
+                            <Link to="/contact" className="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all border-none text-center">
                                 Get in Touch
-                            </a>
+                            </Link>
                             <div className="mt-12 md:hidden">
                                 <Link to="/projects" className="w-full py-5 glass-card flex items-center justify-center gap-3 font-bold border-none">
                                     View Archive <ArrowUpRight size={18} />
