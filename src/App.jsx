@@ -107,6 +107,22 @@ function LiveTime() {
   );
 }
 
+const MagneticButton = ({ children, className }) => {
+  const ref = useRef(null);
+  const { style, onMouseMove, onMouseLeave } = useMagnetic(ref);
+  return (
+    <div
+      ref={ref}
+      style={style}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      className="inline-block"
+    >
+      {React.cloneElement(children, { className: `${children.props.className || ''} ${className || ''}` })}
+    </div>
+  );
+};
+
 function Navbar({ setIsCommandOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
