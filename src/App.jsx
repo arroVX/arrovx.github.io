@@ -7,6 +7,10 @@ import About from './pages/About';
 import Projects from './pages/Projects';
 import Services from './pages/Services';
 import Experience from './pages/Experience';
+import CommandCenter from './components/CommandCenter';
+import { Terminal as TerminalIcon, Search } from 'lucide-react';
+import { useMagnetic } from './utils/animations';
+import { useRef } from 'react';
 
 function BackgroundSystem() {
   return (
@@ -103,7 +107,7 @@ function LiveTime() {
   );
 }
 
-function Navbar() {
+function Navbar({ setIsCommandOpen }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -156,7 +160,19 @@ function Navbar() {
                 About
                 <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === '/about' ? 'w-full' : 'w-0 group-hover:w-full'}`} />
               </Link>
-              <a href="mailto:arroudhilanfi01@gmail.com" className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all">Let's Chat</a>
+              <MagneticButton>
+                <button
+                  onClick={() => setIsCommandOpen(true)}
+                  className="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white bg-white/5 rounded-xl border-none transition-all"
+                  title="Terminal (Ctrl+K)"
+                  style={{ pointerEvents: 'auto' }}
+                >
+                  <TerminalIcon size={18} />
+                </button>
+              </MagneticButton>
+              <MagneticButton>
+                <a href="mailto:arroudhilanfi01@gmail.com" className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all inline-block">Let's Chat</a>
+              </MagneticButton>
             </div>
 
             <button
@@ -293,13 +309,26 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <Router>
       <ScrollToTop />
       <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit']">
         <CustomCursor />
         <BackgroundSystem />
-        <Navbar />
+        <Navbar setIsCommandOpen={setIsCommandOpen} />
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -308,6 +337,9 @@ export default function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/experience" element={<Experience />} />
           </Routes>
+        </AnimatePresence>
+        <AnimatePresence>
+          {isCommandOpen && <CommandCenter isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />}
         </AnimatePresence>
         <Footer />
       </div>

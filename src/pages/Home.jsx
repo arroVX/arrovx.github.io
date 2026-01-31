@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -6,8 +6,10 @@ import {
     Award, Trophy, Mail, Github, Instagram,
     ChevronRight, Menu, X, Terminal, Cpu,
     Globe, Database, Layers, PlayCircle, ExternalLink,
-    Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight
+    Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight,
+    Volume2, BarChart3
 } from 'lucide-react';
+import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
 
 const achievements = [
     {
@@ -79,53 +81,71 @@ function MusicModal({ onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-3xl bg-black/80"
+            className="fixed inset-0 z-[10001] flex items-center justify-center p-6 backdrop-blur-3xl bg-black/90"
             onClick={onClose}
         >
             <motion.div
                 initial={{ scale: 0.8, y: 40 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.8, y: 40 }}
-                className="glass-card max-w-md w-full p-10 text-center relative border-none overflow-hidden"
+                className="glass-card max-w-4xl w-full flex flex-col md:flex-row border-white/10 overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.2)]"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 animate-pulse" />
+                {/* Visual Side */}
+                <div className="flex-1 bg-linear-to-br from-blue-600/20 to-indigo-900/40 p-12 flex flex-col items-center justify-center relative">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                    <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        className="w-64 h-64 rounded-full border-4 border-white/5 p-4 flex items-center justify-center relative z-10"
+                    >
+                        <div className="w-full h-full rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_50px_rgba(59,130,246,0.5)]">
+                            <Disc className="text-white w-32 h-32 opacity-20" />
+                        </div>
+                    </motion.div>
+                </div>
 
-                <div className="w-40 h-40 mx-auto bg-linear-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl relative overflow-hidden group">
-                    <Disc className="text-white w-20 h-20 animate-[spin_10s_linear_infinite]" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <PlayCircle className="text-white w-12 h-12" />
+                {/* Info Side */}
+                <div className="p-8 md:p-12 md:max-w-md flex flex-col justify-center bg-[#0a0a0a] border-l border-white/5">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-500">
+                            <Music size={32} className="animate-pulse" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-1">Now Playing</p>
+                            <h3 className="text-xl font-bold tracking-tight text-white">Autumn</h3>
+                        </div>
                     </div>
-                </div>
 
-                <div className="space-y-2 mb-8">
-                    <p className="text-blue-400 text-xs font-black uppercase tracking-[0.4em]">Listening To</p>
-                    <h3 className="text-3xl font-black tracking-tighter">Autumn</h3>
-                    <p className="text-white/40 font-bold">Murphy Radio</p>
-                </div>
+                    <p className="text-white/40 text-sm leading-relaxed mb-8 italic">
+                        "Autumn" by <span className="text-white">Murphy Radio</span>. A beautiful math-rock piece that inspires my creative coding sessions.
+                    </p>
 
-                <div className="flex justify-center gap-1.5 h-12 items-end mb-10">
-                    {[0.6, 0.4, 0.9, 0.3, 0.7, 0.5, 0.8, 0.4, 0.6, 0.3].map((h, i) => (
-                        <motion.div
-                            key={i}
-                            className="w-1.5 bg-blue-500/40 rounded-full"
-                            animate={{ height: [`${h * 100}%`, `${(1 - h) * 100}%`, `${h * 100}%`] }}
-                            transition={{ repeat: Infinity, duration: 1 + h, ease: "easeInOut" }}
-                        />
-                    ))}
-                </div>
-
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/20 px-2">
-                        <span>Math Rock</span>
-                        <span>02:45 / 04:12</span>
-                        <span>2018</span>
+                    <div className="flex items-end gap-1 h-12 mb-8 px-2">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => (
+                            <motion.div
+                                key={i}
+                                animate={{ height: [10, 40, 15, 35, 20][i % 5] }}
+                                transition={{ repeat: Infinity, duration: 0.6 + (i * 0.1), ease: "easeInOut" }}
+                                className="flex-1 bg-blue-500/40 rounded-full"
+                            />
+                        ))}
                     </div>
+
+                    <div className="flex flex-wrap gap-3 mb-10">
+                        <span className="text-[9px] font-bold uppercase tracking-widest py-2 px-4 bg-white/5 rounded-full border border-white/5 flex items-center gap-2">
+                            <Volume2 size={12} className="text-blue-500" /> Math Rock
+                        </span>
+                        <span className="text-[9px] font-bold uppercase tracking-widest py-2 px-4 bg-white/5 rounded-full border border-white/5 flex items-center gap-2">
+                            <BarChart3 size={12} className="text-blue-500" /> Instrumental
+                        </span>
+                    </div>
+
                     <button
                         onClick={onClose}
-                        className="w-full py-4 bg-white text-black rounded-2xl font-black tracking-widest uppercase text-sm hover:scale-105 active:scale-95 transition-all border-none"
+                        className="w-full py-4 bg-white text-black rounded-2xl font-black tracking-widest uppercase text-xs hover:scale-[1.02] active:scale-[0.98] transition-all border-none"
                     >
-                        Close Player
+                        Minimize Player
                     </button>
                 </div>
             </motion.div>
@@ -149,6 +169,43 @@ const TechStack = ({ icon, name }) => (
         <span>{name}</span>
     </div>
 );
+
+const ScrambleTitle = ({ text, className, delay = 0 }) => {
+    const scrambled = useScrambleText(text, delay);
+    return <span className={className}>{scrambled}</span>;
+};
+
+const TiltCard = ({ children, className }) => {
+    const ref = useRef(null);
+    const { style, onMouseMove, onMouseLeave } = useTilt(ref);
+    return (
+        <div
+            ref={ref}
+            style={style}
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+            className={className}
+        >
+            {children}
+        </div>
+    );
+};
+
+const MagneticButton = ({ children, className }) => {
+    const ref = useRef(null);
+    const { style, onMouseMove, onMouseLeave } = useMagnetic(ref);
+    return (
+        <div
+            ref={ref}
+            style={style}
+            onMouseMove={onMouseMove}
+            onMouseLeave={onMouseLeave}
+            className="inline-block"
+        >
+            {React.cloneElement(children, { className: `${children.props.className} ${className}` })}
+        </div>
+    );
+};
 
 function ProjectModal({ project, onClose }) {
     if (!project) return null;
@@ -218,22 +275,26 @@ export default function Home() {
                         <Zap size={14} className="animate-pulse" /> Portofolio Website 2026
                     </div>
 
-                    <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold mb-6 md:mb-8 leading-[0.9] tracking-tighter">
-                        Bridging <span className="text-blue-500">Tech</span> <br />
-                        <span className="text-linear">& Design Arts</span>
+                    <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold mb-6 md:mb-8 leading-[0.9] tracking-tighter italic">
+                        <ScrambleTitle text="Bridging" className="text-white" /> <span className="text-blue-500">Tech</span> <br />
+                        <ScrambleTitle text="& Design Arts" className="text-linear" delay={500} />
                     </h1>
 
                     <p className="max-w-2xl mx-auto text-base md:text-xl text-white/50 mb-10 md:mb-12 leading-relaxed px-4">
-                        Based in Indonesia, Arro is a <span className="text-white font-bold">SMKN 3 Jepara</span> student specializing in TKJ, crafting digital experiences through code, <span className="text-white font-bold">graphic design</span>, and cinematic visuals.
+                        Based in Indonesia, <span className="text-white font-bold">Arro</span> is a SMKN 3 Jepara student specializing in TKJ, crafting digital experiences through code, <span className="text-white font-bold text-blue-400">graphic design</span>, and cinematic visuals.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-                        <Link to="/projects" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] border-none text-center">
-                            Explore Work
-                        </Link>
-                        <Link to="/about" className="w-full sm:w-auto glass-button border-white/10 group flex items-center justify-center gap-2 border-none">
-                            About Me <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
-                        </Link>
+                        <MagneticButton>
+                            <Link to="/projects" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] border-none text-center">
+                                Explore Work
+                            </Link>
+                        </MagneticButton>
+                        <MagneticButton>
+                            <Link to="/about" className="w-full sm:w-auto glass-button border-white/10 group flex items-center justify-center gap-2 border-none">
+                                About Me <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
+                            </Link>
+                        </MagneticButton>
                     </div>
 
                     {/* Music Now Playing (Simulated) */}
@@ -282,72 +343,86 @@ export default function Home() {
                     {/* TKJ Card */}
                     <motion.div
                         whileHover={{ y: -5 }}
-                        className="md:col-span-8 glass-card glass-card-hover p-10 flex flex-col justify-between overflow-hidden relative group"
+                        className="md:col-span-8 h-full"
                     >
-                        <div className="relative z-10">
-                            <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 font-bold">01</div>
-                            <h3 className="text-3xl font-bold mb-4">Network Engineering</h3>
-                            <p className="text-white/50 max-w-md">Specializing in TKJ (Network & Computer Engineering). Expert in building secure, scalable infrastructures and server management.</p>
-                        </div>
-                        <div className="mt-8 flex flex-wrap gap-2 relative z-10">
-                            <TechStack icon={<Globe size={16} />} name="Routing & Switching" />
-                            <TechStack icon={<Database size={16} />} name="Server Management" />
-                            <TechStack icon={<Terminal size={16} />} name="Linux System" />
-                        </div>
-                        <Monitor className="absolute -bottom-10 -right-10 w-64 h-64 text-white/2 group-hover:text-blue-500/5 transition-colors duration-700" />
+                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between overflow-hidden relative group border-white/5">
+                            <div className="relative z-10">
+                                <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 font-bold">01</div>
+                                <h3 className="text-3xl font-bold mb-4 tracking-tighter">Network Engineering</h3>
+                                <p className="text-white/50 max-w-md">Specializing in TKJ (Network & Computer Engineering). Expert in building secure, scalable infrastructures and server management.</p>
+                            </div>
+                            <div className="mt-8 flex flex-wrap gap-2 relative z-10">
+                                <TechStack icon={<Globe size={16} />} name="Routing & Switching" />
+                                <TechStack icon={<Database size={16} />} name="Server Management" />
+                                <TechStack icon={<Terminal size={16} />} name="Linux System" />
+                            </div>
+                            <Monitor className="absolute -bottom-10 -right-10 w-64 h-64 text-white/2 group-hover:text-blue-500/10 transition-colors duration-700" />
+                        </TiltCard>
                     </motion.div>
 
                     {/* Creative Card */}
                     <motion.div
                         whileHover={{ y: -5 }}
-                        className="md:col-span-4 glass-card glass-card-hover p-10 flex flex-col justify-between bg-linear-to-br from-indigo-500/10 to-transparent"
+                        className="md:col-span-4 h-full"
                     >
-                        <div>
-                            <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400 mb-6 font-bold">02</div>
-                            <h3 className="text-3xl font-bold mb-4 font-['Outfit']">Creative Media</h3>
-                            <p className="text-white/50">Photography & Videography with professional-grade editing.</p>
-                        </div>
-                        <div className="space-y-4 mt-8">
-                            <div className="flex items-center gap-4">
-                                <PlayCircle className="text-indigo-400" /> <span className="font-bold">Adobe Premiere</span>
+                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between bg-linear-to-br from-indigo-500/10 to-transparent border-white/5">
+                            <div>
+                                <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400 mb-6 font-bold">02</div>
+                                <h3 className="text-3xl font-bold mb-4 font-['Outfit'] tracking-tighter">Creative Media</h3>
+                                <p className="text-white/50">Photography & Videography with professional-grade editing.</p>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <Camera className="text-indigo-400" /> <span className="font-bold">Color Grading</span>
+                            <div className="space-y-4 mt-8">
+                                <div className="flex items-center gap-4 group/item">
+                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-indigo-500/20 transition-colors">
+                                        <PlayCircle className="text-indigo-400" size={20} />
+                                    </div>
+                                    <span className="font-bold">Adobe Premiere</span>
+                                </div>
+                                <div className="flex items-center gap-4 group/item">
+                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-indigo-500/20 transition-colors">
+                                        <Camera className="text-indigo-400" size={20} />
+                                    </div>
+                                    <span className="font-bold">Color Grading</span>
+                                </div>
                             </div>
-                        </div>
+                        </TiltCard>
                     </motion.div>
 
                     {/* Guitar Card */}
                     <motion.div
                         whileHover={{ y: -5 }}
-                        className="md:col-span-4 glass-card glass-card-hover p-10 flex flex-col justify-center items-center text-center relative overflow-hidden"
+                        className="md:col-span-4 h-full"
                     >
-                        <Guitar className="w-16 h-16 text-orange-400 mb-6" />
-                        <h3 className="text-2xl font-bold">Composer & Guitarist</h3>
-                        <p className="text-sm text-white/40 mt-2 italic">"Expressing emotions through six strings."</p>
-                        <div className="absolute inset-0 bg-linear-to-t from-orange-500/5 to-transparent pointer-events-none" />
+                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-center items-center text-center relative overflow-hidden border-white/5">
+                            <Guitar className="w-16 h-16 text-orange-400 mb-6 group-hover:scale-110 transition-transform" />
+                            <h3 className="text-2xl font-bold tracking-tighter">Composer & Guitarist</h3>
+                            <p className="text-sm text-white/40 mt-2 italic">"Expressing emotions through six strings."</p>
+                            <div className="absolute inset-0 bg-linear-to-t from-orange-500/5 to-transparent pointer-events-none" />
+                        </TiltCard>
                     </motion.div>
 
                     {/* Code Card */}
                     <motion.div
                         whileHover={{ y: -5 }}
-                        className="md:col-span-8 glass-card glass-card-hover p-8 md:p-10 flex flex-col md:flex-row items-center gap-8"
+                        className="md:col-span-8 h-full"
                     >
-                        <div className="flex-1">
-                            <h3 className="text-3xl font-bold mb-4">Programming Mastery</h3>
-                            <div className="flex gap-4 mb-4">
-                                <TechStack icon={<Code size={16} />} name="React" />
-                                <TechStack icon={<Cpu size={16} />} name="C++ (Competitive)" />
+                        <TiltCard className="h-full glass-card glass-card-hover p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 border-white/5">
+                            <div className="flex-1">
+                                <h3 className="text-3xl font-bold mb-4 tracking-tighter">Programming Mastery</h3>
+                                <div className="flex gap-4 mb-4">
+                                    <TechStack icon={<Code size={16} />} name="React" />
+                                    <TechStack icon={<Cpu size={16} />} name="C++ (Competitive)" />
+                                </div>
+                                <p className="text-white/50 text-sm">Two-time Gold medalist in Informatics. Bringing algorithmic efficiency to modern UI development.</p>
                             </div>
-                            <p className="text-white/50 text-sm">Two-time Gold medalist in Informatics. Bringing algorithmic efficiency to modern UI development.</p>
-                        </div>
-                        <div className="flex-none p-6 bg-white/5 rounded-3xl border border-white/5 font-mono text-xs text-blue-400">
-                            <pre><code>{`function inspire() {
+                            <div className="flex-none p-6 bg-black/40 rounded-3xl border border-white/5 font-mono text-xs text-blue-400 shadow-inner">
+                                <pre><code>{`function inspire() {
   const code = 'Passion';
   const art = 'Vision';
   return code + art;
 }`}</code></pre>
-                        </div>
+                            </div>
+                        </TiltCard>
                     </motion.div>
                 </div>
             </section>
