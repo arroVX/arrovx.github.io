@@ -73,6 +73,66 @@ const gear = [
     { name: "Network Lab", detail: "Cisco Catalyst · EdgeRouter", icon: <Globe className="text-emerald-400" /> }
 ];
 
+function MusicModal({ onClose }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-3xl bg-black/80"
+            onClick={onClose}
+        >
+            <motion.div
+                initial={{ scale: 0.8, y: 40 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.8, y: 40 }}
+                className="glass-card max-w-md w-full p-10 text-center relative border-none overflow-hidden"
+                onClick={e => e.stopPropagation()}
+            >
+                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 animate-pulse" />
+
+                <div className="w-40 h-40 mx-auto bg-linear-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl relative overflow-hidden group">
+                    <Disc className="text-white w-20 h-20 animate-[spin_10s_linear_infinite]" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <PlayCircle className="text-white w-12 h-12" />
+                    </div>
+                </div>
+
+                <div className="space-y-2 mb-8">
+                    <p className="text-blue-400 text-xs font-black uppercase tracking-[0.4em]">Listening To</p>
+                    <h3 className="text-3xl font-black tracking-tighter">Autumn</h3>
+                    <p className="text-white/40 font-bold">Murphy Radio</p>
+                </div>
+
+                <div className="flex justify-center gap-1.5 h-12 items-end mb-10">
+                    {[0.6, 0.4, 0.9, 0.3, 0.7, 0.5, 0.8, 0.4, 0.6, 0.3].map((h, i) => (
+                        <motion.div
+                            key={i}
+                            className="w-1.5 bg-blue-500/40 rounded-full"
+                            animate={{ height: [`${h * 100}%`, `${(1 - h) * 100}%`, `${h * 100}%`] }}
+                            transition={{ repeat: Infinity, duration: 1 + h, ease: "easeInOut" }}
+                        />
+                    ))}
+                </div>
+
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/20 px-2">
+                        <span>Math Rock</span>
+                        <span>02:45 / 04:12</span>
+                        <span>2018</span>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="w-full py-4 bg-white text-black rounded-2xl font-black tracking-widest uppercase text-sm hover:scale-105 active:scale-95 transition-all border-none"
+                    >
+                        Close Player
+                    </button>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+}
+
 const partners = [
     { name: "Cisco", icon: <Globe size={24} /> },
     { name: "Adobe", icon: <Layers size={24} /> },
@@ -134,11 +194,13 @@ function ProjectModal({ project, onClose }) {
 
 export default function Home() {
     const [selectedProject, setSelectedProject] = useState(null);
+    const [showMusicModal, setShowMusicModal] = useState(false);
 
     return (
         <main className="relative z-10">
             <AnimatePresence>
                 {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
+                {showMusicModal && <MusicModal onClose={() => setShowMusicModal(false)} />}
             </AnimatePresence>
 
             {/* Hero Section v2 */}
@@ -173,7 +235,10 @@ export default function Home() {
 
                     {/* Music Now Playing (Simulated) */}
                     <div className="mt-12 md:mt-16 flex items-center justify-center">
-                        <div className="glass-card p-4 py-2! rounded-2xl! flex items-center gap-4 bg-white/5 group border-none">
+                        <div
+                            onClick={() => setShowMusicModal(true)}
+                            className="glass-card p-4 py-2! rounded-2xl! flex items-center gap-4 bg-white/5 group border-none cursor-pointer hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+                        >
                             <div className="w-8 h-8 md:w-10 md:h-10 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center animate-[spin_8s_linear_infinite]">
                                 <Disc className="text-white" size={16} />
                             </div>
