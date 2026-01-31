@@ -63,11 +63,11 @@ export default function Contact() {
                 ...formState,
                 timestamp: serverTimestamp()
             });
-            setToast({ isOpen: true, message: "Pesan terkirim! Makasih ya ro, nanti bakal segera aku cek.", type: 'success' });
+            setToast({ isOpen: true, message: "Pesan terkirim! Bakal segera aku cek.", type: 'success' });
             setFormState({ name: '', email: '', subject: '', message: '' });
         } catch (error) {
             console.error("Error sending message:", error);
-            setToast({ isOpen: true, message: "Waduh, gagal ngirim pesan. Coba cek koneksi kamu ro!", type: 'error' });
+            setToast({ isOpen: true, message: "Waduh, gagal ngirim pesan. Coba cek koneksi kamu!", type: 'error' });
         }
         setIsSubmitting(false);
     };

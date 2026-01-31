@@ -100,12 +100,12 @@ export default function Guestbook() {
                 message: message.trim(),
                 timestamp: serverTimestamp()
             });
-            setToast({ isOpen: true, message: "Pesan terkirim ke digital void! Makasih ya ro.", type: 'success' });
+            setToast({ isOpen: true, message: "Pesan terkirim ke digital void!", type: 'success' });
             setName('');
             setMessage('');
         } catch (error) {
             console.error("Error adding message:", error);
-            setToast({ isOpen: true, message: "Gagal mengirim pesan. Coba cek koneksi kamu ro!", type: 'error' });
+            setToast({ isOpen: true, message: "Gagal mengirim pesan. Coba cek koneksi kamu!", type: 'error' });
         }
         setSubmitting(false);
     };
