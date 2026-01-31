@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Instagram, Mail } from 'lucide-react';
 import Home from './pages/Home';
 import About from './pages/About';
+import Projects from './pages/Projects';
 
 function BackgroundSystem() {
   return (
@@ -129,7 +130,12 @@ function Navbar() {
 
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((item) => (
-                isHome ? (
+                item === 'Work' ? (
+                  <Link key={item} to="/projects" className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
+                    {item}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
+                  </Link>
+                ) : isHome ? (
                   <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
                     {item}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
@@ -170,7 +176,16 @@ function Navbar() {
           >
             <div className="flex flex-col gap-8">
               {navLinks.map((item) => (
-                isHome ? (
+                item === 'Work' ? (
+                  <Link
+                    key={item}
+                    to="/projects"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-4xl font-bold tracking-tighter text-white/40 hover:text-white transition-colors border-none"
+                  >
+                    {item}
+                  </Link>
+                ) : isHome ? (
                   <a
                     key={item}
                     href={`#${item.toLowerCase()}`}
@@ -234,7 +249,7 @@ function Footer() {
             <ul className="space-y-4 text-sm font-medium text-white/50">
               <li><Link to="/" className="hover:text-white transition-colors border-none">Home</Link></li>
               <li><Link to="/about" className="hover:text-white transition-colors border-none">About</Link></li>
-              <li><a href="/#work" className="hover:text-white transition-colors border-none">Work</a></li>
+              <li><Link to="/projects" className="hover:text-white transition-colors border-none">Work</Link></li>
             </ul>
           </div>
           <div>
@@ -282,6 +297,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
         </AnimatePresence>
         <Footer />

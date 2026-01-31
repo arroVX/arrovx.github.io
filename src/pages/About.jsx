@@ -87,6 +87,15 @@ export default function About() {
                         title="Minimalist Design"
                         desc="I'm obsessed with clean interfaces, glassmorphism, and smooth animations."
                     />
+                    <div className="md:col-span-2">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-8">Crafting Digital <span className="text-blue-500">Excellence.</span></h2>
+                        <p className="text-white/60 mb-8 leading-relaxed">
+                            As a TKJ student, I've always been fascinated by how technology can be a canvas for creativity. My journey is a blend of technical precision in networking and visual storytelling through <span className="text-white font-bold">Graphic Design</span>.
+                        </p>
+                        <p className="text-white/60 mb-12 leading-relaxed">
+                            Whether I'm configuring a server or designing a high-impact poster, I focus on the harmony between functionality and aesthetics. Minimalism and bold visual language are the core of my design philosophy.
+                        </p>
+                    </div>
                     <InterestCard
                         icon={<Star className="text-purple-400" />}
                         title="Competitive Programming"

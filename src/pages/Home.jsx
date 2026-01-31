@@ -216,12 +216,12 @@ export default function Home() {
                     </div>
 
                     <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold mb-6 md:mb-8 leading-[0.9] tracking-tighter">
-                        Bridging Tech <br />
-                        <span className="text-linear text-glow">& Creative Arts</span>
+                        Bridging <span className="text-blue-500">Tech</span> <br />
+                        <span className="text-linear">& Design Arts</span>
                     </h1>
 
                     <p className="max-w-2xl mx-auto text-base md:text-xl text-white/50 mb-10 md:mb-12 leading-relaxed px-4">
-                        Based in Indonesia, Arro is a <span className="text-white font-bold">SMKN 3 Jepara</span> student specializing in TKJ, crafting digital experiences through code, music, and cinematic visuals.
+                        Based in Indonesia, Arro is a <span className="text-white font-bold">SMKN 3 Jepara</span> student specializing in TKJ, crafting digital experiences through code, <span className="text-white font-bold">graphic design</span>, and cinematic visuals.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
@@ -352,11 +352,14 @@ export default function Home() {
             {/* Selected Projects */}
             <section id="work" className="py-24 px-6 bg-white/1">
                 <div className="max-w-7xl mx-auto">
-                    <div className="flex items-end justify-between mb-16">
-                        <h2 className="text-5xl font-bold tracking-tighter">Selected <br /> <span className="text-linear">Works</span></h2>
-                        <button className="text-sm font-bold flex items-center gap-2 group border-none">
-                            View All <span className="px-2 py-1 glass-card group-hover:bg-white/10 transition-all">24</span>
-                        </button>
+                    <div className="flex items-end justify-between mb-12 md:mb-16">
+                        <div>
+                            <p className="text-blue-500 text-xs md:text-sm font-black uppercase tracking-widest mb-4">Portfolio</p>
+                            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter">Featured <span className="text-linear">Works.</span></h2>
+                        </div>
+                        <Link to="/projects" className="hidden md:flex items-center gap-2 text-white/40 hover:text-white transition-colors group">
+                            View Archive <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        </Link>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -480,6 +483,11 @@ export default function Home() {
                             <a href="mailto:hello@arroudhil.com" className="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all border-none">
                                 Get in Touch
                             </a>
+                            <div className="mt-12 md:hidden">
+                                <Link to="/projects" className="w-full py-5 glass-card flex items-center justify-center gap-3 font-bold border-none">
+                                    View Archive <ArrowUpRight size={18} />
+                                </Link>
+                            </div>
                             <div className="flex gap-4">
                                 <button className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
                                     <Github />
