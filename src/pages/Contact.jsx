@@ -61,11 +61,11 @@ export default function Contact() {
                 ...formState,
                 timestamp: serverTimestamp()
             });
-            alert("Pesan terkirim! Makasih ya r, nanti bakal segera aku cek.");
+            alert("Pesan terkirim! Makasih ya ro, nanti bakal segera aku cek.");
             setFormState({ name: '', email: '', subject: '', message: '' });
         } catch (error) {
             console.error("Error sending message:", error);
-            alert("Waduh, gagal ngirim pesan. Coba cek koneksi atau config Firebase kamu r!");
+            alert("Waduh, gagal ngirim pesan. Coba cek koneksi atau config Firebase kamu ro!");
         }
         setIsSubmitting(false);
     };

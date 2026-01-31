@@ -158,7 +158,7 @@ export default function Guestbook() {
                                         type="text"
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
-                                        placeholder="Web kamu keren banget Ro! 🔥"
+                                        placeholder="Web kamu keren banget ro! 🔥"
                                         required
                                         className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 pr-16 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium text-sm"
                                     />
