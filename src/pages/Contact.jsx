@@ -1,7 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Github, Instagram, Send, MapPin, Phone, Globe, MessageSquare } from 'lucide-react';
+import { Mail, Github, Instagram, Send, MapPin, Globe, MessageSquare } from 'lucide-react';
 import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const ContactInfo = ({ icon, label, value, href }) => {
     return (
@@ -28,7 +30,7 @@ const MagneticButton = ({ children }) => {
     const { style, onMouseMove, onMouseLeave } = useMagnetic(ref);
     const [isTouch, setIsTouch] = useState(false);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
     }, []);
 
@@ -50,15 +52,22 @@ export default function Contact() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const titleScramble = useScrambleText("Get in Touch", 0);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate form submission
-        setTimeout(() => {
-            alert("Message sent! (Simulation)");
+
+        try {
+            await addDoc(collection(db, 'contacts'), {
+                ...formState,
+                timestamp: serverTimestamp()
+            });
+            alert("Pesan terkirim! Makasih ya r, nanti bakal segera aku cek.");
             setFormState({ name: '', email: '', subject: '', message: '' });
-            setIsSubmitting(false);
-        }, 1500);
+        } catch (error) {
+            console.error("Error sending message:", error);
+            alert("Waduh, gagal ngirim pesan. Coba cek koneksi atau config Firebase kamu r!");
+        }
+        setIsSubmitting(false);
     };
 
     return (
