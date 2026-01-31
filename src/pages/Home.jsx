@@ -6,7 +6,7 @@ import {
     Award, Trophy, Mail, Github, Instagram,
     ChevronRight, Menu, X, Terminal, Cpu,
     Globe, Database, Layers, PlayCircle, ExternalLink,
-    Sparkles, Zap, Monitor, Smartphone, Music, Disc
+    Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight
 } from 'lucide-react';
 
 const achievements = [
