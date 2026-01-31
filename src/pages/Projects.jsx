@@ -1,66 +1,82 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, X, Image as ImageIcon, Search } from 'lucide-react';
+import { ArrowLeft, ExternalLink, X, Image as ImageIcon, Search, Loader2 } from 'lucide-react';
 
 const allProjects = [
-    {
-        title: "Experimental Poster 01",
-        category: "Graphic Design",
-        image: "project-assets/images/0001_0.png",
-        desc: "A bold experimental layout exploring typography and negative space.",
-        tech: ["Photoshop", "Typography"]
-    },
-    {
-        title: "Modern Event Flyer",
-        category: "Graphic Design",
-        image: "project-assets/images/0002_40.png",
-        desc: "Clean and vibrant event promotion material designed for maximum impact.",
-        tech: ["Illustrator", "Layout Design"]
-    },
-    {
-        title: "Digital Art Composition",
-        category: "Digital Art",
-        image: "project-assets/images/0003_20.png",
-        desc: "A fusion of organic textures and sharp digital elements.",
-        tech: ["Photoshop", "Digital Painting"]
-    },
-    {
-        title: "Concept Poster 05",
-        category: "Poster Design",
-        image: "project-assets/images/0005_20.png",
-        desc: "Minimalist concept poster focusing on color harmony and symbolic imagery.",
-        tech: ["Graphic Design", "Minimalism"]
-    },
-    {
-        title: "Visual Identity Study",
-        category: "Branding",
-        image: "project-assets/images/0006_20.png",
-        desc: "Exploring brand marks and visual language through geometric construction.",
-        tech: ["Branding", "Vector"]
-    },
-    {
-        title: "Cinematic Scene Poster",
-        category: "Graphic Design",
-        image: "project-assets/images/0007_20.png",
-        desc: "Capturing the mood of a film through dramatic lighting and composition.",
-        tech: ["Photo Manipulation"]
-    },
-    {
-        title: "Abstract Flow",
-        category: "Design",
-        image: "project-assets/images/0009_20.png",
-        desc: "Dynamic abstract shapes creating a sense of movement and energy.",
-        tech: ["Abstract", "Art"]
-    },
-    {
-        title: "Poster Design - Alpha",
-        category: "Design",
-        image: "project-assets/images/New Project 11 [ABF5BDB].png",
-        desc: "Part of a personal series focused on futuristic aesthetics.",
-        tech: ["Future", "Design"]
-    }
-];
+    { title: "Visual Flow 01", category: "Poster Design", image: "project-assets/images/0001_0.png", tech: ["Photoshop"] },
+    { title: "Visual Flow 02", category: "Poster Design", image: "project-assets/images/0001_0(1).png", tech: ["Photoshop"] },
+    { title: "Visual Flow 03", category: "Poster Design", image: "project-assets/images/0001_0(1)_1.png", tech: ["Photoshop"] },
+    { title: "Visual Flow 04", category: "Poster Design", image: "project-assets/images/0001_0(2).png", tech: ["Photoshop"] },
+    { title: "Visual Flow 05", category: "Poster Design", image: "project-assets/images/0001_0_1.png", tech: ["Photoshop"] },
+    { title: "Experimental 40", category: "Experimental", image: "project-assets/images/0002_40.png", tech: ["Illustrator"] },
+    { title: "Abstract Composition 20", category: "Digital Art", image: "project-assets/images/0003_20.png", tech: ["Digital Art"] },
+    { title: "Geometric Study 05", category: "Graphic Design", image: "project-assets/images/0005_20.png", tech: ["Graphic Design"] },
+    { title: "Geometric Study 06", category: "Graphic Design", image: "project-assets/images/0005_20_1.png", tech: ["Graphic Design"] },
+    { title: "Geometric Study 07", category: "Graphic Design", image: "project-assets/images/0005_20_2.png", tech: ["Graphic Design"] },
+    { title: "Identity Concept 01", category: "Branding", image: "project-assets/images/0006_20.png", tech: ["Branding"] },
+    { title: "Identity Concept 02", category: "Branding", image: "project-assets/images/0006_20(4).png", tech: ["Branding"] },
+    { title: "Identity Concept 03", category: "Branding", image: "project-assets/images/0006_20_1.png", tech: ["Branding"] },
+    { title: "Cinematic Mood 01", category: "Poster Design", image: "project-assets/images/0007_20.png", tech: ["Photo Manipulation"] },
+    { title: "Cinematic Mood 02", category: "Poster Design", image: "project-assets/images/0007_20_1.png", tech: ["Photo Manipulation"] },
+    { title: "Cinematic Mood 03", category: "Poster Design", image: "project-assets/images/0007_20_2.png", tech: ["Photo Manipulation"] },
+    { title: "Dynamic Flow 01", category: "Design", image: "project-assets/images/0009_20.png", tech: ["Design"] },
+    { title: "Dynamic Flow 02", category: "Design", image: "project-assets/images/0009_20_1.png", tech: ["Design"] },
+    { title: "Moment Capture 01", category: "Photography", image: "project-assets/images/20250619_180706.png", tech: ["Photography"] },
+    { title: "Moment Capture 02", category: "Photography", image: "project-assets/images/20250619_180747.png", tech: ["Photography"] },
+    { title: "Moment Capture 03", category: "Photography", image: "project-assets/images/20250803_165007.png", tech: ["Photography"] },
+    { title: "Futuristic 7", category: "Experimental", image: "project-assets/images/7_20251123_001736_0000.png", tech: ["Digital Art"] },
+    { title: "Futuristic 8", category: "Experimental", image: "project-assets/images/8_20251123_001736_0001.png", tech: ["Digital Art"] },
+    { title: "Modern Concept 11", category: "Graphic Design", image: "project-assets/images/New Project 11 [ABF5BDB].png", tech: ["Layout Design"] },
+    { title: "Modern Concept 16", category: "Graphic Design", image: "project-assets/images/New Project 16 [D2FAA83].png", tech: ["Layout Design"] },
+    { title: "Modern Concept 18", category: "Graphic Design", image: "project-assets/images/New Project 18 [55DC1A5].png", tech: ["Layout Design"] },
+    { title: "Mobile UI Study", category: "UI Design", image: "project-assets/images/IMG_20251101_085224.png", tech: ["Figma"] },
+].map(p => ({
+    ...p,
+    desc: p.desc || `An exploration in ${p.category.toLowerCase()} that pushes the boundaries of visual hierarchy and color theory.`,
+    tech: p.tech || ["Graphic Design"]
+}));
+
+function ImageCard({ p, i, onClick }) {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            className="group cursor-pointer"
+            onClick={onClick}
+        >
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden mb-6 relative glass-card p-2 border-white/5">
+                <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 relative">
+                    {!isLoaded && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
+                            <Loader2 className="animate-spin text-white/20" size={24} />
+                        </div>
+                    )}
+                    <img
+                        src={p.image}
+                        loading="lazy"
+                        onLoad={() => setIsLoaded(true)}
+                        className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                        alt={p.title}
+                        onError={(e) => {
+                            e.target.src = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
+                            setIsLoaded(true);
+                        }}
+                    />
+                </div>
+                <div className="absolute inset-x-2 bottom-2 p-6 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 mb-1">{p.category}</p>
+                    <h3 className="text-sm font-bold text-white truncate">{p.title}</h3>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
 
 export default function Projects() {
     const [selectedCategory, setSelectedCategory] = useState("All");
@@ -88,7 +104,7 @@ export default function Projects() {
                             Visual <span className="text-linear">Archive.</span>
                         </motion.h1>
                         <p className="text-lg text-white/50 leading-relaxed">
-                            A curated exhibition of my graphic design works, posters, and visual experiments. Every piece is a journey through color, space, and emotion.
+                            Full collection featuring {allProjects.length} design works. From technical networking diagrams to experimental posters.
                         </p>
                     </div>
 
@@ -99,8 +115,8 @@ export default function Projects() {
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
                                 className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none ${selectedCategory === cat
-                                    ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-                                    : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                        ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
                                     }`}
                             >
                                 {cat}
@@ -110,39 +126,15 @@ export default function Projects() {
                 </div>
 
                 {/* Projects Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
                     <AnimatePresence mode="popLayout">
                         {filteredProjects.map((p, i) => (
-                            <motion.div
-                                layout
-                                key={p.title}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.4, delay: i * 0.05 }}
-                                className="group cursor-pointer"
+                            <ImageCard
+                                key={p.image}
+                                p={p}
+                                i={i}
                                 onClick={() => setSelectedProject(p)}
-                            >
-                                <div className="aspect-[3/4] rounded-3xl overflow-hidden mb-6 relative glass-card p-2">
-                                    <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 border border-white/5">
-                                        <img
-                                            src={p.image}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                            alt={p.title}
-                                            onError={(e) => {
-                                                e.target.src = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm p-6 text-center">
-                                        <div className="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                            <Search size={20} />
-                                        </div>
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 mb-2">{p.category}</p>
-                                        <h3 className="text-xl font-bold text-white mb-2">{p.title}</h3>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            />
                         ))}
                     </AnimatePresence>
                 </div>
@@ -156,45 +148,42 @@ export default function Projects() {
                 )}
             </div>
 
-            {/* Project Modal (Reuse Logic) */}
+            {/* Project Modal */}
             <AnimatePresence>
                 {selectedProject && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-xl bg-black/80"
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/80"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
-                            className="glass-card max-w-lg w-full overflow-hidden"
+                            className="glass-card max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]"
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="aspect-[3/4] relative">
+                            <div className="relative flex-1 overflow-hidden min-h-[300px]">
                                 <img
                                     src={selectedProject.image}
                                     alt={selectedProject.title}
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => {
-                                        e.target.src = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
-                                    }}
+                                    className="w-full h-full object-contain bg-black"
                                 />
                                 <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none">
                                     <X size={20} />
                                 </button>
                             </div>
-                            <div className="p-8">
+                            <div className="p-6 md:p-8 bg-zinc-900/50 backdrop-blur-md border-t border-white/5">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 py-1 px-3 bg-blue-500/10 rounded-lg mb-4 inline-block">{selectedProject.category}</span>
-                                <h3 className="text-3xl font-bold mb-4">{selectedProject.title}</h3>
-                                <p className="text-white/50 mb-8 leading-relaxed italic border-l-2 border-white/10 pl-6">
+                                <h3 className="text-2xl md:text-3xl font-bold mb-4">{selectedProject.title}</h3>
+                                <p className="text-white/50 text-sm mb-6 leading-relaxed italic border-l-2 border-white/10 pl-4">
                                     {selectedProject.desc}
                                 </p>
-                                <div className="flex flex-wrap gap-3">
+                                <div className="flex flex-wrap gap-2">
                                     {selectedProject.tech.map(t => (
-                                        <span key={t} className="text-[10px] font-bold uppercase tracking-widest py-1.5 px-3 bg-white/5 rounded-lg border border-white/5">{t}</span>
+                                        <span key={t} className="text-[10px] font-bold uppercase tracking-widest py-1 px-2.5 bg-white/5 rounded-lg border border-white/5">{t}</span>
                                     ))}
                                 </div>
                             </div>
