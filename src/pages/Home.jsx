@@ -228,9 +228,9 @@ export default function Home() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-                        <a href="#work" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] border-none">
+                        <Link to="/projects" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] border-none text-center">
                             Explore Work
-                        </a>
+                        </Link>
                         <Link to="/about" className="w-full sm:w-auto glass-button border-white/10 group flex items-center justify-center gap-2 border-none">
                             About Me <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
                         </Link>
@@ -352,45 +352,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Selected Projects */}
-            <section id="work" className="py-24 px-6 bg-white/1">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex items-end justify-between mb-12 md:mb-16">
-                        <div>
-                            <p className="text-blue-500 text-xs md:text-sm font-black uppercase tracking-widest mb-4">Portfolio</p>
-                            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter">Featured <span className="text-linear">Works.</span></h2>
-                        </div>
-                        <Link to="/projects" className="hidden md:flex items-center gap-2 text-white/40 hover:text-white transition-colors group">
-                            View Archive <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        </Link>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {projects.map((p, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                viewport={{ once: true }}
-                                className="group cursor-pointer"
-                                onClick={() => setSelectedProject(p)}
-                            >
-                                <div className="aspect-video rounded-3xl overflow-hidden mb-6 relative">
-                                    <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={p.title} />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                        <div className="w-14 h-14 bg-white text-black rounded-full flex items-center justify-center">
-                                            <ExternalLink size={20} />
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-2">{p.category}</p>
-                                <h3 className="text-2xl font-bold hover:text-blue-400 transition-colors">{p.title}</h3>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* Gear Section */}
             <section className="py-24 px-6 bg-[#050505]">
