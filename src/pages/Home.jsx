@@ -92,7 +92,7 @@ function MusicModal({ onClose }) {
                 onClick={e => e.stopPropagation()}
             >
                 {/* Visual Side */}
-                <div className="flex-1 bg-linear-to-br from-blue-600/20 to-indigo-900/40 p-12 flex flex-col items-center justify-center relative">
+                <div className="hidden md:flex flex-1 bg-linear-to-br from-blue-600/20 to-indigo-900/40 p-12 flex-col items-center justify-center relative">
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                     <motion.div
                         animate={{ rotate: 360 }}
@@ -106,7 +106,7 @@ function MusicModal({ onClose }) {
                 </div>
 
                 {/* Info Side */}
-                <div className="p-8 md:p-12 md:max-w-md flex flex-col justify-center bg-[#0a0a0a] border-l border-white/5">
+                <div className="p-6 md:p-12 md:max-w-md flex flex-col justify-center bg-[#0a0a0a] md:border-l border-white/5">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-500">
                             <Music size={32} className="animate-pulse" />
@@ -178,12 +178,18 @@ const ScrambleTitle = ({ text, className, delay = 0 }) => {
 const TiltCard = ({ children, className }) => {
     const ref = useRef(null);
     const { style, onMouseMove, onMouseLeave } = useTilt(ref);
+    const [isTouch, setIsTouch] = useState(false);
+
+    useEffect(() => {
+        setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    }, []);
+
     return (
         <div
             ref={ref}
-            style={style}
-            onMouseMove={onMouseMove}
-            onMouseLeave={onMouseLeave}
+            style={isTouch ? {} : style}
+            onMouseMove={isTouch ? null : onMouseMove}
+            onMouseLeave={isTouch ? null : onMouseLeave}
             className={className}
         >
             {children}
@@ -194,12 +200,18 @@ const TiltCard = ({ children, className }) => {
 const MagneticButton = ({ children, className }) => {
     const ref = useRef(null);
     const { style, onMouseMove, onMouseLeave } = useMagnetic(ref);
+    const [isTouch, setIsTouch] = useState(false);
+
+    useEffect(() => {
+        setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    }, []);
+
     return (
         <div
             ref={ref}
-            style={style}
-            onMouseMove={onMouseMove}
-            onMouseLeave={onMouseLeave}
+            style={isTouch ? {} : style}
+            onMouseMove={isTouch ? null : onMouseMove}
+            onMouseLeave={isTouch ? null : onMouseLeave}
             className="inline-block"
         >
             {React.cloneElement(children, { className: `${children.props.className} ${className}` })}

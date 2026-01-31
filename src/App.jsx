@@ -248,10 +248,21 @@ function Navbar({ setIsCommandOpen }) {
               >
                 About
               </Link>
-              <div className="pt-10 border-t border-white/5">
-                <button className="w-full bg-white text-black py-5 rounded-2xl font-black text-xl border-none">
-                  LET'S CHAT
+              <div className="pt-10 border-t border-white/5 space-y-4">
+                <button
+                  onClick={() => {
+                    setIsCommandOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full bg-blue-500/10 text-blue-400 py-4 rounded-2xl font-black text-sm border border-blue-500/20 flex items-center justify-center gap-3"
+                >
+                  <TerminalIcon size={18} /> OPEN TERMINAL
                 </button>
+                <a href="mailto:arroudhilanfi01@gmail.com">
+                  <button className="w-full bg-white text-black py-4 rounded-2xl font-black text-sm border-none">
+                    LET'S CHAT
+                  </button>
+                </a>
               </div>
             </div>
 
