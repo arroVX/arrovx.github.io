@@ -7,56 +7,56 @@ const allProjects = [
     {
         title: "Experimental Poster 01",
         category: "Graphic Design",
-        image: "/assets/images/0001_0.png",
+        image: "project-assets/images/0001_0.png",
         desc: "A bold experimental layout exploring typography and negative space.",
         tech: ["Photoshop", "Typography"]
     },
     {
         title: "Modern Event Flyer",
         category: "Graphic Design",
-        image: "/assets/images/0002_40.png",
+        image: "project-assets/images/0002_40.png",
         desc: "Clean and vibrant event promotion material designed for maximum impact.",
         tech: ["Illustrator", "Layout Design"]
     },
     {
         title: "Digital Art Composition",
         category: "Digital Art",
-        image: "/assets/images/0003_20.png",
+        image: "project-assets/images/0003_20.png",
         desc: "A fusion of organic textures and sharp digital elements.",
         tech: ["Photoshop", "Digital Painting"]
     },
     {
         title: "Concept Poster 05",
         category: "Poster Design",
-        image: "/assets/images/0005_20.png",
+        image: "project-assets/images/0005_20.png",
         desc: "Minimalist concept poster focusing on color harmony and symbolic imagery.",
         tech: ["Graphic Design", "Minimalism"]
     },
     {
         title: "Visual Identity Study",
         category: "Branding",
-        image: "/assets/images/0006_20.png",
+        image: "project-assets/images/0006_20.png",
         desc: "Exploring brand marks and visual language through geometric construction.",
         tech: ["Branding", "Vector"]
     },
     {
         title: "Cinematic Scene Poster",
         category: "Graphic Design",
-        image: "/assets/images/0007_20.png",
+        image: "project-assets/images/0007_20.png",
         desc: "Capturing the mood of a film through dramatic lighting and composition.",
         tech: ["Photo Manipulation"]
     },
     {
         title: "Abstract Flow",
         category: "Design",
-        image: "/assets/images/0009_20.png",
+        image: "project-assets/images/0009_20.png",
         desc: "Dynamic abstract shapes creating a sense of movement and energy.",
         tech: ["Abstract", "Art"]
     },
     {
         title: "Poster Design - Alpha",
         category: "Design",
-        image: "/assets/images/New Project 11 [ABF5BDB].png",
+        image: "project-assets/images/New Project 11 [ABF5BDB].png",
         desc: "Part of a personal series focused on futuristic aesthetics.",
         tech: ["Future", "Design"]
     }
@@ -99,8 +99,8 @@ export default function Projects() {
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
                                 className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none ${selectedCategory === cat
-                                        ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-                                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                    ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                                    : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
                                     }`}
                             >
                                 {cat}
