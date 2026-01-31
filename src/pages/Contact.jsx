@@ -4,6 +4,7 @@ import { Mail, Github, Instagram, Send, MapPin, Globe, MessageSquare } from 'luc
 import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import Toast from '../components/Toast';
 
 const ContactInfo = ({ icon, label, value, href }) => {
     return (
@@ -50,6 +51,7 @@ const MagneticButton = ({ children }) => {
 export default function Contact() {
     const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
     const titleScramble = useScrambleText("Get in Touch", 0);
 
     const handleSubmit = async (e) => {
@@ -61,11 +63,11 @@ export default function Contact() {
                 ...formState,
                 timestamp: serverTimestamp()
             });
-            alert("Pesan terkirim! Makasih ya ro, nanti bakal segera aku cek.");
+            setToast({ isOpen: true, message: "Pesan terkirim! Makasih ya ro, nanti bakal segera aku cek.", type: 'success' });
             setFormState({ name: '', email: '', subject: '', message: '' });
         } catch (error) {
             console.error("Error sending message:", error);
-            alert("Waduh, gagal ngirim pesan. Coba cek koneksi atau config Firebase kamu ro!");
+            setToast({ isOpen: true, message: "Waduh, gagal ngirim pesan. Coba cek koneksi kamu ro!", type: 'error' });
         }
         setIsSubmitting(false);
     };
@@ -200,6 +202,12 @@ export default function Contact() {
                     </div>
                 </div>
             </div>
+            <Toast
+                isOpen={toast.isOpen}
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast({ ...toast, isOpen: false })}
+            />
         </motion.div>
     );
 }

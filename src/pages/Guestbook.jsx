@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { MessageSquare, Send, User, Calendar, Loader2 } from 'lucide-react';
 import { useScrambleText, useMagnetic } from '../utils/animations';
+import Toast from '../components/Toast';
 
 const MessageCard = ({ msg }) => {
     const date = msg.timestamp?.toDate ? msg.timestamp.toDate().toLocaleDateString('id-ID', {
@@ -68,6 +69,7 @@ export default function Guestbook() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
     const titleText = useScrambleText("Guestbook", 0);
 
     useEffect(() => {
@@ -98,11 +100,12 @@ export default function Guestbook() {
                 message: message.trim(),
                 timestamp: serverTimestamp()
             });
+            setToast({ isOpen: true, message: "Pesan terkirim ke digital void! Makasih ya ro.", type: 'success' });
             setName('');
             setMessage('');
         } catch (error) {
             console.error("Error adding message:", error);
-            alert("Gagal mengirim pesan. Pastikan config Firebase sudah benar!");
+            setToast({ isOpen: true, message: "Gagal mengirim pesan. Coba cek koneksi kamu ro!", type: 'error' });
         }
         setSubmitting(false);
     };
@@ -203,6 +206,12 @@ export default function Guestbook() {
             {/* Background elements */}
             <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute bottom-[20%] left-[-10%] w-[500px] h-[500px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
+            <Toast
+                isOpen={toast.isOpen}
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast({ ...toast, isOpen: false })}
+            />
         </motion.div>
     );
 }
