@@ -8,6 +8,7 @@ import Projects from './pages/Projects';
 import Services from './pages/Services';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
+import Guestbook from './pages/Guestbook';
 import CommandCenter from './components/CommandCenter';
 import { Terminal as TerminalIcon, Search } from 'lucide-react';
 import { useMagnetic } from './utils/animations';
@@ -137,7 +138,7 @@ function Navbar({ setIsCommandOpen }) {
 
   const isHome = location.pathname === '/';
 
-  const navLinks = ['Services', 'Work', 'Experience', 'Contact'];
+  const navLinks = ['Services', 'Work', 'Experience', 'Guestbook', 'Contact'];
 
   return (
     <>
@@ -157,6 +158,7 @@ function Navbar({ setIsCommandOpen }) {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
+                  'Guestbook': '/guestbook',
                   'Contact': '/contact'
                 };
                 const to = linkMap[item] || '/';
@@ -222,6 +224,7 @@ function Navbar({ setIsCommandOpen }) {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
+                  'Guestbook': '/guestbook',
                   'Contact': '/contact'
                 };
                 const to = linkMap[item] || '/';
@@ -297,6 +300,7 @@ function Footer() {
               <li><Link to="/services" className="hover:text-white transition-colors border-none">Services</Link></li>
               <li><Link to="/experience" className="hover:text-white transition-colors border-none">Experience</Link></li>
               <li><Link to="/projects" className="hover:text-white transition-colors border-none">Work</Link></li>
+              <li><Link to="/guestbook" className="hover:text-white transition-colors border-none">Guestbook</Link></li>
             </ul>
           </div>
           <div>
@@ -360,6 +364,7 @@ export default function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/experience" element={<Experience />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/guestbook" element={<Guestbook />} />
           </Routes>
         </AnimatePresence>
         <AnimatePresence>
