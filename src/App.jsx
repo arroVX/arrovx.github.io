@@ -205,7 +205,9 @@ function Navbar() {
             </div>
 
             <div className="mt-auto pb-12 flex gap-6">
-              <Instagram className="text-white/20 hover:text-white transition-colors" />
+              <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors border-none">
+                <Instagram />
+              </a>
               <Github className="text-white/20 hover:text-white transition-colors" />
               <Mail className="text-white/20 hover:text-white transition-colors" />
             </div>
@@ -238,7 +240,7 @@ function Footer() {
           <div>
             <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Socials</p>
             <ul className="space-y-4 text-sm font-medium text-white/50">
-              <li><a href="#" className="hover:text-white transition-colors border-none">Instagram</a></li>
+              <li><a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors border-none">Instagram</a></li>
               <li><a href="#" className="hover:text-white transition-colors border-none">LinkedIn</a></li>
               <li><a href="#" className="hover:text-white transition-colors border-none">GitHub</a></li>
             </ul>

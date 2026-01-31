@@ -419,9 +419,9 @@ export default function Home() {
                                 <button className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
                                     <Github />
                                 </button>
-                                <button className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
+                                <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
                                     <Instagram />
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
