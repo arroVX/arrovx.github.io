@@ -352,7 +352,7 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit']">
+      <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden">
         <CustomCursor />
         <BackgroundSystem />
         <Navbar setIsCommandOpen={setIsCommandOpen} />

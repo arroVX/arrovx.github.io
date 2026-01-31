@@ -112,7 +112,7 @@ export default function Guestbook() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen pt-32 pb-20 px-6 relative z-10"
+            className="min-h-screen pt-32 pb-20 px-6 relative z-10 overflow-x-hidden"
         >
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-16">
