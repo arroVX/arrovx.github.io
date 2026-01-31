@@ -4,33 +4,83 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, X, Image as ImageIcon, Search, Loader2 } from 'lucide-react';
 
 const allProjects = [
-    { title: "Visual Flow 01", category: "Poster Design", image: "project-assets/images/0001_0.png", tech: ["Photoshop"] },
-    { title: "Visual Flow 02", category: "Poster Design", image: "project-assets/images/0001_0(1).png", tech: ["Photoshop"] },
-    { title: "Visual Flow 03", category: "Poster Design", image: "project-assets/images/0001_0(1)_1.png", tech: ["Photoshop"] },
-    { title: "Visual Flow 04", category: "Poster Design", image: "project-assets/images/0001_0(2).png", tech: ["Photoshop"] },
-    { title: "Visual Flow 05", category: "Poster Design", image: "project-assets/images/0001_0_1.png", tech: ["Photoshop"] },
-    { title: "Experimental 40", category: "Experimental", image: "project-assets/images/0002_40.png", tech: ["Illustrator"] },
-    { title: "Abstract Composition 20", category: "Digital Art", image: "project-assets/images/0003_20.png", tech: ["Digital Art"] },
-    { title: "Geometric Study 05", category: "Graphic Design", image: "project-assets/images/0005_20.png", tech: ["Graphic Design"] },
-    { title: "Geometric Study 06", category: "Graphic Design", image: "project-assets/images/0005_20_1.png", tech: ["Graphic Design"] },
-    { title: "Geometric Study 07", category: "Graphic Design", image: "project-assets/images/0005_20_2.png", tech: ["Graphic Design"] },
-    { title: "Identity Concept 01", category: "Branding", image: "project-assets/images/0006_20.png", tech: ["Branding"] },
-    { title: "Identity Concept 02", category: "Branding", image: "project-assets/images/0006_20(4).png", tech: ["Branding"] },
-    { title: "Identity Concept 03", category: "Branding", image: "project-assets/images/0006_20_1.png", tech: ["Branding"] },
-    { title: "Cinematic Mood 01", category: "Poster Design", image: "project-assets/images/0007_20.png", tech: ["Photo Manipulation"] },
-    { title: "Cinematic Mood 02", category: "Poster Design", image: "project-assets/images/0007_20_1.png", tech: ["Photo Manipulation"] },
-    { title: "Cinematic Mood 03", category: "Poster Design", image: "project-assets/images/0007_20_2.png", tech: ["Photo Manipulation"] },
-    { title: "Dynamic Flow 01", category: "Design", image: "project-assets/images/0009_20.png", tech: ["Design"] },
-    { title: "Dynamic Flow 02", category: "Design", image: "project-assets/images/0009_20_1.png", tech: ["Design"] },
-    { title: "Moment Capture 01", category: "Photography", image: "project-assets/images/20250619_180706.png", tech: ["Photography"] },
-    { title: "Moment Capture 02", category: "Photography", image: "project-assets/images/20250619_180747.png", tech: ["Photography"] },
-    { title: "Moment Capture 03", category: "Photography", image: "project-assets/images/20250803_165007.png", tech: ["Photography"] },
-    { title: "Futuristic 7", category: "Experimental", image: "project-assets/images/7_20251123_001736_0000.png", tech: ["Digital Art"] },
-    { title: "Futuristic 8", category: "Experimental", image: "project-assets/images/8_20251123_001736_0001.png", tech: ["Digital Art"] },
-    { title: "Modern Concept 11", category: "Graphic Design", image: "project-assets/images/New Project 11 [ABF5BDB].png", tech: ["Layout Design"] },
-    { title: "Modern Concept 16", category: "Graphic Design", image: "project-assets/images/New Project 16 [D2FAA83].png", tech: ["Layout Design"] },
-    { title: "Modern Concept 18", category: "Graphic Design", image: "project-assets/images/New Project 18 [55DC1A5].png", tech: ["Layout Design"] },
-    { title: "Mobile UI Study", category: "UI Design", image: "project-assets/images/IMG_20251101_085224.png", tech: ["Figma"] },
+    {
+        title: "Liga Korupsi Indonesia",
+        category: "Poster Design",
+        image: "project-assets/images/0001_0.png",
+        desc: "A bold social commentary poster detailing major corruption cases in Indonesia (2024-2025). Designed with an investigative 'warning' aesthetic to highlight legal transparency.",
+        tech: ["Photoshop", "Typography"]
+    },
+    {
+        title: "Visual Flow 02",
+        category: "Experimental",
+        image: "project-assets/images/0001_0(1).png",
+        desc: "An experimental exploration of depth and texture, part of the 'Visual Flow' series focusing on abstract digital art.",
+        tech: ["Photoshop"]
+    },
+    {
+        title: "Visual Flow 03",
+        category: "Experimental",
+        image: "project-assets/images/0001_0(1)_1.png",
+        desc: "Continuing the abstract series with a focus on vibrant color contrasts and organic digital rendering.",
+        tech: ["Photoshop"]
+    },
+    {
+        title: "Visual Flow 04",
+        category: "Experimental",
+        image: "project-assets/images/0001_0(2).png",
+        desc: "A darker, more atmospheric entry in the Visual Flow series, exploring negative space and mood.",
+        tech: ["Photoshop"]
+    },
+    {
+        title: "Modern Event Flyer",
+        category: "Graphic Design",
+        image: "project-assets/images/0002_40.png",
+        desc: "A sleek, modern flyer designed for high-end events, emphasizing clean layout and readability.",
+        tech: ["Illustrator"]
+    },
+    {
+        title: "Abstract Composition",
+        category: "Digital Art",
+        image: "project-assets/images/0003_20.png",
+        desc: "A fusion of geometric shapes and fluid gradients, creating a sense of 3D depth on a 2D canvas.",
+        tech: ["Digital Art"]
+    },
+    {
+        title: "Geometric Study 05",
+        category: "Graphic Design",
+        image: "project-assets/images/0005_20.png",
+        desc: "Part of a minimalist series exploring the balance between bold shapes and subtle textures.",
+        tech: ["Graphic Design"]
+    },
+    {
+        title: "Branding Concept 01",
+        category: "Branding",
+        image: "project-assets/images/0006_20.png",
+        desc: "Investigating modern brand marks through strict geometric construction and minimalist visual language.",
+        tech: ["Branding"]
+    },
+    {
+        title: "Cinematic Mood Poster",
+        category: "Poster Design",
+        image: "project-assets/images/0007_20.png",
+        desc: "Capturing the essence of cinematic storytelling through dramatic lighting and photo manipulation techniques.",
+        tech: ["Photo Manipulation"]
+    },
+    {
+        title: "Moment Capture 01",
+        category: "Photography",
+        image: "project-assets/images/20250619_180706.png",
+        desc: "Street photography focusing on the quiet, often overlooked moments of daily life in Indonesia.",
+        tech: ["Photography"]
+    },
+    {
+        title: "Mobile Interface Study",
+        category: "UI Design",
+        image: "project-assets/images/IMG_20251101_085224.png",
+        desc: "A practical study on mobile user experience, focusing on high-contrast accessibility and modern glassmorphism UI.",
+        tech: ["Figma"]
+    },
 ].map(p => ({
     ...p,
     desc: p.desc || `An exploration in ${p.category.toLowerCase()} that pushes the boundaries of visual hierarchy and color theory.`,
@@ -155,7 +205,7 @@ export default function Projects() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
+                        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
