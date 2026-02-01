@@ -9,6 +9,7 @@ import Services from './pages/Services';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
 import Guestbook from './pages/Guestbook';
+import NotFound from './pages/NotFound';
 import CommandCenter from './components/CommandCenter';
 import { Terminal as TerminalIcon, Search } from 'lucide-react';
 import { useMagnetic } from './utils/animations';
@@ -351,7 +352,7 @@ function Footer() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-[10px] font-bold text-white/20 uppercase tracking-widest gap-4">
-        <div>© 2025 ARROUDHIL ANFI — ALL RIGHTS RESERVED</div>
+        <div>© {new Date().getFullYear()} ARROUDHIL ANFI — ALL RIGHTS RESERVED</div>
         <div>BUILT WITH PRECISION BY YOURS TRULY</div>
       </div>
     </footer>
@@ -396,6 +397,7 @@ export default function App() {
             <Route path="/experience" element={<Experience />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/guestbook" element={<Guestbook />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
         <AnimatePresence>
