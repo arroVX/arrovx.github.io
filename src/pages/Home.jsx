@@ -923,14 +923,6 @@ export default function Home() {
                                 />
                             </div>
 
-                            <div className="p-10 border border-dashed border-white/10 rounded-[32px] flex flex-col items-center justify-center text-center group/photo cursor-not-allowed opacity-50">
-                                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white/20 mb-4 group-hover/photo:text-blue-500 transition-colors">
-                                    <Camera size={24} />
-                                </div>
-                                <p className="text-xs font-bold text-white/40 mb-1">Profile Photo (optional)</p>
-                                <p className="text-[10px] text-white/20 uppercase tracking-widest">Max file size: 5MB</p>
-                            </div>
-
                             <button
                                 type="submit"
                                 disabled={submitting}
