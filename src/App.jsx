@@ -20,11 +20,11 @@ import LogoAnimation from './components/LogoAnimation';
 function BackgroundSystem() {
   return (
     <>
-      <div className="fixed inset-0 grid-pattern pointer-events-none opacity-50" />
+      <div className="fixed inset-0 grid-pattern pointer-events-none opacity-30" />
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="blob w-[800px] h-[800px] bg-indigo-500/20 top-[-20%] left-[-10%]" />
-        <div className="blob w-[600px] h-[600px] bg-purple-500/15 top-[40%] right-[-10%]" />
-        <div className="blob w-[800px] h-[800px] bg-blue-500/15 bottom-[-20%] left-[-5%]" />
+        <div className="blob w-[600px] h-[600px] bg-indigo-600/30 top-[-20%] left-[-10%]" />
+        <div className="blob w-[500px] h-[500px] bg-purple-600/20 top-[40%] right-[-10%]" />
+        <div className="blob w-[600px] h-[600px] bg-blue-600/20 bottom-[-20%] left-[-5%]" />
       </div>
     </>
   );
