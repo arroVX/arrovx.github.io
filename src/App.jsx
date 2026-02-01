@@ -394,8 +394,13 @@ export default function App() {
       </AnimatePresence>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoading ? 0 : 1 }}
+        initial={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
+        animate={!isLoading ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0 }}
+        transition={{
+          duration: 1,
+          ease: [0.76, 0, 0.24, 1],
+          delay: 0.8 // Wait for the preloader curtain to clear most of the screen
+        }}
         className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden"
       >
         <CustomCursor />
