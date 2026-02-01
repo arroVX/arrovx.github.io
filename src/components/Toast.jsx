@@ -17,10 +17,10 @@ export default function Toast({ message, type = 'success', isOpen, onClose }) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    initial={{ opacity: 0, y: -20, scale: 0.9, filter: 'blur(10px)' }}
+                    initial={{ opacity: 0, y: 20, scale: 0.9, filter: 'blur(10px)' }}
                     animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -20, scale: 0.9, filter: 'blur(10px)' }}
-                    className="fixed top-6 left-1/2 -translate-x-1/2 md:left-auto md:right-12 md:top-auto md:bottom-12 md:translate-x-0 z-1000000 pointer-events-none px-4 w-full max-w-sm flex justify-center md:block"
+                    exit={{ opacity: 0, y: 20, scale: 0.9, filter: 'blur(10px)' }}
+                    className="fixed bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:right-12 md:bottom-12 md:translate-x-0 z-1000000 pointer-events-none px-4 w-full max-w-sm flex justify-center md:block"
                 >
                     <div className="glass-card p-4 pr-12 border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center gap-4 pointer-events-auto w-full md:min-w-[350px] relative overflow-hidden group">
                         {/* Progress Bar */}

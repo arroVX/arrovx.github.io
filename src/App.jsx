@@ -145,9 +145,9 @@ function Navbar({ setIsCommandOpen }) {
 
   return (
     <>
-      <nav className={`fixed top-0 w-full z-100 transition-all duration-500 ${scrolled ? 'py-3 bg-[#030303]/40 backdrop-blur-md border-b border-white/5' : 'py-4 md:py-8'}`}>
+      <nav className={`fixed top-0 w-full z-100 transition-all duration-300 ${scrolled ? 'py-4' : 'py-4 md:py-8'}`}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className={`py-3 px-6 flex items-center justify-between border-white/5 transition-all duration-500 ${scrolled ? 'bg-transparent border-none' : 'glass-card'}`}>
+          <div className="glass-card py-3 px-6 flex items-center justify-between border-white/5">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap- group border-none">
                 <LogoAnimation />
