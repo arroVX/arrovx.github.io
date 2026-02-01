@@ -147,11 +147,7 @@ function Navbar({ setIsCommandOpen }) {
           <div className="glass-card py-3 px-6 flex items-center justify-between border-white/5">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap- group border-none">
-                <span className="text-lg md:text-xl font-bold tracking-tighter hover:text-blue-400 transition-colors flex items-center">
-                  <span className="hidden sm:inline">ARROUDHIL ANFI</span>
-                  <span className="sm:hidden">ARRO</span>
-                  <span className="text-blue-500 group-hover:text-white transition-colors">.</span>
-                </span>
+                <span className="text-xl font-bold tracking-tighter hover:text-blue-400 transition-colors">ARRO<span className="text-blue-500 group-hover:text-white transition-colors">.</span></span>
               </Link>
               <LiveTime />
             </div>
