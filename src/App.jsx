@@ -149,17 +149,19 @@ function Navbar({ setIsCommandOpen }) {
   return (
     <>
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-6 md:py-8'
+        className={`fixed top-0 w-full z-50 transition-all duration-500 overflow-x-hidden ${scrolled ? 'py-2 md:py-4' : 'py-4 md:py-8'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className={`glass-card py-3 px-6 flex items-center justify-between border-white/5 transition-all duration-500 ${scrolled ? 'bg-black/40 backdrop-blur-3xl border-white/10 shadow-2xl' : ''
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className={`glass-card py-2 md:py-3 px-4 md:px-6 flex items-center justify-between border-white/5 transition-all duration-500 ${scrolled ? 'bg-black/40 backdrop-blur-3xl border-white/10 shadow-2xl' : ''
             }`}>
-            <div className="flex items-center gap-4">
-              <Link to="/" className="flex items-center gap- group border-none">
+            <div className="flex items-center gap-3">
+              <Link to="/" className="flex items-center group border-none">
                 <LogoAnimation />
               </Link>
-              <LiveTime />
+              <div className="hidden sm:block">
+                <LiveTime />
+              </div>
             </div>
 
             <div className="hidden md:flex items-center gap-8">
@@ -423,7 +425,7 @@ export default function App() {
         initial={{ opacity: 0 }}
         animate={!isLoading ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-10 w-full"
+        className="relative z-10 w-full overflow-x-hidden"
       >
         <AnimatePresence mode="wait">
           <Routes>

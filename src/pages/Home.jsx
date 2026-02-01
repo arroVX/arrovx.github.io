@@ -472,9 +472,9 @@ export default function Home() {
     };
 
     return (
-        <main className="relative z-10 text-white">
+        <main className="relative z-10 text-white overflow-x-hidden w-full">
             {/* Hero Section v2 */}
-            <section className="min-h-screen flex flex-col items-center justify-center pt-40 pb-20 px-6 overflow-hidden">
+            <section className="min-h-screen flex flex-col items-center justify-center pt-32 md:pt-40 pb-20 px-4 md:px-6 overflow-hidden">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -485,7 +485,7 @@ export default function Home() {
                         <Zap size={14} className="animate-pulse" /> Portofolio Website 2026
                     </div>
 
-                    <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold mb-6 md:mb-8 leading-[0.9] tracking-tighter italic">
+                    <h1 className="text-4xl sm:text-7xl md:text-9xl font-bold mb-6 md:mb-8 leading-[1] md:leading-[0.9] tracking-tighter italic">
                         <ScrambleTitle text="Bridging" className="text-white" /> <span className="text-blue-500">Tech</span> <br />
                         <ScrambleTitle text="& Design Arts" className="text-linear" delay={500} />
                     </h1>
