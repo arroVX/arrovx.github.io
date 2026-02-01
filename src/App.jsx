@@ -20,11 +20,11 @@ import LogoAnimation from './components/LogoAnimation';
 function BackgroundSystem() {
   return (
     <>
-      <div className="fixed inset-0 grid-pattern pointer-events-none opacity-30" />
+      <div className="fixed inset-0 grid-pattern pointer-events-none opacity-50" />
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="blob w-[600px] h-[600px] bg-indigo-600/30 top-[-20%] left-[-10%]" />
-        <div className="blob w-[500px] h-[500px] bg-purple-600/20 top-[40%] right-[-10%]" />
-        <div className="blob w-[600px] h-[600px] bg-blue-600/20 bottom-[-20%] left-[-5%]" />
+        <div className="blob w-[800px] h-[800px] bg-indigo-500/20 top-[-20%] left-[-10%]" />
+        <div className="blob w-[600px] h-[600px] bg-purple-500/15 top-[40%] right-[-10%]" />
+        <div className="blob w-[800px] h-[800px] bg-blue-500/15 bottom-[-20%] left-[-5%]" />
       </div>
     </>
   );
@@ -393,18 +393,19 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      <BackgroundSystem />
+
       <motion.div
         initial={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
         animate={!isLoading ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0 }}
         transition={{
-          duration: 1,
+          duration: 1.2,
           ease: [0.76, 0, 0.24, 1],
-          delay: 0.8 // Wait for the preloader curtain to clear most of the screen
+          delay: 0.8
         }}
-        className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden"
+        className="relative z-10 min-h-screen text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden"
       >
         <CustomCursor />
-        <BackgroundSystem />
         <Navbar setIsCommandOpen={setIsCommandOpen} />
         <AnimatePresence mode="wait">
           <Routes>
