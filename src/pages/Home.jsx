@@ -10,7 +10,10 @@ import {
     Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight,
     Volume2, BarChart3, Star, ArrowLeft
 } from 'lucide-react';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
+import Toast from '../components/Toast';
 
 const achievements = [
     {
@@ -401,6 +404,33 @@ export default function Home() {
     const [selectedProject, setSelectedProject] = useState(null);
     const [showMusicModal, setShowMusicModal] = useState(false);
 
+    // Guestbook States
+    const [guestName, setGuestName] = useState('');
+    const [guestMessage, setGuestMessage] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
+
+    const handleGuestbookSubmit = async (e) => {
+        e.preventDefault();
+        if (!guestName.trim() || !guestMessage.trim()) return;
+
+        setSubmitting(true);
+        try {
+            await addDoc(collection(db, 'guestbook'), {
+                name: guestName.trim(),
+                message: guestMessage.trim(),
+                timestamp: serverTimestamp()
+            });
+            setToast({ isOpen: true, message: "Pesan terkirim ke digital void!", type: 'success' });
+            setGuestName('');
+            setGuestMessage('');
+        } catch (error) {
+            console.error("Error adding message:", error);
+            setToast({ isOpen: true, message: "Gagal mengirim pesan ro!", type: 'error' });
+        }
+        setSubmitting(false);
+    };
+
     return (
         <main className="relative z-10">
             {/* Hero Section v2 */}
@@ -760,6 +790,71 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* Quick Guestbook Section */}
+            <section className="py-24 px-6 max-w-5xl mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="glass-card p-10 md:p-16 border-white/5 bg-white/2 relative overflow-hidden"
+                >
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
+                                <MessageSquare size={20} />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl font-bold tracking-tighter">Guestbook</h2>
+                                <p className="text-xs text-white/30 uppercase tracking-widest font-black">Drop a message or testimonial</p>
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleGuestbookSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div className="md:col-span-1">
+                                    <input
+                                        type="text"
+                                        value={guestName}
+                                        onChange={(e) => setGuestName(e.target.value)}
+                                        placeholder="Username"
+                                        required
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium text-sm"
+                                    />
+                                </div>
+                                <div className="md:col-span-3 relative">
+                                    <input
+                                        type="text"
+                                        value={guestMessage}
+                                        onChange={(e) => setGuestMessage(e.target.value)}
+                                        placeholder="Tinggalkan pesan di sini ro..."
+                                        required
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 pr-16 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium text-sm"
+                                    />
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                                        <button
+                                            type="submit"
+                                            disabled={submitting}
+                                            className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all disabled:opacity-50 border-none"
+                                        >
+                                            {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div className="mt-8 flex justify-center">
+                            <Link to="/guestbook" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 hover:text-blue-400 transition-colors">
+                                View all messages →
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Background Detail */}
+                    <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none" />
+                </motion.div>
+            </section>
+
             {/* Terminal/Command Promo */}
             <section className="pb-32 px-6">
                 <div className="max-w-5xl mx-auto flex flex-col items-center">
@@ -804,6 +899,12 @@ export default function Home() {
                     </div>
                 )}
             </AnimatePresence>
+            <Toast
+                isOpen={toast.isOpen}
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast({ ...toast, isOpen: false })}
+            />
         </main>
     );
 }
