@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, X } from 'lucide-react';
 
@@ -12,7 +13,7 @@ export default function Toast({ message, type = 'success', isOpen, onClose }) {
         }
     }, [isOpen, onClose]);
 
-    return (
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
                 <motion.div
@@ -53,6 +54,7 @@ export default function Toast({ message, type = 'success', isOpen, onClose }) {
                     </div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

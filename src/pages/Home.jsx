@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -76,12 +77,12 @@ const gear = [
 ];
 
 function MusicModal({ onClose }) {
-    return (
+    return createPortal(
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[10001] flex items-center justify-center p-6 backdrop-blur-3xl bg-black/90"
+            className="fixed inset-0 z-1000001 flex items-center justify-center p-6 backdrop-blur-3xl bg-black/90"
             onClick={onClose}
         >
             <motion.div
@@ -149,7 +150,8 @@ function MusicModal({ onClose }) {
                     </button>
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div>,
+        document.body
     );
 }
 
@@ -221,12 +223,12 @@ const MagneticButton = ({ children, className }) => {
 
 function ProjectModal({ project, onClose }) {
     if (!project) return null;
-    return (
+    return createPortal(
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-100000 flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
+            className="fixed inset-0 z-1000002 flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
             onClick={onClose}
         >
             <motion.div
@@ -260,7 +262,8 @@ function ProjectModal({ project, onClose }) {
                     </div>
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div>,
+        document.body
     );
 }
 

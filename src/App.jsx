@@ -394,6 +394,8 @@ export default function App() {
       </AnimatePresence>
 
       <BackgroundSystem />
+      <CustomCursor />
+      <Navbar setIsCommandOpen={setIsCommandOpen} />
 
       <motion.div
         initial={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
@@ -403,10 +405,8 @@ export default function App() {
           ease: [0.76, 0, 0.24, 1],
           delay: 0.8
         }}
-        className="relative z-10 min-h-screen text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden"
+        className="w-full relative z-10"
       >
-        <CustomCursor />
-        <Navbar setIsCommandOpen={setIsCommandOpen} />
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -419,11 +419,12 @@ export default function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
-        <AnimatePresence>
-          {isCommandOpen && <CommandCenter isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />}
-        </AnimatePresence>
         <Footer />
       </motion.div>
+
+      <AnimatePresence>
+        {isCommandOpen && <CommandCenter isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />}
+      </AnimatePresence>
     </Router>
   );
 }
