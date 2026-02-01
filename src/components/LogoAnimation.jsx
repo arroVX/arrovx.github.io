@@ -1,46 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const variants = [
-    { text: "ARRO" },
-    { text: "ARROUDHIL ANFI" },
-    { text: "ꦄꦫꦺꦴ" },
-    { text: "ꦄꦫꦺꦴꦈꦝꦶꦭ꧀ ꦄꦤ꧀ꦥ꦳ꦶ" },
-    { text: "A.R.R.O" },
-    { text: "ΛRRΘ" },
-    { text: "αяяσ" }
+    "ARRO",
+    "ARROUDHIL ANFI",
+    "ꦄꦫꦺꦴ",
+    "ꦄꦫꦺꦴꦈꦝꦶꦭ꧀ ꦄꦤ꧀ꦥ꦳ꦶ",
+    "A.R.R.O",
+    "ΛRRΘ",
+    "αяяσ"
 ];
+
+const chars = '!<>-_\\/[]{}—=+*^?#________';
 
 export default function LogoAnimation() {
     const [index, setIndex] = useState(0);
+    const [displayText, setDisplayText] = useState(variants[0]);
+    const [isScrambling, setIsScrambling] = useState(false);
+
+    const scramble = useCallback((targetText) => {
+        setIsScrambling(true);
+        let iteration = 0;
+        const maxIterations = targetText.length * 3;
+
+        const interval = setInterval(() => {
+            setDisplayText(
+                targetText.split("")
+                    .map((char, idx) => {
+                        if (idx < iteration / 3) return targetText[idx];
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join("")
+            );
+
+            if (iteration >= maxIterations) {
+                clearInterval(interval);
+                setIsScrambling(false);
+                setDisplayText(targetText);
+            }
+            iteration += 1;
+        }, 30);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % variants.length);
-        }, 3000);
+            const nextIndex = (index + 1) % variants.length;
+            setIndex(nextIndex);
+            scramble(variants[nextIndex]);
+        }, 4000);
         return () => clearInterval(interval);
-    }, []);
-
-    const currentVariant = variants[index];
+    }, [index, scramble]);
 
     return (
-        <div className="flex items-center h-8 overflow-hidden">
-            <AnimatePresence mode="wait">
-                <motion.span
-                    key={index}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{
-                        duration: 0.5,
-                        ease: [0.76, 0, 0.24, 1]
-                    }}
-                    className="text-xl font-bold tracking-tighter hover:text-blue-400 transition-colors whitespace-nowrap inline-flex items-center"
-                >
-                    {currentVariant.text}
-                    <span className="text-blue-500 group-hover:text-white transition-colors ml-px">.</span>
-                </motion.span>
-            </AnimatePresence>
+        <div className="flex items-center h-8">
+            <span
+                className={`text-xl font-bold tracking-tighter transition-colors whitespace-nowrap inline-flex items-center ${isScrambling ? 'text-blue-400' : 'hover:text-blue-400'
+                    }`}
+            >
+                {displayText}
+                <span className="text-blue-500 group-hover:text-white transition-colors ml-px">.</span>
+            </span>
         </div>
     );
 }
