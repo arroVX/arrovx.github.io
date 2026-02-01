@@ -8,7 +8,7 @@ import {
     ChevronRight, Menu, X, Terminal, Cpu,
     Globe, Database, Layers, PlayCircle, ExternalLink,
     Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight,
-    Volume2, BarChart3
+    Volume2, BarChart3, Star, ArrowLeft
 } from 'lucide-react';
 import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
 
@@ -47,25 +47,52 @@ const achievements = [
 
 const projects = [
     {
-        title: "Cinematic Reel 2024",
-        category: "Videography",
-        image: "https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&q=80&w=800",
-        desc: "A collection of high-energy cinematic shots and edits crafted for local clients. Focuses on storytelling and color grading excellence.",
-        tech: ["Premiere Pro", "After Effects", "DaVinci Resolve"]
+        title: "Aritmatika Solver",
+        category: "Programming",
+        image: "https://eki.my.id/storage/project/image/AritmatikaSolver-1707211111.png",
+        desc: "Program dirancang untuk mempermudah pengguna menyelesaikan soal Aritmatika otomatis.",
+        longDesc: "Program ini dirancang untuk mempermudah pengguna dalam menyelesaikan soal-soal Aritmatika secara otomatis dengan menggunakan bahasa pemrograman Python. Membantu pelajar menyelesaikan soal dengan cepat.",
+        tech: ["Python", "CLI", "Mathematics"],
+        stats: { tech: "3", features: "4" },
+        features: [
+            "Menghitung suku tertentu (Un) barisan aritmatika.",
+            "Menentukan suku pertama (a) dan beda (b).",
+            "Menghitung jumlah n suku pertama (Sn).",
+            "Langkah penyelesaian yang mudah dipahami."
+        ],
+        links: { live: "#", github: "#" }
     },
     {
-        title: "Network Infrastructure Mod",
-        category: "TKJ / Networking",
-        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=800",
-        desc: "Designing and configuring a scalable Linux-based server infrastructure with multi-layer security and automated monitoring.",
-        tech: ["Cisco", "Linux", "Nginx", "MikroTik"]
+        title: "Liga Korupsi Indonesia",
+        category: "Poster Design",
+        image: "project-assets/images/0001_0.png",
+        desc: "A bold social commentary poster detailing major corruption cases in Indonesia.",
+        longDesc: "Program visual ini dirancang untuk mempermudah masyarakat dalam memahami skala kasus korupsi di Indonesia melalui desain poster investigatif yang futuristik.",
+        tech: ["Photoshop", "Typography", "Infographics"],
+        stats: { tech: "3", features: "5" },
+        features: [
+            "Visualisasi data korupsi nasional 2024-2025",
+            "Tipografi bergaya investigatif",
+            "Informasi hukum yang terintegrasi visual",
+            "Desain High-Impact untuk kesadaran sosial"
+        ],
+        links: { live: "#", github: "#" }
     },
     {
         title: "React Glass Portfolio",
         category: "Web Dev",
         image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&q=80&w=800",
-        desc: "A futuristic portfolio design featuring high-end glassmorphism, fluid animations, and a focus on visual impact.",
-        tech: ["React", "Framer Motion", "Tailwind CSS"]
+        desc: "A futuristic portfolio design featuring high-end glassmorphism and fluid animations.",
+        longDesc: "Proyek pengembangan portofolio modern menggunakan React dan Framer Motion. Fokus pada performa tinggi dan estetika premium dengan efek transparansi tingkat lanjut.",
+        tech: ["React", "Framer Motion", "Tailwind CSS"],
+        stats: { tech: "3", features: "6" },
+        features: [
+            "Animasi transisi halaman yang smooth",
+            "Komponen kustom glassmorphism",
+            "Responsivitas total di semua perangkat",
+            "Navigasi dinamis dan command center"
+        ],
+        links: { live: "#", github: "#" }
     }
 ];
 
@@ -228,37 +255,156 @@ function ProjectModal({ project, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-1000002 flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
+            className="fixed inset-0 z-1000000 flex items-center justify-center backdrop-blur-3xl bg-[#030303]/95"
             onClick={onClose}
         >
             <motion.div
-                initial={{ scale: 0.9, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 20 }}
-                className="glass-card max-w-2xl w-full overflow-hidden border-white/10"
+                initial={{ scale: 0.95, y: 40, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.95, y: 40, opacity: 0 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#080808] border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] relative custom-scrollbar"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="aspect-video relative bg-zinc-950">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
-                    <button
-                        onClick={onClose}
-                        className="absolute top-4 right-4 w-12 h-12 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none"
-                    >
-                        <X size={24} />
-                    </button>
-                </div>
-                <div className="p-6 md:p-10 bg-zinc-900">
-                    <div className="flex items-center gap-3 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 py-1 px-3 bg-blue-500/10 rounded-lg">{project.category}</span>
+                {/* Close Button Mobile */}
+                <button
+                    onClick={onClose}
+                    className="md:hidden fixed top-6 right-6 z-50 w-12 h-12 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center text-white border-none"
+                >
+                    <X size={24} />
+                </button>
+
+                <div className="p-8 md:p-16 lg:p-20">
+                    {/* Navigation Header */}
+                    <div className="flex items-center gap-4 mb-12">
+                        <button
+                            onClick={onClose}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold text-white/50 hover:text-white transition-all border-none"
+                        >
+                            <ArrowLeft size={16} /> Kembali
+                        </button>
+                        <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white/20">
+                            <span>Karya</span>
+                            <div className="w-1 h-1 bg-white/20 rounded-full" />
+                            <span className="text-blue-500">{project.title}</span>
+                        </div>
                     </div>
-                    <h3 className="text-2xl md:text-4xl font-bold mb-4 tracking-tighter">{project.title}</h3>
-                    <p className="text-white/50 mb-8 leading-relaxed italic border-l-2 border-white/10 pl-6 text-sm md:text-base">
-                        {project.desc}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                        {project.tech.map(t => (
-                            <span key={t} className="text-[10px] font-bold uppercase tracking-widest py-1.5 px-3 bg-white/5 rounded-lg border border-white/5">{t}</span>
-                        ))}
+
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                        {/* Left Content Column */}
+                        <div className="lg:col-span-7 space-y-12">
+                            <div>
+                                <motion.h2
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4"
+                                >
+                                    {project.title}
+                                </motion.h2>
+                                <div className="w-24 h-1.5 bg-linear-to-r from-blue-500 to-indigo-600 rounded-full mb-8 shadow-[0_0_20px_rgba(59,130,246,0.5)]" />
+                                <p className="text-lg md:text-xl text-white/60 leading-relaxed font-medium">
+                                    {project.longDesc || project.desc}
+                                </p>
+                            </div>
+
+                            {/* Stats Grid */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="glass-card p-6 bg-white/2 border-white/5 group hover:bg-white/5 transition-all">
+                                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-4 group-hover:scale-110 transition-transform">
+                                        <Terminal size={20} />
+                                    </div>
+                                    <h4 className="text-2xl font-black text-white mb-1">{project.stats?.tech || project.tech.length}</h4>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Total Teknologi</p>
+                                </div>
+                                <div className="glass-card p-6 bg-white/2 border-white/5 group hover:bg-white/5 transition-all">
+                                    <div className="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center text-purple-500 mb-4 group-hover:scale-110 transition-transform">
+                                        <Layers size={20} />
+                                    </div>
+                                    <h4 className="text-2xl font-black text-white mb-1">{project.stats?.features || (project.features?.length || "0")}</h4>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Fitur Utama</p>
+                                </div>
+                            </div>
+
+                            {/* Primary Buttons */}
+                            <div className="flex flex-wrap gap-4">
+                                <a
+                                    href={project.links?.live || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs tracking-widest uppercase transition-all shadow-[0_10px_30px_rgba(37,99,235,0.3)] group"
+                                >
+                                    <Globe size={18} className="group-hover:rotate-12 transition-transform" /> Live Demo
+                                </a>
+                                <a
+                                    href={project.links?.github || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs tracking-widest uppercase transition-all border border-white/10"
+                                >
+                                    <Github size={18} /> Github
+                                </a>
+                            </div>
+
+                            {/* Tech Stack List */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2 text-white/40">
+                                    <Terminal size={14} className="text-blue-500" />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Technologies Used</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {project.tech.map(t => (
+                                        <div key={t} className="px-4 py-2 bg-blue-500/5 border border-blue-500/10 rounded-xl text-[10px] font-bold text-blue-400 uppercase tracking-widest hover:bg-blue-500/10 transition-colors">
+                                            # {t}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Visual/Mockup Column */}
+                        <div className="lg:col-span-5 space-y-8">
+                            <div className="relative group">
+                                <div className="absolute -inset-4 bg-blue-500/10 blur-[60px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                <div className="relative aspect-4/3 w-full rounded-[40px] overflow-hidden bg-zinc-900 border border-white/10 p-4 shadow-2xl">
+                                    <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
+                                        <img
+                                            src={project.image}
+                                            alt={project.title}
+                                            className="w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Key Features Card */}
+                            <div className="glass-card p-8 md:p-10 bg-white/2 border-white/5 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-5">
+                                    <Star size={80} className="text-blue-500" />
+                                </div>
+                                <div className="flex items-center gap-3 mb-8">
+                                    <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400">
+                                        <Star size={18} fill="currentColor" />
+                                    </div>
+                                    <h3 className="text-xl font-bold tracking-tight text-white">Key Features</h3>
+                                </div>
+                                <div className="space-y-5">
+                                    {(project.features || [
+                                        "Interactive UI components with smooth animations",
+                                        "Fully responsive design for all device sizes",
+                                        "Optimized performance and SEO practices",
+                                        "Integrated dynamic data management"
+                                    ]).map((feature, idx) => (
+                                        <div key={idx} className="flex items-start gap-4 group">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500/40 mt-2 group-hover:scale-150 group-hover:bg-blue-500 transition-all" />
+                                            <p className="text-sm md:text-base text-white/50 leading-relaxed group-hover:text-white/80 transition-colors">
+                                                {feature}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </motion.div>

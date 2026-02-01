@@ -1,21 +1,50 @@
-import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, X, Image as ImageIcon, Search, Loader2 } from 'lucide-react';
+import {
+    ArrowLeft, ExternalLink, X, Image as ImageIcon,
+    Search, Loader2, Github, Terminal, Layers,
+    Link as LinkIcon, Star, CheckCircle2, Globe
+} from 'lucide-react';
 
 const allProjects = [
     {
         title: "Liga Korupsi Indonesia",
         category: "Poster Design",
         image: "project-assets/images/0001_0.png",
-        desc: "A bold social commentary poster detailing major corruption cases in Indonesia (2024-2025). Designed with an investigative 'warning' aesthetic to highlight legal transparency.",
-        tech: ["Photoshop", "Typography"]
+        desc: "A bold social commentary poster detailing major corruption cases in Indonesia (2024-2025).",
+        longDesc: "Program visual ini dirancang untuk mempermudah masyarakat dalam memahami skala kasus korupsi di Indonesia. Proyek ini menggabungkan jurnalisme data dengan desain poster investigatif untuk menonjolkan transparansi hukum.",
+        tech: ["Photoshop", "Typography", "Data Journalism"],
+        stats: { tech: "3", features: "5" },
+        features: [
+            "Visualisasi data kasus korupsi besar",
+            "Tipografi bergaya investigatif",
+            "Layout infografis yang padat informasi",
+            "Palet warna peringatan (High Warning)",
+            "Kompilasi data hukum 2024-2025"
+        ],
+        links: { live: "#", github: "#" }
+    },
+    {
+        title: "Aritmatika Solver",
+        category: "Programming",
+        image: "https://eki.my.id/storage/project/image/AritmatikaSolver-1707211111.png", // Using a fallback or user might update
+        desc: "Program dirancang untuk mempermudah pengguna menyelesaikan soal Aritmatika otomatis.",
+        longDesc: "Program ini dirancang untuk mempermudah pengguna dalam menyelesaikan soal-soal Aritmatika secara otomatis dengan menggunakan bahasa pemrograman Python. Tujuan utama dari program ini adalah untuk membantu pengguna, terutama pelajar, dalam menyelesaikan soal-soal Aritmatika dengan lebih cepat dan mudah.",
+        tech: ["Python", "CLI", "Math API"],
+        stats: { tech: "3", features: "4" },
+        features: [
+            "Menghitung suku tertentu dari barisan aritmatika dengan menggunakan rumus suku ke-n.",
+            "Menentukan suku pertama atau beda jika hanya dua suku diketahui dalam barisan aritmatika.",
+            "Menghitung jumlah n suku pertama dari deret aritmatika dengan langkah perhitungan yang jelas."
+        ],
+        links: { live: "https://replit.com/@arroudhilanfi/Aritmatika-Solver", github: "https://github.com/arroVX/aritmatika-solver" }
     },
     {
         title: "Visual Flow 02",
         category: "Experimental",
         image: "project-assets/images/0001_0(1).png",
-        desc: "An experimental exploration of depth and texture, part of the 'Visual Flow' series focusing on abstract digital art.",
+        desc: "An experimental exploration of depth and texture, part of the 'Visual Flow' series.",
         tech: ["Photoshop"]
     },
     {
@@ -204,50 +233,169 @@ export default function Projects() {
                 )}
             </div>
 
-            {/* Project Modal */}
+            {/* Project Modal: Poster Style Detail View */}
             <AnimatePresence>
-                {selectedProject && (
+                {selectedProject && createPortal(
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
+                        className="fixed inset-0 z-1000000 flex items-center justify-center backdrop-blur-3xl bg-[#030303]/95"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            exit={{ scale: 0.9, y: 20 }}
-                            className="glass-card max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh] border-white/10"
+                            initial={{ scale: 0.95, y: 40, opacity: 0 }}
+                            animate={{ scale: 1, y: 0, opacity: 1 }}
+                            exit={{ scale: 0.95, y: 40, opacity: 0 }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#080808] border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] relative custom-scrollbar"
                             onClick={e => e.stopPropagation()}
                         >
-                            <div className="relative flex-1 overflow-hidden min-h-[300px] bg-zinc-950">
-                                <img
-                                    src={selectedProject.image}
-                                    alt={selectedProject.title}
-                                    className="w-full h-full object-contain bg-zinc-950"
-                                />
-                                <button
-                                    onClick={() => setSelectedProject(null)}
-                                    className="absolute top-4 right-4 w-12 h-12 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white hover:bg-white hover:text-black transition-all border-none"
-                                >
-                                    <X size={24} />
-                                </button>
-                            </div>
-                            <div className="p-6 md:p-8 bg-zinc-900 border-t border-white/5">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 py-1 px-3 bg-blue-500/10 rounded-lg mb-4 inline-block">{selectedProject.category}</span>
-                                <h3 className="text-2xl md:text-3xl font-bold mb-4 tracking-tighter">{selectedProject.title}</h3>
-                                <p className="text-white/50 text-sm mb-6 leading-relaxed italic border-l-2 border-white/10 pl-4">
-                                    {selectedProject.desc}
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {selectedProject.tech.map(t => (
-                                        <span key={t} className="text-[10px] font-bold uppercase tracking-widest py-1 px-2.5 bg-white/5 rounded-lg border border-white/5">{t}</span>
-                                    ))}
+                            {/* Close Button Mobile */}
+                            <button
+                                onClick={() => setSelectedProject(null)}
+                                className="md:hidden fixed top-6 right-6 z-50 w-12 h-12 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center text-white border-none"
+                            >
+                                <X size={24} />
+                            </button>
+
+                            <div className="p-8 md:p-16 lg:p-20">
+                                {/* Navigation Header */}
+                                <div className="flex items-center gap-4 mb-12">
+                                    <button
+                                        onClick={() => setSelectedProject(null)}
+                                        className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold text-white/50 hover:text-white transition-all border-none"
+                                    >
+                                        <ArrowLeft size={16} /> Back
+                                    </button>
+                                    <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white/20">
+                                        <span>Projects</span>
+                                        <div className="w-1 h-1 bg-white/20 rounded-full" />
+                                        <span className="text-blue-500">{selectedProject.title}</span>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                                    {/* Left Content Column */}
+                                    <div className="lg:col-span-7 space-y-12">
+                                        <div>
+                                            <motion.h2
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4"
+                                            >
+                                                {selectedProject.title}
+                                            </motion.h2>
+                                            <div className="w-24 h-1.5 bg-linear-to-r from-blue-500 to-indigo-600 rounded-full mb-8 shadow-[0_0_20px_rgba(59,130,246,0.5)]" />
+                                            <p className="text-lg md:text-xl text-white/60 leading-relaxed font-medium">
+                                                {selectedProject.longDesc || selectedProject.desc}
+                                            </p>
+                                        </div>
+
+                                        {/* Stats Grid */}
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="glass-card p-6 bg-white/2 border-white/5 group hover:bg-white/5 transition-all">
+                                                <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-4 group-hover:scale-110 transition-transform">
+                                                    <Terminal size={20} />
+                                                </div>
+                                                <h4 className="text-2xl font-black text-white mb-1">{selectedProject.stats?.tech || selectedProject.tech.length}</h4>
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Total Teknologi</p>
+                                            </div>
+                                            <div className="glass-card p-6 bg-white/2 border-white/5 group hover:bg-white/5 transition-all">
+                                                <div className="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center text-purple-500 mb-4 group-hover:scale-110 transition-transform">
+                                                    <Layers size={20} />
+                                                </div>
+                                                <h4 className="text-2xl font-black text-white mb-1">{selectedProject.stats?.features || (selectedProject.features?.length || "0")}</h4>
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Fitur Utama</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Primary Buttons */}
+                                        <div className="flex flex-wrap gap-4">
+                                            <a
+                                                href={selectedProject.links?.live || "#"}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs tracking-widest uppercase transition-all shadow-[0_10px_30px_rgba(37,99,235,0.3)] group"
+                                            >
+                                                <Globe size={18} className="group-hover:rotate-12 transition-transform" /> Live Demo
+                                            </a>
+                                            <a
+                                                href={selectedProject.links?.github || "#"}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs tracking-widest uppercase transition-all border border-white/10"
+                                            >
+                                                <Github size={18} /> Github
+                                            </a>
+                                        </div>
+
+                                        {/* Tech Stack List */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center gap-2 text-white/40">
+                                                <Terminal size={14} className="text-blue-500" />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Technologies Used</span>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2">
+                                                {selectedProject.tech.map(t => (
+                                                    <div key={t} className="px-4 py-2 bg-blue-500/5 border border-blue-500/10 rounded-xl text-[10px] font-bold text-blue-400 uppercase tracking-widest hover:bg-blue-500/10 transition-colors">
+                                                        # {t}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Visual/Mockup Column */}
+                                    <div className="lg:col-span-5 space-y-8">
+                                        <div className="relative group">
+                                            {/* Decorative Background for Mockup */}
+                                            <div className="absolute -inset-4 bg-blue-500/10 blur-[60px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                            <div className="relative aspect-4/3 w-full rounded-[40px] overflow-hidden bg-zinc-900 border border-white/10 p-4 shadow-2xl">
+                                                <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
+                                                    <img
+                                                        src={selectedProject.image}
+                                                        alt={selectedProject.title}
+                                                        className="w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Key Features Card */}
+                                        <div className="glass-card p-8 md:p-10 bg-white/2 border-white/5 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-4 opacity-5">
+                                                <Star size={80} className="text-blue-500" />
+                                            </div>
+                                            <div className="flex items-center gap-3 mb-8">
+                                                <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400">
+                                                    <Star size={18} fill="currentColor" />
+                                                </div>
+                                                <h3 className="text-xl font-bold tracking-tight text-white">Key Features</h3>
+                                            </div>
+                                            <div className="space-y-5">
+                                                {(selectedProject.features || [
+                                                    "Interactive UI components with smooth animations",
+                                                    "Fully responsive design for all device sizes",
+                                                    "Optimized performance and SEO practices",
+                                                    "Integrated dynamic data management"
+                                                ]).map((feature, idx) => (
+                                                    <div key={idx} className="flex items-start gap-4 group">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500/40 mt-2 group-hover:scale-150 group-hover:bg-blue-500 transition-all" />
+                                                        <p className="text-sm md:text-base text-white/50 leading-relaxed group-hover:text-white/80 transition-colors">
+                                                            {feature}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
-                    </motion.div>
+                    </motion.div>,
+                    document.body
                 )}
             </AnimatePresence>
         </main>
