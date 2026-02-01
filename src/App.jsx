@@ -167,15 +167,22 @@ function Navbar({ setIsCommandOpen }) {
                 const to = linkMap[item] || '/';
 
                 return (
-                  <Link key={item} to={to} className="text-sm font-medium text-white/50 hover:text-white transition-colors relative group border-none">
+                  <Link
+                    key={item}
+                    to={to}
+                    className={`text-sm font-medium transition-all relative group border-none ${location.pathname === to ? 'text-white' : 'text-white/30 hover:text-white/70'
+                      }`}
+                  >
                     {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full opacity-0 group-hover:opacity-100" />
+                    <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === to ? 'w-full opacity-100' : 'w-0 group-hover:w-full opacity-0 group-hover:opacity-100'
+                      }`} />
                   </Link>
                 );
               })}
-              <Link to="/about" className={`text-sm font-medium transition-colors relative group border-none ${location.pathname === '/about' ? 'text-white' : 'text-white/50 hover:text-white'}`}>
+              <Link to="/about" className={`text-sm font-medium transition-all relative group border-none ${location.pathname === '/about' ? 'text-white' : 'text-white/30 hover:text-white/70'
+                }`}>
                 About
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === '/about' ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === '/about' ? 'w-full opacity-100' : 'w-0 group-hover:w-full opacity-0'}`} />
               </Link>
               <MagneticButton>
                 <button

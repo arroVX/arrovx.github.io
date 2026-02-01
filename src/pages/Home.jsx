@@ -8,7 +8,8 @@ import {
     ChevronRight, Menu, X, Terminal, Cpu,
     Globe, Database, Layers, PlayCircle, ExternalLink,
     Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight,
-    Volume2, BarChart3, Star, ArrowLeft, MessageSquare, Loader2, Send
+    Volume2, BarChart3, Star, ArrowLeft, MessageSquare, Loader2, Send,
+    User, MessageCircle, Share2
 } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -401,6 +402,13 @@ export default function Home() {
     const [guestName, setGuestName] = useState('');
     const [guestMessage, setGuestMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
+
+    // Contact States
+    const [contactName, setContactName] = useState('');
+    const [contactEmail, setContactEmail] = useState('');
+    const [contactMessage, setContactMessage] = useState('');
+    const [sendingContact, setSendingContact] = useState(false);
+
     const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
 
     const handleGuestbookSubmit = async (e) => {
@@ -422,6 +430,28 @@ export default function Home() {
             setToast({ isOpen: true, message: "Gagal mengirim pesan ro!", type: 'error' });
         }
         setSubmitting(false);
+    };
+
+    const handleContactSubmit = async (e) => {
+        e.preventDefault();
+        if (!contactName.trim() || !contactEmail.trim() || !contactMessage.trim()) return;
+
+        setSendingContact(true);
+        try {
+            await addDoc(collection(db, 'contacts'), {
+                name: contactName,
+                email: contactEmail,
+                message: contactMessage,
+                timestamp: serverTimestamp()
+            });
+            setToast({ isOpen: true, message: "Pesan kontak berhasil terkirim!", type: 'success' });
+            setContactName('');
+            setContactEmail('');
+            setContactMessage('');
+        } catch (error) {
+            setToast({ isOpen: true, message: "Gagal mengirim kontak.", type: 'error' });
+        }
+        setSendingContact(false);
     };
 
     return (
@@ -746,97 +776,164 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Contact CTA */}
-            <section id="contact" className="py-32 px-6">
-                <div className="max-w-5xl mx-auto glass-card p-12 md:p-24 text-center relative overflow-hidden border-none shadow-[0_0_100px_rgba(59,130,246,0.1)]">
-                    <div className="relative z-10">
-                        <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">Ready to start a <br /> <span className="text-linear">project?</span></h2>
-                        <p className="text-white/50 text-lg mb-12 max-w-md mx-auto">Let's collaborate on something extraordinary. Available for remote work and collaborations.</p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <Link to="/contact" className="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all border-none text-center">
-                                Get in Touch
-                            </Link>
-                            <div className="mt-12 md:hidden">
-                                <Link to="/projects" className="w-full py-5 glass-card flex items-center justify-center gap-3 font-bold border-none">
-                                    View Archive <ArrowUpRight size={18} />
-                                </Link>
+            {/* Unified Contact & Guestbook Section */}
+            <section className="py-32 px-6 max-w-7xl mx-auto">
+                <div className="text-center mb-20">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-5xl md:text-7xl font-bold tracking-tighter mb-4"
+                    >
+                        Hubungi <span className="text-linear">Saya</span>
+                    </motion.h2>
+                    <p className="text-white/40 max-w-2xl mx-auto">Punya pertanyaan? Kirimi saya pesan, dan saya akan segera membalasnya.</p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    {/* Left: Contact Form */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -40 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="glass-card p-8 md:p-12 border-white/5 relative group"
+                    >
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h3 className="text-3xl font-bold mb-2">Hubungi</h3>
+                                <p className="text-white/30 text-sm">Ada yang ingin didiskusikan? Kirim saya pesan dan mari kita bicara.</p>
                             </div>
-                            <div className="flex gap-4">
-                                <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
-                                    <Github />
+                            <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center text-white/40 border border-white/5">
+                                <Share2 size={18} />
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleContactSubmit} className="space-y-4">
+                            <div className="relative group/input">
+                                <User size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-blue-500 transition-colors" />
+                                <input
+                                    type="text"
+                                    value={contactName}
+                                    onChange={(e) => setContactName(e.target.value)}
+                                    placeholder="Nama Anda"
+                                    required
+                                    className="w-full bg-white/2 border border-white/5 rounded-2xl px-14 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium"
+                                />
+                            </div>
+                            <div className="relative group/input">
+                                <Mail size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-blue-500 transition-colors" />
+                                <input
+                                    type="email"
+                                    value={contactEmail}
+                                    onChange={(e) => setContactEmail(e.target.value)}
+                                    placeholder="Email Anda"
+                                    required
+                                    className="w-full bg-white/2 border border-white/5 rounded-2xl px-14 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium"
+                                />
+                            </div>
+                            <div className="relative group/input">
+                                <MessageCircle size={18} className="absolute left-5 top-6 text-white/20 group-focus-within/input:text-blue-500 transition-colors" />
+                                <textarea
+                                    value={contactMessage}
+                                    onChange={(e) => setContactMessage(e.target.value)}
+                                    placeholder="Pesan Anda"
+                                    required
+                                    rows={5}
+                                    className="w-full bg-white/2 border border-white/5 rounded-3xl px-14 py-5 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium resize-none shadow-none"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={sendingContact}
+                                className="w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl font-black text-xs tracking-[0.2em] uppercase transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 border-none"
+                            >
+                                {sendingContact ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />} Kirim Pesan
+                            </button>
+                        </form>
+
+                        <div className="mt-12 pt-12 border-t border-white/5">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-6 flex items-center gap-4">
+                                <span className="w-8 h-px bg-white/10" /> Connect With Me
+                            </p>
+                            <div className="grid grid-cols-2 gap-4">
+                                <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="glass-card p-4 flex items-center gap-3 hover:bg-white/5 transition-all border-none">
+                                    <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center"><Github size={20} /></div>
+                                    <span className="text-xs font-bold text-white/70">GitHub</span>
                                 </a>
-                                <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="w-14 h-14 glass-card flex items-center justify-center hover:bg-white/10 transition-all border-white/5 border-none">
-                                    <Instagram />
+                                <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="glass-card p-4 flex items-center gap-3 hover:bg-white/5 transition-all border-none">
+                                    <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center"><Instagram size={20} /></div>
+                                    <span className="text-xs font-bold text-white/70">Instagram</span>
                                 </a>
                             </div>
                         </div>
-                    </div>
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-[100px] pointer-events-none" />
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 blur-[100px] pointer-events-none" />
-                </div>
-            </section>
+                    </motion.div>
 
-            {/* Quick Guestbook Section */}
-            <section className="py-24 px-6 max-w-5xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="glass-card p-10 md:p-16 border-white/5 bg-white/2 relative overflow-hidden"
-                >
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-3 mb-8">
+                    {/* Right: Guestbook */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="glass-card p-8 md:p-12 border-white/5 min-h-full"
+                    >
+                        <div className="flex items-center gap-3 mb-10">
                             <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
                                 <MessageSquare size={20} />
                             </div>
-                            <div>
-                                <h2 className="text-3xl font-bold tracking-tighter text-white">Guestbook</h2>
-                                <p className="text-xs text-white/30 uppercase tracking-widest font-black">Drop a message or testimonial</p>
-                            </div>
+                            <h3 className="text-2xl font-bold">Guestbook <span className="text-white/20 text-lg font-medium ml-2 font-mono">(Live)</span></h3>
                         </div>
 
                         <form onSubmit={handleGuestbookSubmit} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                <div className="md:col-span-1">
-                                    <input
-                                        type="text"
-                                        value={guestName}
-                                        onChange={(e) => setGuestName(e.target.value)}
-                                        placeholder="Username"
-                                        required
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium text-sm"
-                                    />
-                                </div>
-                                <div className="md:col-span-3 relative">
-                                    <input
-                                        type="text"
-                                        value={guestMessage}
-                                        onChange={(e) => setGuestMessage(e.target.value)}
-                                        placeholder="Tinggalkan pesan di sini ro..."
-                                        required
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 pr-16 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium text-sm"
-                                    />
-                                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                                        <button
-                                            type="submit"
-                                            disabled={submitting}
-                                            className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all disabled:opacity-50 border-none"
-                                        >
-                                            {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
-                                        </button>
-                                    </div>
-                                </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Name <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    value={guestName}
+                                    onChange={(e) => setGuestName(e.target.value)}
+                                    placeholder="Enter your name"
+                                    required
+                                    className="w-full bg-white/2 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium"
+                                />
                             </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Message <span className="text-red-500">*</span></label>
+                                <textarea
+                                    value={guestMessage}
+                                    onChange={(e) => setGuestMessage(e.target.value)}
+                                    placeholder="Write your message here..."
+                                    required
+                                    rows={4}
+                                    className="w-full bg-white/2 border border-white/5 rounded-3xl px-6 py-5 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium resize-none shadow-none"
+                                />
+                            </div>
+
+                            <div className="p-10 border border-dashed border-white/10 rounded-[32px] flex flex-col items-center justify-center text-center group/photo cursor-not-allowed opacity-50">
+                                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white/20 mb-4 group-hover/photo:text-blue-500 transition-colors">
+                                    <Camera size={24} />
+                                </div>
+                                <p className="text-xs font-bold text-white/40 mb-1">Profile Photo (optional)</p>
+                                <p className="text-[10px] text-white/20 uppercase tracking-widest">Max file size: 5MB</p>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={submitting}
+                                className="w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl font-black text-xs tracking-[0.2em] uppercase transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 border-none shadow-[0_10px_30px_rgba(37,99,235,0.2)]"
+                            >
+                                {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />} Post Comment
+                            </button>
                         </form>
 
-                        <div className="mt-8 flex justify-center">
-                            <Link to="/guestbook" className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 hover:text-blue-400 transition-colors">
-                                View all messages →
+                        <div className="mt-12 flex flex-col items-center justify-center h-40 border-t border-white/5 pt-12">
+                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/10 mb-4">
+                                <User size={24} />
+                            </div>
+                            <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">No comments yet. Start the conversation!</p>
+                            <Link to="/guestbook" className="mt-4 text-[9px] font-black uppercase tracking-[0.4em] text-blue-500 hover:text-blue-400 transition-colors">
+                                View Archieve →
                             </Link>
                         </div>
-                    </div>
-                    <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none" />
-                </motion.div>
+                    </motion.div>
+                </div>
             </section>
 
             {/* Terminal/Command Promo */}
