@@ -147,7 +147,11 @@ function Navbar({ setIsCommandOpen }) {
           <div className="glass-card py-3 px-6 flex items-center justify-between border-white/5">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap- group border-none">
-                <span className="text-xl font-bold tracking-tighter hover:text-blue-400 transition-colors">ARRO<span className="text-blue-500 group-hover:text-white transition-colors">.</span></span>
+                <span className="text-lg md:text-xl font-bold tracking-tighter hover:text-blue-400 transition-colors flex items-center">
+                  <span className="hidden sm:inline">ARROUDHIL ANFI</span>
+                  <span className="sm:hidden">ARRO</span>
+                  <span className="text-blue-500 group-hover:text-white transition-colors">.</span>
+                </span>
               </Link>
               <LiveTime />
             </div>
@@ -199,9 +203,20 @@ function Navbar({ setIsCommandOpen }) {
               </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="w-10 h-10 flex items-center justify-center text-white bg-white/5 rounded-xl border-none active:scale-90 transition-transform"
+                className="w-10 h-10 flex flex-col items-center justify-center gap-1.5 text-white bg-white/5 rounded-xl border-none active:scale-90 transition-all relative overflow-hidden"
               >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                <motion.span
+                  animate={mobileMenuOpen ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
+                  className="w-5 h-0.5 bg-white rounded-full"
+                />
+                <motion.span
+                  animate={mobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
+                  className="w-5 h-0.5 bg-white rounded-full"
+                />
+                <motion.span
+                  animate={mobileMenuOpen ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
+                  className="w-5 h-0.5 bg-white rounded-full"
+                />
               </button>
             </div>
           </div>
@@ -218,64 +233,84 @@ function Navbar({ setIsCommandOpen }) {
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-[49] bg-[#030303]/95 backdrop-blur-2xl md:hidden flex flex-col pt-32 px-10"
           >
-            <div className="flex flex-col gap-8">
-              {navLinks.map((item) => {
+            <div className="flex flex-col gap-6">
+              {['Services', 'Work', 'Experience', 'Guestbook', 'About', 'Contact'].map((item, i) => {
                 const linkMap = {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
                   'Guestbook': '/guestbook',
+                  'About': '/about',
                   'Contact': '/contact'
                 };
                 const to = linkMap[item] || '/';
 
                 return (
-                  <Link
+                  <motion.div
                     key={item}
-                    to={to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-4xl font-bold tracking-tighter text-white/40 hover:text-white transition-colors border-none"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05 }}
                   >
-                    {item}
-                  </Link>
+                    <Link
+                      to={to}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`text-5xl font-bold tracking-tighter transition-all border-none flex items-center gap-4 ${location.pathname === to ? 'text-white' : 'text-white/20 hover:text-white'
+                        }`}
+                    >
+                      <span className="text-sm font-black text-blue-500/50 mt-2">0{i + 1}</span>
+                      {item}
+                    </Link>
+                  </motion.div>
                 );
               })}
-              <Link
-                to="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`text-4xl font-bold tracking-tighter transition-colors border-none ${location.pathname === '/about' ? 'text-white' : 'text-white/40'}`}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="pt-10 mt-10 border-t border-white/5 space-y-4"
               >
-                About
-              </Link>
-              <div className="pt-10 border-t border-white/5 space-y-4">
-                <button
-                  onClick={() => {
-                    setIsCommandOpen(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full bg-blue-500/10 text-blue-400 py-4 rounded-2xl font-black text-sm border border-blue-500/20 flex items-center justify-center gap-3"
-                >
-                  <TerminalIcon size={18} /> OPEN TERMINAL
-                </button>
-                <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full bg-white text-black py-4 rounded-2xl font-black text-sm border-none">
-                    LET'S CHAT
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => {
+                      setIsCommandOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex-1 bg-white/5 text-white/50 py-5 rounded-2xl font-bold text-xs border border-white/5 flex items-center justify-center gap-3 active:scale-95 transition-all"
+                  >
+                    <TerminalIcon size={16} /> TERMINAL
                   </button>
-                </Link>
-              </div>
+                  <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex-1">
+                    <button className="w-full bg-white text-black py-5 rounded-2xl font-black text-xs border-none active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)]">
+                      LET'S CHAT
+                    </button>
+                  </Link>
+                </div>
+              </motion.div>
             </div>
 
-            <div className="mt-auto pb-12 flex gap-6">
-              <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors border-none">
-                <Instagram size={28} />
-              </a>
-              <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white transition-colors border-none">
-                <Github size={28} />
-              </a>
-              <a href="mailto:arroudhilanfi01@gmail.com" className="text-white/20 hover:text-white transition-colors border-none">
-                <Mail size={28} />
-              </a>
-            </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="mt-auto pb-12 flex items-center justify-between"
+            >
+              <div className="flex gap-6">
+                <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 transition-all border-none">
+                  <Instagram size={20} />
+                </a>
+                <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 transition-all border-none">
+                  <Github size={20} />
+                </a>
+                <a href="mailto:arroudhilanfi01@gmail.com" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 transition-all border-none">
+                  <Mail size={20} />
+                </a>
+              </div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-white/10">
+                Menu v2.0
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
