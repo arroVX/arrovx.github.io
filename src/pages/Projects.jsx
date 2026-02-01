@@ -147,15 +147,21 @@ export default function Projects() {
                             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
                         </Link>
                         <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
                             className="text-5xl md:text-7xl font-bold tracking-tighter mb-6"
                         >
                             Visual <span className="text-linear">Archive.</span>
                         </motion.h1>
-                        <p className="text-lg text-white/50 leading-relaxed">
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-lg text-white/50 leading-relaxed"
+                        >
                             Full collection featuring {allProjects.length} design works. From technical networking diagrams to experimental posters.
-                        </p>
+                        </motion.p>
                     </div>
 
                     {/* Category Filter */}

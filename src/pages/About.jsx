@@ -49,7 +49,13 @@ export default function About() {
                 </div>
 
                 {/* Narrative */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20"
+                >
                     <div className="md:col-span-2 space-y-6 text-lg text-white/70 leading-relaxed">
                         Hi, I'm <span className="text-white font-bold">Arroudhil Anfi</span>, but you can call me <span className="text-blue-400 font-bold">Arro</span>. I'm a student at <span className="text-white font-bold">SMK Negeri 3 Jepara</span> specializing in Computer and Network Engineering (TKJ) who doesn't believe in boundaries between technology and creativity.
                         <p>
@@ -62,55 +68,86 @@ export default function About() {
                     <div className="space-y-6">
                         <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white/30">Personal Stats</h3>
                         <div className="space-y-4">
-                            <StatItem label="Code Satisfaction" value="100%" />
-                            <StatItem label="Music Playtime" value="Infinity" />
-                            <StatItem label="Caffeine Level" value="Midnight" />
-                            <StatItem label="Success Rate" value="99.9%" />
+                            {[
+                                { label: "Code Satisfaction", value: "100%" },
+                                { label: "Music Playtime", value: "Infinity" },
+                                { label: "Caffeine Level", value: "Midnight" },
+                                { label: "Success Rate", value: "99.9%" }
+                            ].map((stat, i) => (
+                                <motion.div
+                                    key={stat.label}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.3 + i * 0.1 }}
+                                >
+                                    <StatItem label={stat.label} value={stat.value} />
+                                </motion.div>
+                            ))}
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Hobbies / Interests */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-                    <InterestCard
-                        icon={<Music className="text-orange-400" />}
-                        title="Math Rock & Guitar"
-                        desc="Deeply inspired by Murphy Radio. I love exploring complex math rock melodies, twinkly guitar riffs, and composing own tracks."
-                    />
-                    <InterestCard
-                        icon={<Camera className="text-blue-400" />}
-                        title="Visual Storytelling"
-                        desc="Photography and videography aren't just hobbies; they're how I document my perspective."
-                    />
-                    <InterestCard
-                        icon={<Coffee className="text-yellow-600" />}
-                        title="Minimalist Design"
-                        desc="I'm obsessed with clean interfaces, glassmorphism, and smooth animations."
-                    />
-                    <div className="md:col-span-2">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                        <InterestCard
+                            icon={<Music className="text-orange-400" />}
+                            title="Math Rock & Guitar"
+                            desc="Deeply inspired by Murphy Radio. I love exploring complex math rock melodies, twinkly guitar riffs, and composing own tracks."
+                        />
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+                        <InterestCard
+                            icon={<Camera className="text-blue-400" />}
+                            title="Visual Storytelling"
+                            desc="Photography and videography aren't just hobbies; they're how I document my perspective."
+                        />
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                        <InterestCard
+                            icon={<Coffee className="text-yellow-600" />}
+                            title="Minimalist Design"
+                            desc="I'm obsessed with clean interfaces, glassmorphism, and smooth animations."
+                        />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="md:col-span-2 mt-12 mb-12"
+                    >
                         <h2 className="text-4xl md:text-5xl font-bold mb-8">Crafting Digital <span className="text-blue-500">Excellence.</span></h2>
                         <p className="text-white/60 mb-8 leading-relaxed">
                             As a TKJ student, I've always been fascinated by how technology can be a canvas for creativity. My journey is a blend of technical precision in networking and visual storytelling through <span className="text-white font-bold">Graphic Design</span>.
                         </p>
-                        <p className="text-white/60 mb-12 leading-relaxed">
+                        <p className="text-white/60 mb-8 leading-relaxed">
                             Whether I'm configuring a server or designing a high-impact poster, I focus on the harmony between functionality and aesthetics. Minimalism and bold visual language are the core of my design philosophy.
                         </p>
-                    </div>
-                    <InterestCard
-                        icon={<Star className="text-purple-400" />}
-                        title="Competitive Programming"
-                        desc="Solving complex problems with efficient logic is my kind of sport."
-                    />
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                        <InterestCard
+                            icon={<Star className="text-purple-400" />}
+                            title="Competitive Programming"
+                            desc="Solving complex problems with efficient logic is my kind of sport."
+                        />
+                    </motion.div>
                 </div>
 
                 {/* Quote */}
-                <div className="glass-card p-12 text-center relative overflow-hidden mb-20">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="glass-card p-12 text-center relative overflow-hidden mb-20"
+                >
                     <div className="text-4xl md:text-5xl font-bold tracking-tight mb-4 italic opacity-80">
                         "Technology is the инструмент, <br /> Creativity is the soul."
                     </div>
                     <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-500/10 blur-[80px]" />
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/10 blur-[80px]" />
-                </div>
+                </motion.div>
             </div>
         </main>
     );

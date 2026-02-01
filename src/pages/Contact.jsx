@@ -100,37 +100,30 @@ export default function Contact() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
                     {/* Left Side: Contact Info */}
                     <div className="lg:col-span-5 space-y-6">
-                        <ContactInfo
-                            icon={<Mail size={24} />}
-                            label="Email"
-                            value="arroudhilanfi01@gmail.com"
-                            href="mailto:arroudhilanfi01@gmail.com"
-                        />
-                        <ContactInfo
-                            icon={<Instagram size={24} />}
-                            label="Instagram"
-                            value="@jingroo_"
-                            href="https://www.instagram.com/jingroo_"
-                        />
-                        <ContactInfo
-                            icon={<Github size={24} />}
-                            label="GitHub"
-                            value="arroVX"
-                            href="https://github.com/arroVX"
-                        />
-                        <ContactInfo
-                            icon={<MapPin size={24} />}
-                            label="Location"
-                            value="Jepara, Central Java, ID"
-                            href="https://maps.google.com/?q=Jepara"
-                        />
+                        {[
+                            { icon: <Mail size={24} />, label: "Email", value: "arroudhilanfi01@gmail.com", href: "mailto:arroudhilanfi01@gmail.com" },
+                            { icon: <Instagram size={24} />, label: "Instagram", value: "@jingroo_", href: "https://www.instagram.com/jingroo_" },
+                            { icon: <Github size={24} />, label: "GitHub", value: "arroVX", href: "https://github.com/arroVX" },
+                            { icon: <MapPin size={24} />, label: "Location", value: "Jepara, Central Java, ID", href: "https://maps.google.com/?q=Jepara" }
+                        ].map((info, i) => (
+                            <motion.div
+                                key={info.label}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                            >
+                                <ContactInfo {...info} />
+                            </motion.div>
+                        ))}
                     </div>
 
                     {/* Right Side: Contact Form */}
                     <div className="lg:col-span-7">
                         <motion.form
                             initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
                             onSubmit={handleSubmit}
                             className="glass-card p-8 md:p-12 border-white/5 space-y-6"

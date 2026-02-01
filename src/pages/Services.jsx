@@ -49,9 +49,10 @@ export default function Services() {
                     {services.map((s, i) => (
                         <motion.div
                             key={s.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1 }}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: i * 0.1 }}
                             className="glass-card p-10 group hover:bg-white/5 transition-colors border-white/5"
                         >
                             <div className="mb-6 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">

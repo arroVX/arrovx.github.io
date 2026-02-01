@@ -14,6 +14,7 @@ import CommandCenter from './components/CommandCenter';
 import { Terminal as TerminalIcon, Search } from 'lucide-react';
 import { useMagnetic } from './utils/animations';
 import { useRef } from 'react';
+import Preloader from './components/Preloader';
 
 function BackgroundSystem() {
   return (
@@ -369,6 +370,7 @@ function ScrollToTop() {
 
 export default function App() {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -384,7 +386,17 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden">
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <Preloader onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoading ? 0 : 1 }}
+        className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 font-['Outfit'] overflow-x-hidden"
+      >
         <CustomCursor />
         <BackgroundSystem />
         <Navbar setIsCommandOpen={setIsCommandOpen} />
@@ -404,7 +416,7 @@ export default function App() {
           {isCommandOpen && <CommandCenter isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />}
         </AnimatePresence>
         <Footer />
-      </div>
+      </motion.div>
     </Router>
   );
 }

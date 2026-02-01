@@ -18,7 +18,8 @@ const MessageCard = ({ msg }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="glass-card p-6 border-white/5 hover:bg-white/5 transition-all group relative overflow-hidden"
         >
             <div className="flex items-start gap-4">

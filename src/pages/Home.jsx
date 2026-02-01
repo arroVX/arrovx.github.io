@@ -341,7 +341,13 @@ export default function Home() {
 
             {/* Bento Grid: Expertise & Areas */}
             <section id="services" className="py-24 px-6 max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
+                >
                     <div>
                         <p className="text-blue-500 font-bold tracking-widest uppercase text-xs mb-4">My Expertise</p>
                         <h2 className="text-5xl font-bold tracking-tighter">Crafting in multi <br /> <span className="text-white/40">dimensions.</span></h2>
@@ -349,11 +355,15 @@ export default function Home() {
                     <p className="max-w-sm text-white/50 text-sm leading-relaxed">
                         From configuring robust network infrastructures to composing cinematic melodies, my work is a blend of logic and soul.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
                     {/* TKJ Card */}
                     <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
                         whileHover={{ y: -5 }}
                         className="md:col-span-8 h-full"
                     >
@@ -374,6 +384,10 @@ export default function Home() {
 
                     {/* Creative Card */}
                     <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
                         whileHover={{ y: -5 }}
                         className="md:col-span-4 h-full"
                     >
@@ -402,6 +416,10 @@ export default function Home() {
 
                     {/* Guitar Card */}
                     <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
                         whileHover={{ y: -5 }}
                         className="md:col-span-4 h-full"
                     >
@@ -415,6 +433,10 @@ export default function Home() {
 
                     {/* Code Card */}
                     <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
                         whileHover={{ y: -5 }}
                         className="md:col-span-8 h-full"
                     >
@@ -444,14 +466,23 @@ export default function Home() {
             {/* Gear Section */}
             <section className="py-24 px-6 bg-[#050505]">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
                         <p className="text-xs font-black uppercase tracking-[0.3em] text-blue-500 mb-4">Behind the scenes</p>
                         <h2 className="text-5xl font-bold tracking-tighter">My Desktop Hub</h2>
-                    </div>
+                    </motion.div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {gear.map((g, i) => (
                             <motion.div
                                 key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
                                 whileHover={{ y: -10 }}
                                 className="glass-card p-8 group border-none hover:bg-white/5 transition-all"
                             >

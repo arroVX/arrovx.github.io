@@ -50,9 +50,10 @@ export default function Experience() {
                     {experiences.map((exp, i) => (
                         <motion.div
                             key={exp.title}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.1 }}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: i * 0.1 }}
                             className="glass-card p-8 md:p-12 relative overflow-hidden group border-white/5"
                         >
                             <div className="flex flex-col md:flex-row md:items-start gap-8">
