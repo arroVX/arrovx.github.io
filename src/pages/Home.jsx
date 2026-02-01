@@ -587,6 +587,28 @@ export default function Home() {
                             </div>
                         </TiltCard>
                     </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        whileHover={{ y: -5 }}
+                        className="md:col-span-4 h-full"
+                    >
+                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between relative overflow-hidden border-white/5 group">
+                            <div className="relative z-10">
+                                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500">
+                                    <Globe size={24} />
+                                </div>
+                                <h3 className="text-2xl font-bold tracking-tighter">Network <br /> Engineering</h3>
+                                <p className="text-sm text-white/40 mt-4 leading-relaxed">Configuring robust infrastructures & server protocols as a TKJ specialist.</p>
+                            </div>
+                            <div className="mt-6 pt-6 border-t border-white/5">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Industry Ready</p>
+                            </div>
+                        </TiltCard>
+                    </motion.div>
                 </div>
             </section>
 
