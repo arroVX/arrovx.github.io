@@ -15,6 +15,7 @@ import { Terminal as TerminalIcon, Search } from 'lucide-react';
 import { useMagnetic } from './utils/animations';
 import { useRef } from 'react';
 import Preloader from './components/Preloader';
+import LogoAnimation from './components/LogoAnimation';
 
 function BackgroundSystem() {
   return (
@@ -149,7 +150,7 @@ function Navbar({ setIsCommandOpen }) {
           <div className="glass-card py-3 px-6 flex items-center justify-between border-white/5">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap- group border-none">
-                <span className="text-xl font-bold tracking-tighter hover:text-blue-400 transition-colors">ARRO<span className="text-blue-500 group-hover:text-white transition-colors">.</span></span>
+                <LogoAnimation />
               </Link>
               <LiveTime />
             </div>
