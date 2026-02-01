@@ -145,9 +145,9 @@ function Navbar({ setIsCommandOpen }) {
 
   return (
     <>
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4' : 'py-4 md:py-8'}`}>
+      <nav className={`fixed top-0 w-full z-100 transition-all duration-500 ${scrolled ? 'py-3 bg-[#030303]/40 backdrop-blur-md border-b border-white/5' : 'py-4 md:py-8'}`}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="glass-card py-3 px-6 flex items-center justify-between border-white/5">
+          <div className={`py-3 px-6 flex items-center justify-between border-white/5 transition-all duration-500 ${scrolled ? 'bg-transparent border-none' : 'glass-card'}`}>
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap- group border-none">
                 <LogoAnimation />
@@ -394,18 +394,15 @@ export default function App() {
       </AnimatePresence>
 
       <BackgroundSystem />
-      <CustomCursor />
-      <Navbar setIsCommandOpen={setIsCommandOpen} />
 
-      <motion.div
-        initial={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
-        animate={!isLoading ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0 }}
-        transition={{
-          duration: 1.2,
-          ease: [0.76, 0, 0.24, 1],
-          delay: 0.8
-        }}
-        className="w-full relative z-10"
+      {!isLoading && <CustomCursor />}
+      {!isLoading && <Navbar setIsCommandOpen={setIsCommandOpen} />}
+
+      <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={!isLoading ? { opacity: 1, y: 0 } : { opacity: 0 }}
+        transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 w-full"
       >
         <AnimatePresence mode="wait">
           <Routes>
@@ -420,7 +417,7 @@ export default function App() {
           </Routes>
         </AnimatePresence>
         <Footer />
-      </motion.div>
+      </motion.main>
 
       <AnimatePresence>
         {isCommandOpen && <CommandCenter isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />}
