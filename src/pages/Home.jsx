@@ -8,7 +8,7 @@ import {
     ChevronRight, Menu, X, Terminal, Cpu,
     Globe, Database, Layers, PlayCircle, ExternalLink,
     Sparkles, Zap, Monitor, Smartphone, Music, Disc, ArrowUpRight,
-    Volume2, BarChart3, Star, ArrowLeft
+    Volume2, BarChart3, Star, ArrowLeft, MessageSquare, Loader2, Send
 } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -66,18 +66,18 @@ const projects = [
         links: { live: "#", github: "#" }
     },
     {
-        title: "React Glass Portfolio",
-        category: "Web Dev",
-        image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&q=80&w=800",
-        desc: "A futuristic portfolio design featuring high-end glassmorphism and fluid animations.",
-        longDesc: "Proyek pengembangan portofolio modern menggunakan React dan Framer Motion. Fokus pada performa tinggi dan estetika premium dengan efek transparansi tingkat lanjut.",
-        tech: ["React", "Framer Motion", "Tailwind CSS"],
-        stats: { tech: "3", features: "6" },
+        title: "Visual Flow Series",
+        category: "Abstract Art",
+        image: "project-assets/images/0001_0(1).png",
+        desc: "An experimental exploration of depth and texture in digital abstract composition.",
+        longDesc: "Serial eksplorasi visual yang menggabungkan elemen organik dan digital. Fokus pada pembentukan tekstur yang dalam dan kontras warna yang dinamis.",
+        tech: ["Photoshop", "Digital Art"],
+        stats: { tech: "2", features: "4" },
         features: [
-            "Animasi transisi halaman yang smooth",
-            "Komponen kustom glassmorphism",
-            "Responsivitas total di semua perangkat",
-            "Navigasi dinamis dan command center"
+            "Eksplorasi tekstur digital",
+            "Komposisi warna kontras tinggi",
+            "Gaya visual abstrak modern",
+            "Teknik blending layer kompleks"
         ],
         links: { live: "#", github: "#" }
     }
@@ -106,7 +106,6 @@ function MusicModal({ onClose }) {
                 className="glass-card max-w-4xl w-full flex flex-col md:flex-row border-white/10 overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.2)]"
                 onClick={e => e.stopPropagation()}
             >
-                {/* Visual Side */}
                 <div className="hidden md:flex flex-1 bg-linear-to-br from-blue-600/20 to-indigo-900/40 p-12 flex-col items-center justify-center relative">
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                     <motion.div
@@ -120,7 +119,6 @@ function MusicModal({ onClose }) {
                     </motion.div>
                 </div>
 
-                {/* Info Side */}
                 <div className="p-6 md:p-12 md:max-w-md flex flex-col justify-center bg-[#0a0a0a] md:border-l border-white/5">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-500">
@@ -193,7 +191,7 @@ const ScrambleTitle = ({ text, className, delay = 0 }) => {
 
 const TiltCard = ({ children, className }) => {
     const ref = useRef(null);
-    const { style, onMouseMove, onMouseLeave } = useTilt(ref);
+    const { style, onMouseMove, onMouseLeave } = useTilt(ref, { max: 15, perspective: 1000 });
     const [isTouch, setIsTouch] = useState(false);
 
     useEffect(() => {
@@ -213,7 +211,7 @@ const TiltCard = ({ children, className }) => {
     );
 };
 
-const MagneticButton = ({ children, className }) => {
+const MagneticButton = ({ children, className = "" }) => {
     const ref = useRef(null);
     const { style, onMouseMove, onMouseLeave } = useMagnetic(ref);
     const [isTouch, setIsTouch] = useState(false);
@@ -221,6 +219,8 @@ const MagneticButton = ({ children, className }) => {
     useEffect(() => {
         setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
     }, []);
+
+    if (!React.isValidElement(children)) return children;
 
     return (
         <div
@@ -230,7 +230,9 @@ const MagneticButton = ({ children, className }) => {
             onMouseLeave={isTouch ? null : onMouseLeave}
             className="inline-block"
         >
-            {React.cloneElement(children, { className: `${children.props.className} ${className}` })}
+            {React.cloneElement(children, {
+                className: `${children.props.className || ''} ${className}`
+            })}
         </div>
     );
 };
@@ -253,7 +255,6 @@ function ProjectModal({ project, onClose }) {
                 className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#080808] border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] relative custom-scrollbar"
                 onClick={e => e.stopPropagation()}
             >
-                {/* Close Button Mobile */}
                 <button
                     onClick={onClose}
                     className="md:hidden fixed top-6 right-6 z-50 w-12 h-12 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center text-white border-none"
@@ -262,7 +263,6 @@ function ProjectModal({ project, onClose }) {
                 </button>
 
                 <div className="p-8 md:p-16 lg:p-20">
-                    {/* Navigation Header */}
                     <div className="flex items-center gap-4 mb-12">
                         <button
                             onClick={onClose}
@@ -278,7 +278,6 @@ function ProjectModal({ project, onClose }) {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-                        {/* Left Content Column */}
                         <div className="lg:col-span-7 space-y-12">
                             <div>
                                 <motion.h2
@@ -294,7 +293,6 @@ function ProjectModal({ project, onClose }) {
                                 </p>
                             </div>
 
-                            {/* Stats Grid */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="glass-card p-6 bg-white/2 border-white/5 group hover:bg-white/5 transition-all">
                                     <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-4 group-hover:scale-110 transition-transform">
@@ -312,7 +310,6 @@ function ProjectModal({ project, onClose }) {
                                 </div>
                             </div>
 
-                            {/* Primary Buttons */}
                             <div className="flex flex-wrap gap-4">
                                 <a
                                     href={project.links?.live || "#"}
@@ -332,7 +329,6 @@ function ProjectModal({ project, onClose }) {
                                 </a>
                             </div>
 
-                            {/* Tech Stack List */}
                             <div className="space-y-4">
                                 <div className="flex items-center gap-2 text-white/40">
                                     <Terminal size={14} className="text-blue-500" />
@@ -348,11 +344,9 @@ function ProjectModal({ project, onClose }) {
                             </div>
                         </div>
 
-                        {/* Right Visual/Mockup Column */}
                         <div className="lg:col-span-5 space-y-8">
                             <div className="relative group">
                                 <div className="absolute -inset-4 bg-blue-500/10 blur-[60px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-
                                 <div className="relative aspect-4/3 w-full rounded-[40px] overflow-hidden bg-zinc-900 border border-white/10 p-4 shadow-2xl">
                                     <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
                                         <img
@@ -364,7 +358,6 @@ function ProjectModal({ project, onClose }) {
                                 </div>
                             </div>
 
-                            {/* Key Features Card */}
                             <div className="glass-card p-8 md:p-10 bg-white/2 border-white/5 relative overflow-hidden">
                                 <div className="absolute top-0 right-0 p-4 opacity-5">
                                     <Star size={80} className="text-blue-500" />
@@ -432,7 +425,7 @@ export default function Home() {
     };
 
     return (
-        <main className="relative z-10">
+        <main className="relative z-10 text-white">
             {/* Hero Section v2 */}
             <section className="min-h-screen flex flex-col items-center justify-center pt-40 pb-20 px-6 overflow-hidden">
                 <motion.div
@@ -467,7 +460,6 @@ export default function Home() {
                         </MagneticButton>
                     </div>
 
-                    {/* Music Now Playing (Simulated) */}
                     <div className="mt-12 md:mt-16 flex items-center justify-center">
                         <div
                             onClick={() => setShowMusicModal(true)}
@@ -484,7 +476,6 @@ export default function Home() {
                     </div>
                 </motion.div>
 
-                {/* Trusted/Tools Cloud */}
                 <div id="services" className="mt-24 w-full max-w-5xl scroll-mt-32">
                     <p className="text-center text-xs font-bold text-white/30 uppercase tracking-[0.3em] mb-10">Built with Industrial Standards</p>
                     <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-700">
@@ -516,7 +507,6 @@ export default function Home() {
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
-                    {/* TKJ Card */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -525,42 +515,25 @@ export default function Home() {
                         whileHover={{ y: -5 }}
                         className="md:col-span-8 h-full"
                     >
-                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between overflow-hidden relative group border-white/5">
+                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between relative overflow-hidden group border-white/5">
                             <div className="relative z-10">
-                                <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 font-bold">01</div>
-                                <h3 className="text-3xl font-bold mb-4 tracking-tighter">Network Engineering</h3>
-                                <p className="text-white/50 max-w-md">Specializing in TKJ (Network & Computer Engineering). Expert in building secure, scalable infrastructures and server management.</p>
-                            </div>
-                            <div className="mt-8 flex flex-wrap gap-2 relative z-10">
-                                <TechStack icon={<Globe size={16} />} name="Routing & Switching" />
-                                <TechStack icon={<Database size={16} />} name="Server Management" />
-                                <TechStack icon={<Terminal size={16} />} name="Linux System" />
-                            </div>
-                            <Monitor className="absolute -bottom-10 -right-10 w-64 h-64 text-white/2 group-hover:text-blue-500/10 transition-colors duration-700" />
-                        </TiltCard>
-                    </motion.div>
-
-                    {/* Creative Card */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        whileHover={{ y: -5 }}
-                        className="md:col-span-4 h-full"
-                    >
-                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between bg-linear-to-br from-indigo-500/10 to-transparent border-white/5">
-                            <div>
-                                <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400 mb-6 font-bold">02</div>
-                                <h3 className="text-3xl font-bold mb-4 font-['Outfit'] tracking-tighter">Creative Media</h3>
-                                <p className="text-white/50">Photography & Videography with professional-grade editing.</p>
-                            </div>
-                            <div className="space-y-4 mt-8">
-                                <div className="flex items-center gap-4 group/item">
-                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-indigo-500/20 transition-colors">
-                                        <PlayCircle className="text-indigo-400" size={20} />
+                                <div className="flex gap-4 mb-6">
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
+                                        <Camera size={24} />
                                     </div>
-                                    <span className="font-bold">Adobe Premiere</span>
+                                    <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all duration-500">
+                                        <Video size={24} />
+                                    </div>
+                                </div>
+                                <h3 className="text-4xl font-bold mb-4 tracking-tighter italic">Visuality & <br /> Motion Arts</h3>
+                                <p className="text-white/50 text-lg max-w-md">Creating cinematic experiences through lenses and temporal design. Specialized in color theory and dynamic composition.</p>
+                            </div>
+                            <div className="flex flex-wrap gap-4 relative z-10">
+                                <div className="flex items-center gap-4 group/item">
+                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-blue-500/20 transition-colors">
+                                        <Edit className="text-blue-400" size={20} />
+                                    </div>
+                                    <span className="font-bold">Post-Production</span>
                                 </div>
                                 <div className="flex items-center gap-4 group/item">
                                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-indigo-500/20 transition-colors">
@@ -572,7 +545,6 @@ export default function Home() {
                         </TiltCard>
                     </motion.div>
 
-                    {/* Guitar Card */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -589,7 +561,6 @@ export default function Home() {
                         </TiltCard>
                     </motion.div>
 
-                    {/* Code Card */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -618,8 +589,6 @@ export default function Home() {
                     </motion.div>
                 </div>
             </section>
-
-
 
             {/* Projects Section */}
             <section id="work" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
@@ -716,12 +685,10 @@ export default function Home() {
                             viewport={{ once: true }}
                             className="glass-card p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8 relative group transition-all duration-500 hover:bg-white/5 overflow-hidden border-none"
                         >
-                            {/* Icon Container */}
                             <div className={`w-16 h-16 ${a.color} rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                                 {React.cloneElement(a.icon, { size: 32 })}
                             </div>
 
-                            {/* Content Container */}
                             <div className="flex-1 text-center md:text-left space-y-1 relative z-10">
                                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                                     <h3 className="text-xl md:text-2xl font-bold tracking-tight">{a.title}</h3>
@@ -731,7 +698,6 @@ export default function Home() {
                                 <p className="text-white/40 text-sm md:text-base leading-relaxed max-w-xl">{a.desc}</p>
                             </div>
 
-                            {/* Action Container */}
                             <div className="shrink-0 pt-2 md:pt-0 relative z-10">
                                 {a.cert ? (
                                     <a
@@ -750,7 +716,6 @@ export default function Home() {
                                 )}
                             </div>
 
-                            {/* Decorative Background Year */}
                             <div className="absolute top-1/2 -translate-y-1/2 right-12 text-8xl font-black text-white/2 pointer-events-none select-none group-hover:text-white/5 transition-colors hidden lg:block uppercase italic">
                                 {a.year}
                             </div>
@@ -784,7 +749,6 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    {/* CTA Background blobs */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-[100px] pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 blur-[100px] pointer-events-none" />
                 </div>
@@ -804,7 +768,7 @@ export default function Home() {
                                 <MessageSquare size={20} />
                             </div>
                             <div>
-                                <h2 className="text-3xl font-bold tracking-tighter">Guestbook</h2>
+                                <h2 className="text-3xl font-bold tracking-tighter text-white">Guestbook</h2>
                                 <p className="text-xs text-white/30 uppercase tracking-widest font-black">Drop a message or testimonial</p>
                             </div>
                         </div>
@@ -849,8 +813,6 @@ export default function Home() {
                             </Link>
                         </div>
                     </div>
-
-                    {/* Background Detail */}
                     <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none" />
                 </motion.div>
             </section>
@@ -878,7 +840,6 @@ export default function Home() {
                             <span className="text-white/10 font-bold uppercase tracking-widest text-xs">or</span>
                             <button
                                 onClick={() => {
-                                    // Triggering custom event for App.jsx to listen
                                     window.dispatchEvent(new CustomEvent('open-command-center'));
                                 }}
                                 className="flex items-center gap-3 px-8 py-4 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-2xl font-bold text-xs tracking-widest uppercase transition-all border border-blue-500/20 group border-none"
@@ -890,7 +851,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Modals moved to bottom for better stacking context */}
             <AnimatePresence>
                 {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
                 {showMusicModal && (
