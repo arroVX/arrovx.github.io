@@ -226,7 +226,7 @@ function ProjectModal({ project, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
+            className="fixed inset-0 z-100000 flex items-center justify-center p-4 md:p-6 backdrop-blur-xl bg-black/90"
             onClick={onClose}
         >
             <motion.div
@@ -270,11 +270,6 @@ export default function Home() {
 
     return (
         <main className="relative z-10">
-            <AnimatePresence>
-                {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
-                {showMusicModal && <MusicModal onClose={() => setShowMusicModal(false)} />}
-            </AnimatePresence>
-
             {/* Hero Section v2 */}
             <section className="min-h-screen flex flex-col items-center justify-center pt-40 pb-20 px-6 overflow-hidden">
                 <motion.div
@@ -586,6 +581,16 @@ export default function Home() {
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 blur-[100px] pointer-events-none" />
                 </div>
             </section>
+
+            {/* Modals moved to bottom for better stacking context */}
+            <AnimatePresence>
+                {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
+                {showMusicModal && (
+                    <div className="fixed inset-0 z-99999">
+                        <MusicModal onClose={() => setShowMusicModal(false)} />
+                    </div>
+                )}
+            </AnimatePresence>
         </main>
     );
 }

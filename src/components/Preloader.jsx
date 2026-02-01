@@ -66,7 +66,7 @@ export default function Preloader({ onComplete }) {
                 ></motion.path>
             </svg>
 
-            <div className="relative z-10 flex flex-col items-center pointer-events-auto">
+            <div className="relative z-10 flex flex-col items-center pointer-events-none">
                 {/* Decorative particles */}
                 <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
                     {particles.map((_, i) => (
