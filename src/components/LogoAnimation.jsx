@@ -3,11 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 const variants = [
     "ARRO",
     "ARROUDHIL ANFI",
-    "ꦄꦫꦺꦴ",
-    "ꦄꦫꦺꦴꦈꦝꦶꦭ꧀ ꦄꦤ꧀ꦥ꦳ꦶ",
-    "A.R.R.O",
-    "ΛRRΘ",
-    "αяяσ"
+    "ꦄꦫꦺꦴ"
 ];
 
 const chars = '!<>-_\\/[]{}—=+*^?#________';
