@@ -998,9 +998,11 @@ export default function Home() {
                         viewport={{ once: true }}
                         className="text-center"
                     >
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 mb-6">Power User Shortcut</p>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-8 text-white/40">
-                            Want a faster way to <span className="text-white">navigate?</span>
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 mb-6 flex items-center justify-center gap-3">
+                            <span className="w-8 h-px bg-white/5" /> Command Line Feature <span className="w-8 h-px bg-white/5" />
+                        </p>
+                        <h3 className="text-3xl md:text-5xl font-bold mb-8 text-white/40 tracking-tighter">
+                            Want to navigate like a <span className="text-white italic">hacker?</span>
                         </h3>
                         <div className="flex flex-col md:flex-row items-center justify-center gap-6">
                             <div className="flex items-center gap-3 px-6 py-4 bg-white/5 rounded-2xl border border-white/5 text-white/60">

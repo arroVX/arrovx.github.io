@@ -1,16 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, X, ChevronRight, Zap, Command } from 'lucide-react';
+import { Terminal, X, ChevronRight, Zap, Command, Github, Instagram, Linkedin, Mail, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const COMMANDS = {
-    'help': 'Available commands: help, about, projects, services, ping, clear, whoami, skills',
+    'help': 'Available commands: help, about, projects, services, experience, guestbook, ping, clear, whoami, skills, achievements, social, contact, music, version',
     'about': 'Navigating to About page...',
     'projects': 'Navigating to Projects page...',
     'services': 'Navigating to Services page...',
+    'experience': 'Navigating to Experience section...',
+    'guestbook': 'Navigating to Guestbook page...',
+    'contact': 'Navigating to Contact page...',
     'ping': 'Pong! (64 bytes from arrovx.github.io: icmp_seq=1 ttl=64 time=0.042 ms)',
     'whoami': 'Arroudhil Anfi - TKJ Student / Visionary Designer / Gold Medalist in Informatics.',
-    'skills': 'Primary: Networking, Photoshop, Premiere Pro, React, C++. Hobbies: Math Rock Guitar, Photography.',
+    'skills': 'Primary: Networking (TKJ), Photoshop, Premiere Pro, React, Tailwind CSS, C++. Hobbies: Math Rock Guitar, Photography.',
+    'achievements': '2025: Medali Emas FSBN & ONSP (Informatika). 2022: Medali Perak POSN (Informatika) & Excellent Award Robotic.',
+    'social': 'GitHub: github.com/arroVX | Instagram: @jingroo_ | Discord: arro.nx',
+    'github': 'Opening GitHub profile in new tab...',
+    'instagram': 'Opening Instagram profile in new tab...',
+    'music': 'Currently vibing to: Murphy Radio - Autumn (Math Rock)',
+    'version': 'ArroOS version 2.0.26-build.stable.2026',
     'clear': 'CLEARED'
 };
 
@@ -55,10 +64,21 @@ export default function CommandCenter({ isOpen, onClose }) {
                 const response = COMMANDS[cmd];
                 setHistory(prev => [...prev, { type: 'response', content: response }]);
 
-                // Navigation commands
-                if (cmd === 'about') setTimeout(() => { navigate('/about'); onClose(); }, 500);
-                if (cmd === 'projects') setTimeout(() => { navigate('/projects'); onClose(); }, 500);
-                if (cmd === 'services') setTimeout(() => { navigate('/services'); onClose(); }, 500);
+                // Action Mapping
+                const actions = {
+                    'about': () => { navigate('/about'); onClose(); },
+                    'projects': () => { navigate('/projects'); onClose(); },
+                    'services': () => { navigate('/#services'); onClose(); }, // scroll indicator
+                    'experience': () => { navigate('/#experience'); onClose(); },
+                    'guestbook': () => { navigate('/guestbook'); onClose(); },
+                    'contact': () => { navigate('/contact'); onClose(); },
+                    'github': () => { window.open('https://github.com/arroVX', '_blank'); },
+                    'instagram': () => { window.open('https://www.instagram.com/jingroo_', '_blank'); }
+                };
+
+                if (actions[cmd]) {
+                    setTimeout(actions[cmd], 800);
+                }
             } else {
                 setHistory(prev => [...prev, { type: 'error', content: `Command not found: ${cmd}. Type "help" for assistance.` }]);
             }
@@ -81,16 +101,19 @@ export default function CommandCenter({ isOpen, onClose }) {
                         initial={{ scale: 0.95, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                        className="glass-card w-full max-w-2xl h-[70vh] md:h-[450px] flex flex-col overflow-hidden border-white/10 shadow-[0_0_50px_rgba(59,130,246,0.15)] bg-zinc-950/80"
+                        className="glass-card w-full max-w-2xl h-[70vh] md:h-[500px] flex flex-col overflow-hidden border-white/10 shadow-[0_0_50px_rgba(59,130,246,0.15)] bg-[#030303]/90 relative"
                         onClick={e => e.stopPropagation()}
                     >
                         {/* Terminal Header */}
                         <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/5">
                             <div className="flex items-center gap-3">
-                                <Terminal size={18} className="text-blue-500" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Terminal Command Center</span>
+                                <Terminal size={18} className="text-blue-500 animate-pulse" />
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 leading-tight">ArroOS Command Line</span>
+                                    <span className="text-[8px] text-blue-500/50 uppercase tracking-widest font-mono">Kernel 2.0.26-build</span>
+                                </div>
                             </div>
-                            <button onClick={onClose} className="text-white/30 hover:text-white transition-colors">
+                            <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-white/5 flex items-center justify-center text-white/30 hover:text-white transition-all">
                                 <X size={18} />
                             </button>
                         </div>
@@ -98,40 +121,41 @@ export default function CommandCenter({ isOpen, onClose }) {
                         {/* Terminal Body */}
                         <div
                             ref={scrollRef}
-                            className="flex-1 p-6 font-mono text-sm overflow-y-auto space-y-2 selection:bg-blue-500/30"
+                            className="flex-1 p-6 font-mono text-sm overflow-y-auto space-y-3 selection:bg-blue-500/30 custom-scrollbar"
                         >
                             {history.map((line, i) => (
-                                <div key={i} className={`flex gap-2 ${line.type === 'error' ? 'text-red-400' :
-                                    line.type === 'response' ? 'text-blue-300' :
+                                <div key={i} className={`flex gap-3 ${line.type === 'error' ? 'text-red-400' :
+                                    line.type === 'response' ? 'text-blue-400 font-medium' :
                                         line.type === 'input' ? 'text-white' : 'text-white/40'
                                     }`}>
-                                    {line.type === 'input' && <span className="text-blue-500 font-bold">❯</span>}
-                                    <p className="leading-relaxed whitespace-pre-wrap">{line.content}</p>
+                                    {line.type === 'input' && <span className="text-blue-500 font-bold opacity-80">❯</span>}
+                                    <div className="flex-1">
+                                        <p className="leading-relaxed whitespace-pre-wrap">{line.content}</p>
+                                    </div>
                                 </div>
                             ))}
-                            <div className="flex items-center gap-2">
-                                <span className="text-blue-500 font-bold italic group-hover:animate-pulse">❯</span>
+                            <div className="flex items-center gap-3 group">
+                                <span className="text-blue-500 font-bold italic animate-pulse">❯</span>
                                 <input
                                     ref={inputRef}
                                     type="text"
                                     value={input}
                                     onChange={e => setInput(e.target.value)}
                                     onKeyDown={handleCommand}
-                                    className="flex-1 bg-transparent border-none outline-none text-white focus:ring-0 p-0"
-                                    placeholder="Enter command..."
+                                    className="flex-1 bg-transparent border-none outline-none text-white focus:ring-0 p-0 placeholder:text-white/5"
+                                    placeholder="Enter system command..."
                                 />
                             </div>
                         </div>
 
                         {/* Terminal Footer */}
-                        <div className="px-6 py-3 border-t border-white/5 bg-black/40 flex items-center justify-between text-[9px] font-bold text-white/20 uppercase tracking-widest">
+                        <div className="px-6 py-3 border-t border-white/5 bg-black/60 flex items-center justify-between text-[9px] font-bold text-white/20 uppercase tracking-widest">
                             <div className="flex gap-4">
-                                <span>Status: Online</span>
-                                <span>Encoding: UTF-8</span>
+                                <span className="flex items-center gap-1.5"><Zap size={10} className="text-blue-500" /> Latency: 4ms</span>
+                                <span className="hidden sm:inline">User@Arro-PC:~$</span>
                             </div>
-                            <div className="flex items-center gap-1.5 opacity-50">
-                                <Command size={10} /> <span className="hidden md:inline">Press ESC to exit</span>
-                                <span className="md:hidden text-[8px]">Tap outside to exit</span>
+                            <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-md">
+                                <Command size={10} /> <span>ESC to exit</span>
                             </div>
                         </div>
                     </motion.div>
