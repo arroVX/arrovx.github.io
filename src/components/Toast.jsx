@@ -19,7 +19,7 @@ export default function Toast({ message, type = 'success', isOpen, onClose }) {
                     initial={{ opacity: 0, y: 50, scale: 0.9, filter: 'blur(10px)' }}
                     animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                     exit={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-                    className="fixed bottom-8 right-8 z-10002 pointer-events-none"
+                    className="fixed bottom-8 right-8 z-1000000 pointer-events-none"
                 >
                     <div className="glass-card p-1 pr-12 pl-5 py-4 border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center gap-4 pointer-events-auto min-w-[300px] relative overflow-hidden group">
                         {/* Progress Bar */}

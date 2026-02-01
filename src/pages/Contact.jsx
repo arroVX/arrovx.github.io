@@ -73,134 +73,136 @@ export default function Contact() {
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen pt-32 pb-20 px-6 relative z-10 overflow-x-hidden"
-        >
-            <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 glass-card rounded-full text-xs font-bold text-blue-400 mb-6 tracking-widest uppercase border-white/5"
-                    >
-                        <MessageSquare size={14} /> Available for projects
-                    </motion.div>
-                    <h1 className="text-5xl md:text-8xl font-bold tracking-tighter italic mb-6">
-                        {titleScramble}
-                    </h1>
-                    <p className="text-white/40 max-w-2xl mx-auto text-lg">
-                        Have a project in mind? Or just want to say hi? <br />
-                        Feel free to reach out through any of these channels.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-                    {/* Left Side: Contact Info */}
-                    <div className="lg:col-span-5 space-y-6">
-                        {[
-                            { icon: <Mail size={24} />, label: "Email", value: "arroudhilanfi01@gmail.com", href: "mailto:arroudhilanfi01@gmail.com" },
-                            { icon: <Instagram size={24} />, label: "Instagram", value: "@jingroo_", href: "https://www.instagram.com/jingroo_" },
-                            { icon: <Github size={24} />, label: "GitHub", value: "arroVX", href: "https://github.com/arroVX" },
-                            { icon: <MapPin size={24} />, label: "Location", value: "Jepara, Central Java, ID", href: "https://maps.google.com/?q=Jepara" }
-                        ].map((info, i) => (
-                            <motion.div
-                                key={info.label}
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                            >
-                                <ContactInfo {...info} />
-                            </motion.div>
-                        ))}
+        <>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="min-h-screen pt-32 pb-20 px-6 relative z-10 overflow-x-hidden"
+            >
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="inline-flex items-center gap-2 px-4 py-1.5 glass-card rounded-full text-xs font-bold text-blue-400 mb-6 tracking-widest uppercase border-white/5"
+                        >
+                            <MessageSquare size={14} /> Available for projects
+                        </motion.div>
+                        <h1 className="text-5xl md:text-8xl font-bold tracking-tighter italic mb-6">
+                            {titleScramble}
+                        </h1>
+                        <p className="text-white/40 max-w-2xl mx-auto text-lg">
+                            Have a project in mind? Or just want to say hi? <br />
+                            Feel free to reach out through any of these channels.
+                        </p>
                     </div>
 
-                    {/* Right Side: Contact Form */}
-                    <div className="lg:col-span-7">
-                        <motion.form
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            onSubmit={handleSubmit}
-                            className="glass-card p-8 md:p-12 border-white/5 space-y-6"
-                        >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                        {/* Left Side: Contact Info */}
+                        <div className="lg:col-span-5 space-y-6">
+                            {[
+                                { icon: <Mail size={24} />, label: "Email", value: "arroudhilanfi01@gmail.com", href: "mailto:arroudhilanfi01@gmail.com" },
+                                { icon: <Instagram size={24} />, label: "Instagram", value: "@jingroo_", href: "https://www.instagram.com/jingroo_" },
+                                { icon: <Github size={24} />, label: "GitHub", value: "arroVX", href: "https://github.com/arroVX" },
+                                { icon: <MapPin size={24} />, label: "Location", value: "Jepara, Central Java, ID", href: "https://maps.google.com/?q=Jepara" }
+                            ].map((info, i) => (
+                                <motion.div
+                                    key={info.label}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1 }}
+                                >
+                                    <ContactInfo {...info} />
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* Right Side: Contact Form */}
+                        <div className="lg:col-span-7">
+                            <motion.form
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.2 }}
+                                onSubmit={handleSubmit}
+                                className="glass-card p-8 md:p-12 border-white/5 space-y-6"
+                            >
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Your Name</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={formState.name}
+                                            onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                                            className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium"
+                                            placeholder="John Doe"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Email Address</label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={formState.email}
+                                            onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                                            className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium"
+                                            placeholder="john@example.com"
+                                        />
+                                    </div>
+                                </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Your Name</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Subject</label>
                                     <input
                                         type="text"
                                         required
-                                        value={formState.name}
-                                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                                        value={formState.subject}
+                                        onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
                                         className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium"
-                                        placeholder="John Doe"
+                                        placeholder="What's this about?"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Email Address</label>
-                                    <input
-                                        type="email"
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Your Message</label>
+                                    <textarea
                                         required
-                                        value={formState.email}
-                                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium"
-                                        placeholder="john@example.com"
-                                    />
+                                        rows="5"
+                                        value={formState.message}
+                                        onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium resize-none"
+                                        placeholder="Tell me more about your project..."
+                                    ></textarea>
                                 </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Subject</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formState.subject}
-                                    onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
-                                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium"
-                                    placeholder="What's this about?"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Your Message</label>
-                                <textarea
-                                    required
-                                    rows="5"
-                                    value={formState.message}
-                                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all text-white font-medium resize-none"
-                                    placeholder="Tell me more about your project..."
-                                ></textarea>
-                            </div>
 
-                            <MagneticButton>
-                                <button
-                                    disabled={isSubmitting}
-                                    className="bg-white text-black py-4 rounded-2xl font-black tracking-widest uppercase text-xs hover:scale-[1.02] active:scale-[0.98] transition-all border-none flex items-center justify-center gap-2 disabled:opacity-50 disabled:scale-100"
-                                >
-                                    {isSubmitting ? (
-                                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-                                            <Globe size={18} />
-                                        </motion.div>
-                                    ) : (
-                                        <>
-                                            <Send size={18} /> Send Message
-                                        </>
-                                    )}
-                                </button>
-                            </MagneticButton>
-                        </motion.form>
+                                <MagneticButton>
+                                    <button
+                                        disabled={isSubmitting}
+                                        className="bg-white text-black py-4 rounded-2xl font-black tracking-widest uppercase text-xs hover:scale-[1.02] active:scale-[0.98] transition-all border-none flex items-center justify-center gap-2 disabled:opacity-50 disabled:scale-100"
+                                    >
+                                        {isSubmitting ? (
+                                            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
+                                                <Globe size={18} />
+                                            </motion.div>
+                                        ) : (
+                                            <>
+                                                <Send size={18} /> Send Message
+                                            </>
+                                        )}
+                                    </button>
+                                </MagneticButton>
+                            </motion.form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
             <Toast
                 isOpen={toast.isOpen}
                 message={toast.message}
                 type={toast.type}
                 onClose={() => setToast({ ...toast, isOpen: false })}
             />
-        </motion.div>
+        </>
     );
 }
