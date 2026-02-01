@@ -12,7 +12,7 @@ import {
     User, MessageCircle, Share2
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
 import Toast from '../components/Toast';
 
@@ -409,7 +409,24 @@ export default function Home() {
     const [contactMessage, setContactMessage] = useState('');
     const [sendingContact, setSendingContact] = useState(false);
 
+    // Live Messages State
+    const [messages, setMessages] = useState([]);
+    const [loadingMessages, setLoadingMessages] = useState(true);
+
     const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
+
+    useEffect(() => {
+        const q = query(collection(db, 'guestbook'), orderBy('timestamp', 'desc'), limit(3));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const msgs = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setMessages(msgs);
+            setLoadingMessages(false);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const handleGuestbookSubmit = async (e) => {
         e.preventDefault();
@@ -923,14 +940,57 @@ export default function Home() {
                             </button>
                         </form>
 
-                        <div className="mt-12 flex flex-col items-center justify-center h-40 border-t border-white/5 pt-12">
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/10 mb-4">
-                                <User size={24} />
+                        <div className="mt-12 space-y-4 border-t border-white/5 pt-12">
+                            <div className="flex items-center justify-between mb-4">
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Latest Activity</p>
+                                <Link to="/guestbook" className="text-[9px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-widest">
+                                    View All →
+                                </Link>
                             </div>
-                            <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">No comments yet. Start the conversation!</p>
-                            <Link to="/guestbook" className="mt-4 text-[9px] font-black uppercase tracking-[0.4em] text-blue-500 hover:text-blue-400 transition-colors">
-                                View Archieve →
-                            </Link>
+
+                            <div className="space-y-3">
+                                <AnimatePresence mode="popLayout">
+                                    {messages.length > 0 ? (
+                                        messages.map((msg, idx) => (
+                                            <motion.div
+                                                key={msg.id}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                transition={{ delay: idx * 0.1 }}
+                                                className="p-4 bg-white/2 border border-white/5 rounded-2xl group/msg hover:bg-white/5 transition-all"
+                                            >
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-bold text-blue-400">
+                                                        {msg.name?.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <span className="text-xs font-bold text-white/80">{msg.name}</span>
+                                                    <span className="text-[9px] text-white/10 font-mono ml-auto">
+                                                        {msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleDateString() : 'Just now'}
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs text-white/40 leading-relaxed italic group-hover/msg:text-white/60 transition-colors">
+                                                    "{msg.message}"
+                                                </p>
+                                            </motion.div>
+                                        ))
+                                    ) : (
+                                        !loadingMessages && (
+                                            <div className="flex flex-col items-center justify-center py-10 text-center">
+                                                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/10 mb-4">
+                                                    <User size={24} />
+                                                </div>
+                                                <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">No comments yet. Start the conversation!</p>
+                                            </div>
+                                        )
+                                    )}
+                                </AnimatePresence>
+                                {loadingMessages && (
+                                    <div className="flex justify-center py-10">
+                                        <Loader2 size={24} className="animate-spin text-white/10" />
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </motion.div>
                 </div>
