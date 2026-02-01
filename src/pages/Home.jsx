@@ -607,6 +607,51 @@ export default function Home() {
 
 
 
+            {/* Projects Section */}
+            <section id="work" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
+                >
+                    <div>
+                        <p className="text-blue-500 font-bold tracking-widest uppercase text-xs mb-4">Portofolio</p>
+                        <h2 className="text-5xl font-bold tracking-tighter">Selected <span className="text-white/40">Work.</span></h2>
+                    </div>
+                    <Link to="/projects" className="group flex items-center gap-2 text-white/50 hover:text-white transition-all text-xs font-bold uppercase tracking-widest">
+                        View Archive <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={16} />
+                    </Link>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projects.map((p, i) => (
+                        <motion.div
+                            key={p.title}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.1 }}
+                            className="group cursor-pointer"
+                            onClick={() => setSelectedProject(p)}
+                        >
+                            <div className="aspect-video rounded-3xl overflow-hidden mb-6 relative glass-card p-2 border-white/5">
+                                <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 relative">
+                                    <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" alt={p.title} />
+                                    <div className="absolute inset-x-0 bottom-0 p-6 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 mb-1">{p.category}</p>
+                                        <h3 className="text-xl font-bold text-white truncate">{p.title}</h3>
+                                    </div>
+                                    <div className="absolute top-4 right-4 w-10 h-10 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all">
+                                        <ArrowUpRight size={20} />
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
             {/* Gear Section */}
             <section className="py-24 px-6 bg-[#050505]">
                 <div className="max-w-7xl mx-auto">
