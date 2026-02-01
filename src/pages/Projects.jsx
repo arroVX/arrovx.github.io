@@ -27,21 +27,6 @@ const allProjects = [
         links: { live: "#", github: "#" }
     },
     {
-        title: "Aritmatika Solver",
-        category: "Programming",
-        image: "https://eki.my.id/storage/project/image/AritmatikaSolver-1707211111.png", // Using a fallback or user might update
-        desc: "Program dirancang untuk mempermudah pengguna menyelesaikan soal Aritmatika otomatis.",
-        longDesc: "Program ini dirancang untuk mempermudah pengguna dalam menyelesaikan soal-soal Aritmatika secara otomatis dengan menggunakan bahasa pemrograman Python. Tujuan utama dari program ini adalah untuk membantu pengguna, terutama pelajar, dalam menyelesaikan soal-soal Aritmatika dengan lebih cepat dan mudah.",
-        tech: ["Python", "CLI", "Math API"],
-        stats: { tech: "3", features: "4" },
-        features: [
-            "Menghitung suku tertentu dari barisan aritmatika dengan menggunakan rumus suku ke-n.",
-            "Menentukan suku pertama atau beda jika hanya dua suku diketahui dalam barisan aritmatika.",
-            "Menghitung jumlah n suku pertama dari deret aritmatika dengan langkah perhitungan yang jelas."
-        ],
-        links: { live: "https://replit.com/@arroudhilanfi/Aritmatika-Solver", github: "https://github.com/arroVX/aritmatika-solver" }
-    },
-    {
         title: "Visual Flow 02",
         category: "Experimental",
         image: "project-assets/images/0001_0(1).png",

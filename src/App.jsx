@@ -64,7 +64,7 @@ const CustomCursor = () => {
   return (
     <div className="hidden lg:block">
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-blue-500/50 pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-blue-500/50 pointer-events-none z-2000000"
         animate={{
           x: position.x - 16,
           y: position.y - 16,
@@ -74,7 +74,7 @@ const CustomCursor = () => {
         transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 0.5 }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-blue-500 pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-blue-500 pointer-events-none z-2000000"
         animate={{
           x: position.x - 3,
           y: position.y - 3,
@@ -380,8 +380,15 @@ export default function App() {
         setIsCommandOpen(prev => !prev);
       }
     };
+
+    const handleOpenCommand = () => setIsCommandOpen(true);
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('open-command-center', handleOpenCommand);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('open-command-center', handleOpenCommand);
+    };
   }, []);
 
   return (

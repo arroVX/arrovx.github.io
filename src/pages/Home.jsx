@@ -47,22 +47,6 @@ const achievements = [
 
 const projects = [
     {
-        title: "Aritmatika Solver",
-        category: "Programming",
-        image: "https://eki.my.id/storage/project/image/AritmatikaSolver-1707211111.png",
-        desc: "Program dirancang untuk mempermudah pengguna menyelesaikan soal Aritmatika otomatis.",
-        longDesc: "Program ini dirancang untuk mempermudah pengguna dalam menyelesaikan soal-soal Aritmatika secara otomatis dengan menggunakan bahasa pemrograman Python. Membantu pelajar menyelesaikan soal dengan cepat.",
-        tech: ["Python", "CLI", "Mathematics"],
-        stats: { tech: "3", features: "4" },
-        features: [
-            "Menghitung suku tertentu (Un) barisan aritmatika.",
-            "Menentukan suku pertama (a) dan beda (b).",
-            "Menghitung jumlah n suku pertama (Sn).",
-            "Langkah penyelesaian yang mudah dipahami."
-        ],
-        links: { live: "#", github: "#" }
-    },
-    {
         title: "Liga Korupsi Indonesia",
         category: "Poster Design",
         image: "project-assets/images/0001_0.png",
@@ -773,6 +757,41 @@ export default function Home() {
                     {/* CTA Background blobs */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-[100px] pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 blur-[100px] pointer-events-none" />
+                </div>
+            </section>
+
+            {/* Terminal/Command Promo */}
+            <section className="pb-32 px-6">
+                <div className="max-w-5xl mx-auto flex flex-col items-center">
+                    <div className="w-px h-24 bg-linear-to-b from-transparent via-white/10 to-transparent mb-12" />
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="text-center"
+                    >
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 mb-6">Power User Shortcut</p>
+                        <h3 className="text-2xl md:text-3xl font-bold mb-8 text-white/40">
+                            Want a faster way to <span className="text-white">navigate?</span>
+                        </h3>
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                            <div className="flex items-center gap-3 px-6 py-4 bg-white/5 rounded-2xl border border-white/5 text-white/60">
+                                <kbd className="px-2 py-1 bg-white/10 rounded-lg text-white font-mono text-sm leading-none">CTRL</kbd>
+                                <span className="text-xs font-bold">+</span>
+                                <kbd className="px-2 py-1 bg-white/10 rounded-lg text-white font-mono text-sm leading-none">K</kbd>
+                            </div>
+                            <span className="text-white/10 font-bold uppercase tracking-widest text-xs">or</span>
+                            <button
+                                onClick={() => {
+                                    // Triggering custom event for App.jsx to listen
+                                    window.dispatchEvent(new CustomEvent('open-command-center'));
+                                }}
+                                className="flex items-center gap-3 px-8 py-4 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-2xl font-bold text-xs tracking-widest uppercase transition-all border border-blue-500/20 group border-none"
+                            >
+                                <Terminal size={18} className="group-hover:rotate-12 transition-transform" /> Open Command Center
+                            </button>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
