@@ -1,24 +1,21 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-// --- PANDUAN UNTUK RO ---
-// 1. Buka https://console.firebase.google.com/
-// 2. Buat project baru (namanya bebas, misal "Portfolio-Arro")
-// 3. Daftarkan aplikasi "Web" (klik ikon </>)
-// 4. Copy bagian "firebaseConfig" dan ganti di bawah ini:
-
+// Config Firebase Project: rojing-54fcd
 const firebaseConfig = {
-    apiKey: "AIzaSyCR78HlkHS4qwSrgPIhTguCYzgjckLNu0Q",
-    authDomain: "arro-portofolio.firebaseapp.com",
-    projectId: "arro-portofolio",
-    storageBucket: "arro-portofolio.firebasestorage.app",
-    messagingSenderId: "618950653172",
-    appId: "1:618950653172:web:7a0e8d8e70099d20a1daa1",
-    measurementId: "G-4J9X1JW0F9"
+    apiKey: "AIzaSyAi4-VIoR6F2GBi451xkCrYmEOBgxuovXg",
+    authDomain: "rojing-54fcd.firebaseapp.com",
+    projectId: "rojing-54fcd",
+    storageBucket: "rojing-54fcd.firebasestorage.app",
+    messagingSenderId: "388291905786",
+    appId: "1:388291905786:web:851146a30570b2581e2143",
+    measurementId: "G-DF5JW6403L"
 };
 
 // Hubungkan ke Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-export { db };
+export { db, storage };

@@ -40,11 +40,7 @@ export default function About() {
                         >
                             The Mind Behind <br /> <span className="text-linear">Arro.</span>
                         </motion.h1>
-                        <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm font-bold text-white/40 uppercase tracking-widest">
-                            <span className="flex items-center gap-2"><MapPin size={14} className="text-blue-500" /> Indonesia</span>
-                            <span className="flex items-center gap-2"><Rocket size={14} className="text-purple-500" /> Student @ SMKN 3 Jepara</span>
-                            <span className="flex items-center gap-2"><Heart size={14} className="text-pink-500" /> Creative Soul</span>
-                        </div>
+
                     </div>
                 </div>
 

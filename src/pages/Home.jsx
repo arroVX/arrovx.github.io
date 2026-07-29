@@ -12,9 +12,11 @@ import {
     User, MessageCircle, Share2
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { useScrambleText, useTilt, useMagnetic } from '../utils/animations';
+import CodeConsoleAnimation from '../components/CodeConsoleAnimation';
 import Toast from '../components/Toast';
+import TerminalLoading from '../components/TerminalLoading';
 
 const achievements = [
     {
@@ -169,11 +171,11 @@ function MusicModal({ onClose }) {
 }
 
 const partners = [
-    { name: "Cisco", icon: <Globe size={24} /> },
-    { name: "Adobe", icon: <Layers size={24} /> },
-    { name: "GitHub", icon: <Github size={24} /> },
-    { name: "Framer", icon: <Zap size={24} /> },
-    { name: "React", icon: <Code size={24} /> }
+    { name: "Cisco", icon: <Globe size={22} className="text-blue-400" /> },
+    { name: "Adobe", icon: <Layers size={22} className="text-sky-400" /> },
+    { name: "GitHub", icon: <Github size={22} className="text-white" /> },
+    { name: "Framer", icon: <Zap size={22} className="text-purple-400" /> },
+    { name: "React", icon: <Code size={22} className="text-cyan-400" /> }
 ];
 
 const TechStack = ({ icon, name }) => (
@@ -313,7 +315,7 @@ function ProjectModal({ project, onClose }) {
 
                             <div className="flex flex-wrap gap-4">
                                 <a
-                                    href={project.links?.live || "#"}
+                                    href={project.liveUrl || project.links?.live || "#"}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs tracking-widest uppercase transition-all shadow-[0_10px_30px_rgba(37,99,235,0.3)] group"
@@ -321,7 +323,7 @@ function ProjectModal({ project, onClose }) {
                                     <Globe size={18} className="group-hover:rotate-12 transition-transform" /> Live Demo
                                 </a>
                                 <a
-                                    href={project.links?.github || "#"}
+                                    href={project.githubUrl || project.links?.github || "#"}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs tracking-widest uppercase transition-all border border-white/10"
@@ -336,9 +338,9 @@ function ProjectModal({ project, onClose }) {
                                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">Technologies Used</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
-                                    {project.tech.map(t => (
+                                    {(Array.isArray(project.tech) ? project.tech : (typeof project.tech === 'string' ? project.tech.split(',') : [])).map(t => (
                                         <div key={t} className="px-4 py-2 bg-blue-500/5 border border-blue-500/10 rounded-xl text-[10px] font-bold text-blue-400 uppercase tracking-widest hover:bg-blue-500/10 transition-colors">
-                                            # {t}
+                                            # {typeof t === 'string' ? t.trim() : t}
                                         </div>
                                     ))}
                                 </div>
@@ -348,41 +350,14 @@ function ProjectModal({ project, onClose }) {
                         <div className="lg:col-span-5 space-y-8">
                             <div className="relative group">
                                 <div className="absolute -inset-4 bg-blue-500/10 blur-[60px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="relative aspect-4/3 w-full rounded-[40px] overflow-hidden bg-zinc-900 border border-white/10 p-4 shadow-2xl">
-                                    <div className="w-full h-full rounded-[30px] overflow-hidden bg-black flex items-center justify-center">
+                                <div className="relative aspect-[3/4] min-h-[380px] max-h-[550px] w-full rounded-[32px] overflow-hidden bg-[#070913] border border-blue-500/20 p-2 shadow-2xl">
+                                    <div className="w-full h-full rounded-[24px] overflow-hidden bg-black flex items-center justify-center relative">
                                         <img
                                             src={project.image}
                                             alt={project.title}
-                                            className="w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105"
+                                            className="w-full h-full object-contain opacity-95 transition-transform duration-700 group-hover:scale-105"
                                         />
                                     </div>
-                                </div>
-                            </div>
-
-                            <div className="glass-card p-8 md:p-10 bg-white/2 border-white/5 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-4 opacity-5">
-                                    <Star size={80} className="text-blue-500" />
-                                </div>
-                                <div className="flex items-center gap-3 mb-8">
-                                    <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400">
-                                        <Star size={18} fill="currentColor" />
-                                    </div>
-                                    <h3 className="text-xl font-bold tracking-tight text-white">Key Features</h3>
-                                </div>
-                                <div className="space-y-5">
-                                    {(project.features || [
-                                        "Interactive UI components with smooth animations",
-                                        "Fully responsive design for all device sizes",
-                                        "Optimized performance and SEO practices",
-                                        "Integrated dynamic data management"
-                                    ]).map((feature, idx) => (
-                                        <div key={idx} className="flex items-start gap-4 group">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500/40 mt-2 group-hover:scale-150 group-hover:bg-blue-500 transition-all" />
-                                            <p className="text-sm md:text-base text-white/50 leading-relaxed group-hover:text-white/80 transition-colors">
-                                                {feature}
-                                            </p>
-                                        </div>
-                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -398,10 +373,24 @@ export default function Home() {
     const [selectedProject, setSelectedProject] = useState(null);
     const [showMusicModal, setShowMusicModal] = useState(false);
 
-    // Guestbook States
-    const [guestName, setGuestName] = useState('');
-    const [guestMessage, setGuestMessage] = useState('');
-    const [submitting, setSubmitting] = useState(false);
+    // Firebase Projects State
+    const [firebaseProjects, setFirebaseProjects] = useState([]);
+    const [loadingProjects, setLoadingProjects] = useState(true);
+
+    useEffect(() => {
+        const unsub = onSnapshot(collection(db, 'projects'), (snapshot) => {
+            const data = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setFirebaseProjects(data);
+            setLoadingProjects(false);
+        }, (error) => {
+            console.error("Error fetching home projects:", error);
+            setLoadingProjects(false);
+        });
+        return () => unsub();
+    }, []);
 
     // Contact States
     const [contactName, setContactName] = useState('');
@@ -409,45 +398,7 @@ export default function Home() {
     const [contactMessage, setContactMessage] = useState('');
     const [sendingContact, setSendingContact] = useState(false);
 
-    // Live Messages State
-    const [messages, setMessages] = useState([]);
-    const [loadingMessages, setLoadingMessages] = useState(true);
-
     const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
-
-    useEffect(() => {
-        const q = query(collection(db, 'guestbook'), orderBy('timestamp', 'desc'), limit(3));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const msgs = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setMessages(msgs);
-            setLoadingMessages(false);
-        });
-        return () => unsubscribe();
-    }, []);
-
-    const handleGuestbookSubmit = async (e) => {
-        e.preventDefault();
-        if (!guestName.trim() || !guestMessage.trim()) return;
-
-        setSubmitting(true);
-        try {
-            await addDoc(collection(db, 'guestbook'), {
-                name: guestName.trim(),
-                message: guestMessage.trim(),
-                timestamp: serverTimestamp()
-            });
-            setToast({ isOpen: true, message: "Pesan terkirim ke digital void!", type: 'success' });
-            setGuestName('');
-            setGuestMessage('');
-        } catch (error) {
-            console.error("Error adding message:", error);
-            setToast({ isOpen: true, message: "Gagal mengirim pesan ro!", type: 'error' });
-        }
-        setSubmitting(false);
-    };
 
     const handleContactSubmit = async (e) => {
         e.preventDefault();
@@ -473,57 +424,107 @@ export default function Home() {
 
     return (
         <main className="relative z-10 text-white overflow-x-hidden w-full">
-            {/* Hero Section v2 */}
-            <section className="min-h-screen flex flex-col items-center justify-center pt-32 md:pt-40 pb-20 px-4 md:px-6 overflow-hidden">
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center relative"
-                >
-                    <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 glass-card rounded-full! text-[10px] md:text-xs font-bold text-blue-400 mb-6 md:mb-8 tracking-widest uppercase border-white/5">
-                        <Zap size={14} className="animate-pulse" /> Portofolio Website 2026
-                    </div>
+            {/* Hero Section - Matched to Reference Design (Dark Blue Theme) */}
+            <section className="min-h-screen flex flex-col justify-center pt-32 md:pt-40 pb-20 px-6 max-w-7xl mx-auto relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+                    {/* Left Column: Bio & CTA & Mini Terminal */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="lg:col-span-7 space-y-6 text-left"
+                    >
+                        {/* Greeting Subtitle */}
+                        <p className="text-blue-400 font-mono text-sm md:text-base font-medium tracking-wider">
+                            Hello, I'm
+                        </p>
 
-                    <h1 className="text-4xl sm:text-7xl md:text-9xl font-bold mb-6 md:mb-8 leading-[1] md:leading-[0.9] tracking-tighter italic">
-                        <ScrambleTitle text="Bridging" className="text-white" /> <span className="text-blue-500">Tech</span> <br />
-                        <ScrambleTitle text="& Design Arts" className="text-linear" delay={500} />
-                    </h1>
+                        {/* Name Headline */}
+                        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter text-white leading-[1.05]">
+                            Arroudhil <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-blue-600">Anfi.</span>
+                        </h1>
 
-                    <p className="max-w-2xl mx-auto text-base md:text-xl text-white/50 mb-10 md:mb-12 leading-relaxed px-4">
-                        Based in Indonesia, <span className="text-white font-bold">Arro</span> is a SMKN 3 Jepara student specializing in TKJ, crafting digital experiences through code, <span className="text-white font-bold text-blue-400">graphic design</span>, and cinematic visuals.
-                    </p>
+                        {/* Subtitle / Main Role */}
+                        <h2 className="text-2xl md:text-3xl text-white/50 font-normal tracking-tight">
+                            Web Dev & Designer Graphic
+                        </h2>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-                        <MagneticButton>
-                            <Link to="/projects" className="w-full sm:w-auto bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] border-none text-center">
-                                Explore Work
-                            </Link>
-                        </MagneticButton>
-                        <MagneticButton>
-                            <Link to="/about" className="w-full sm:w-auto glass-button border-white/10 group flex items-center justify-center gap-2 border-none">
-                                About Me <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
-                            </Link>
-                        </MagneticButton>
-                    </div>
+                        {/* Bio Paragraph */}
+                        <p className="text-base md:text-lg text-white/60 max-w-xl leading-relaxed font-normal">
+                            Siswa <span className="text-blue-300 font-medium">TKJ SMKN 3 Jepara</span> & <span className="text-sky-300 font-medium">2x Gold Medalist Informatika</span>. Exploring <span className="text-blue-300 font-medium">Network Infrastructure</span>, <span className="text-sky-400 font-medium">Web Developer</span> & <span className="text-blue-400 font-medium">Graphic Design</span>.
+                        </p>
 
-                    <div className="mt-12 md:mt-16 flex items-center justify-center">
-                        <div
-                            onClick={() => setShowMusicModal(true)}
-                            className="glass-card p-4 py-2! rounded-2xl! flex items-center gap-4 bg-white/5 group border-none cursor-pointer hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
-                        >
-                            <div className="w-8 h-8 md:w-10 md:h-10 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center animate-[spin_8s_linear_infinite]">
-                                <Disc className="text-white" size={16} />
-                            </div>
-                            <div className="text-left">
-                                <p className="text-[9px] uppercase tracking-widest font-black text-blue-500 mb-0.5">Now Playing</p>
-                                <p className="text-xs md:text-sm font-bold truncate max-w-[120px] md:max-w-[150px]">Murphy Radio — Autumn</p>
+                        {/* Action Buttons & Now Playing Row */}
+                        <div className="flex flex-wrap items-center gap-4 pt-2">
+                            <MagneticButton>
+                                <Link
+                                    to="/projects"
+                                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 transition-all text-sm inline-block border-none"
+                                >
+                                    View Projects
+                                </Link>
+                            </MagneticButton>
+                            <MagneticButton>
+                                <a
+                                    href="https://github.com/arroVX"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-6 py-3.5 rounded-xl border border-white/10 hover:border-white/30 text-white/80 hover:text-white font-medium bg-white/5 transition-all text-sm inline-block border-none"
+                                >
+                                    GitHub
+                                </a>
+                            </MagneticButton>
+
+                            {/* Now Playing Widget */}
+                            <div
+                                onClick={() => setShowMusicModal(true)}
+                                className="glass-card px-4 py-2 rounded-xl flex items-center gap-3 bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group shadow-lg"
+                                title="Click to listen"
+                            >
+                                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-sky-600 rounded-lg flex items-center justify-center animate-[spin_8s_linear_infinite] shadow-[0_0_12px_rgba(37,99,235,0.5)]">
+                                    <Disc className="text-white" size={16} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-[9px] uppercase tracking-widest font-black text-blue-400 mb-0.5 flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        Now Playing
+                                    </p>
+                                    <p className="text-xs font-bold text-white/90 truncate max-w-[150px]">
+                                        Murphy Radio — Autumn
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </motion.div>
 
-                <div id="services" className="mt-24 w-full max-w-5xl scroll-mt-32">
+                        {/* Interactive Mini Terminal Box */}
+                        <div className="pt-4 max-w-md">
+                            <div className="bg-[#070b14] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+                                <div className="px-4 py-3 bg-[#0d1322] flex items-center gap-2 border-b border-white/5">
+                                    <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
+                                    <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
+                                    <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
+                                </div>
+                                <div className="p-4 font-mono text-xs text-emerald-400 flex items-center gap-2">
+                                    <span className="text-blue-400 font-bold">$</span>
+                                    <span>arro --status --build</span>
+                                    <span className="w-2 h-4 bg-emerald-400 inline-block animate-pulse" />
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Right Column: Interactive Cyber Console Animation */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="lg:col-span-5"
+                    >
+                        <CodeConsoleAnimation />
+                    </motion.div>
+                </div>
+
+                <div id="services" className="mt-28 w-full max-w-5xl mx-auto scroll-mt-32">
                     <p className="text-center text-xs font-bold text-white/30 uppercase tracking-[0.3em] mb-10">Built with Industrial Standards</p>
                     <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale group hover:grayscale-0 hover:opacity-100 transition-all duration-700">
                         {partners.map((p) => (
@@ -553,7 +554,7 @@ export default function Home() {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -562,7 +563,7 @@ export default function Home() {
                         whileHover={{ y: -5 }}
                         className="md:col-span-8 h-full"
                     >
-                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between relative overflow-hidden group border-white/5">
+                        <TiltCard className="h-full glass-card glass-card-hover p-6 md:p-10 flex flex-col justify-between relative overflow-hidden group border-white/5">
                             <div className="relative z-10">
                                 <div className="flex gap-4 mb-6">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500">
@@ -572,21 +573,21 @@ export default function Home() {
                                         <Video size={24} />
                                     </div>
                                 </div>
-                                <h3 className="text-4xl font-bold mb-4 tracking-tighter italic">Visuality & <br /> Motion Arts</h3>
-                                <p className="text-white/50 text-lg max-w-md">Creating cinematic experiences through lenses and temporal design. Specialized in color theory and dynamic composition.</p>
+                                <h3 className="text-3xl md:text-4xl font-bold mb-4 tracking-tighter italic">Visuality & <br /> Motion Arts</h3>
+                                <p className="text-white/50 text-base md:text-lg max-w-md">Creating cinematic experiences through lenses and temporal design. Specialized in color theory and dynamic composition.</p>
                             </div>
-                            <div className="flex flex-wrap gap-4 relative z-10">
+                            <div className="flex flex-wrap gap-4 relative z-10 mt-6">
                                 <div className="flex items-center gap-4 group/item">
                                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-blue-500/20 transition-colors">
                                         <Edit className="text-blue-400" size={20} />
                                     </div>
-                                    <span className="font-bold">Post-Production</span>
+                                    <span className="font-bold text-sm md:text-base">Post-Production</span>
                                 </div>
                                 <div className="flex items-center gap-4 group/item">
                                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover/item:bg-indigo-500/20 transition-colors">
                                         <Camera className="text-indigo-400" size={20} />
                                     </div>
-                                    <span className="font-bold">Color Grading</span>
+                                    <span className="font-bold text-sm md:text-base">Color Grading</span>
                                 </div>
                             </div>
                         </TiltCard>
@@ -600,7 +601,7 @@ export default function Home() {
                         whileHover={{ y: -5 }}
                         className="md:col-span-4 h-full"
                     >
-                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-center items-center text-center relative overflow-hidden border-white/5">
+                        <TiltCard className="h-full glass-card glass-card-hover p-6 md:p-10 flex flex-col justify-center items-center text-center relative overflow-hidden border-white/5">
                             <Guitar className="w-16 h-16 text-orange-400 mb-6 group-hover:scale-110 transition-transform" />
                             <h3 className="text-2xl font-bold tracking-tighter">Composer & Guitarist</h3>
                             <p className="text-sm text-white/40 mt-2 italic">"Expressing emotions through six strings."</p>
@@ -616,17 +617,19 @@ export default function Home() {
                         whileHover={{ y: -5 }}
                         className="md:col-span-8 h-full"
                     >
-                        <TiltCard className="h-full glass-card glass-card-hover p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 border-white/5">
-                            <div className="flex-1">
-                                <h3 className="text-3xl font-bold mb-4 tracking-tighter">Programming Mastery</h3>
-                                <div className="flex gap-4 mb-4">
-                                    <TechStack icon={<Code size={16} />} name="React" />
-                                    <TechStack icon={<Cpu size={16} />} name="C++ (Competitive)" />
+                        <TiltCard className="h-full glass-card glass-card-hover p-6 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 border-white/5 overflow-hidden">
+                            <div className="flex-1 w-full min-w-0">
+                                <h3 className="text-2xl md:text-3xl font-bold mb-4 tracking-tighter truncate">Programming Mastery</h3>
+                                <div className="flex flex-wrap gap-2 md:gap-4 mb-4 w-full">
+                                    <TechStack icon={<Code size={16} />} name="Tailwind"/>
+                                    <TechStack icon={<Code size={16} />} name="JavaScript"/>
+                                    <TechStack icon={<Cpu size={16} />} name="Laravel" />
+                                    <TechStack icon={<Cpu size={16} />} name="Next.JS" />
                                 </div>
-                                <p className="text-white/50 text-sm">Two-time Gold medalist in Informatics. Bringing algorithmic efficiency to modern UI development.</p>
+                                <p className="text-white/50 text-xs md:text-sm leading-relaxed">Two-time Gold medalist in Informatics. Bringing algorithmic efficiency to modern UI development.</p>
                             </div>
-                            <div className="flex-none p-6 bg-black/40 rounded-3xl border border-white/5 font-mono text-xs text-blue-400 shadow-inner">
-                                <pre><code>{`function inspire() {
+                            <div className="flex-none p-4 md:p-6 bg-black/40 rounded-3xl border border-white/5 font-mono text-xs text-blue-400 shadow-inner w-full md:w-auto overflow-x-auto">
+                                <pre className="text-[11px] md:text-xs"><code>{`function inspire() {
   const code = 'Passion';
   const art = 'Vision';
   return code + art;
@@ -643,7 +646,7 @@ export default function Home() {
                         whileHover={{ y: -5 }}
                         className="md:col-span-4 h-full"
                     >
-                        <TiltCard className="h-full glass-card glass-card-hover p-10 flex flex-col justify-between relative overflow-hidden border-white/5 group">
+                        <TiltCard className="h-full glass-card glass-card-hover p-6 md:p-10 flex flex-col justify-between relative overflow-hidden border-white/5 group">
                             <div className="relative z-10">
                                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500">
                                     <Globe size={24} />
@@ -676,32 +679,56 @@ export default function Home() {
                     </Link>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {projects.map((p, i) => (
-                        <motion.div
-                            key={p.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            className="group cursor-pointer"
-                            onClick={() => setSelectedProject(p)}
-                        >
-                            <div className="aspect-video rounded-3xl overflow-hidden mb-6 relative glass-card p-2 border-white/5">
-                                <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 relative">
-                                    <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" alt={p.title} />
-                                    <div className="absolute inset-x-0 bottom-0 p-6 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 mb-1">{p.category}</p>
-                                        <h3 className="text-xl font-bold text-white truncate">{p.title}</h3>
-                                    </div>
-                                    <div className="absolute top-4 right-4 w-10 h-10 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all">
-                                        <ArrowUpRight size={20} />
+                {loadingProjects ? (
+                    <TerminalLoading message="Memuat proyek portofolio dari Firebase database..." />
+                ) : firebaseProjects.length === 0 ? (
+                    <div className="text-center py-16 glass-card border-white/5 rounded-3xl">
+                        <p className="text-white/40 text-sm font-medium mb-2">Belum ada proyek portofolio di database Firebase.</p>
+                        <p className="text-white/30 text-xs">Tambahkan proyek melalui <Link to="/admin" className="text-blue-400 underline">Admin Panel</Link>.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {firebaseProjects.slice(0, 6).map((p, i) => (
+                            <motion.div
+                                key={p.id || p.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="group cursor-pointer"
+                                onClick={() => setSelectedProject(p)}
+                            >
+                                <div className="aspect-[4/3] rounded-3xl overflow-hidden mb-4 relative glass-card p-2 border-white/5">
+                                    <div className="w-full h-full rounded-2xl overflow-hidden bg-black border border-white/5 relative flex items-center justify-center">
+                                        <img src={p.image} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700 opacity-90" alt={p.title} />
+                                        <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-400 mb-1">{p.category || 'Portfolio'}</p>
+                                            <h3 className="text-xl font-bold text-white truncate">{p.title}</h3>
+                                        </div>
+                                        <div className="absolute top-4 right-4 w-10 h-10 bg-black/60 backdrop-blur-xl rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all">
+                                            <ArrowUpRight size={20} />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                                <div className="px-1 text-left">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 px-2.5 py-1 rounded-md border border-blue-500/20">
+                                            {p.category || 'Design'}
+                                        </span>
+                                        {p.classLevel && (
+                                            <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest bg-purple-500/10 px-2.5 py-1 rounded-md border border-purple-500/20">
+                                                {p.classLevel}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                                        {p.title}
+                                    </h3>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
             </section>
 
             {/* Gear Section */}
@@ -793,7 +820,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Unified Contact & Guestbook Section */}
+            {/* Contact Section */}
             <section className="py-32 px-6 max-w-7xl mx-auto">
                 <div className="text-center mb-20">
                     <motion.h2
@@ -807,11 +834,11 @@ export default function Home() {
                     <p className="text-white/40 max-w-2xl mx-auto">Punya pertanyaan? Kirimi saya pesan, dan saya akan segera membalasnya.</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                    {/* Left: Contact Form */}
+                <div className="max-w-3xl mx-auto">
+                    {/* Contact Form */}
                     <motion.div
-                        initial={{ opacity: 0, x: -40 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         className="glass-card p-8 md:p-12 border-white/5 relative group"
                     >
@@ -881,107 +908,6 @@ export default function Home() {
                                     <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center"><Instagram size={20} /></div>
                                     <span className="text-xs font-bold text-white/70">Instagram</span>
                                 </a>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Right: Guestbook */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 40 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="glass-card p-8 md:p-12 border-white/5 min-h-full"
-                    >
-                        <div className="flex items-center gap-3 mb-10">
-                            <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
-                                <MessageSquare size={20} />
-                            </div>
-                            <h3 className="text-2xl font-bold">Guestbook <span className="text-white/20 text-lg font-medium ml-2 font-mono">(Live)</span></h3>
-                        </div>
-
-                        <form onSubmit={handleGuestbookSubmit} className="space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Name <span className="text-red-500">*</span></label>
-                                <input
-                                    type="text"
-                                    value={guestName}
-                                    onChange={(e) => setGuestName(e.target.value)}
-                                    placeholder="Enter your name"
-                                    required
-                                    className="w-full bg-white/2 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Message <span className="text-red-500">*</span></label>
-                                <textarea
-                                    value={guestMessage}
-                                    onChange={(e) => setGuestMessage(e.target.value)}
-                                    placeholder="Write your message here..."
-                                    required
-                                    rows={4}
-                                    className="w-full bg-white/2 border border-white/5 rounded-3xl px-6 py-5 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium resize-none shadow-none"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={submitting}
-                                className="w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl font-black text-xs tracking-[0.2em] uppercase transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 border-none shadow-[0_10px_30px_rgba(37,99,235,0.2)]"
-                            >
-                                {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />} Post Comment
-                            </button>
-                        </form>
-
-                        <div className="mt-12 space-y-4 border-t border-white/5 pt-12">
-                            <div className="flex items-center justify-between mb-4">
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Latest Activity</p>
-                                <Link to="/guestbook" className="text-[9px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-widest">
-                                    View All →
-                                </Link>
-                            </div>
-
-                            <div className="space-y-3">
-                                <AnimatePresence mode="popLayout">
-                                    {messages.length > 0 ? (
-                                        messages.map((msg, idx) => (
-                                            <motion.div
-                                                key={msg.id}
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.95 }}
-                                                transition={{ delay: idx * 0.1 }}
-                                                className="p-4 bg-white/2 border border-white/5 rounded-2xl group/msg hover:bg-white/5 transition-all"
-                                            >
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-bold text-blue-400">
-                                                        {msg.name?.charAt(0).toUpperCase()}
-                                                    </div>
-                                                    <span className="text-xs font-bold text-white/80">{msg.name}</span>
-                                                    <span className="text-[9px] text-white/10 font-mono ml-auto">
-                                                        {msg.timestamp?.toDate ? new Date(msg.timestamp.toDate()).toLocaleDateString() : 'Just now'}
-                                                    </span>
-                                                </div>
-                                                <p className="text-xs text-white/40 leading-relaxed italic group-hover/msg:text-white/60 transition-colors">
-                                                    "{msg.message}"
-                                                </p>
-                                            </motion.div>
-                                        ))
-                                    ) : (
-                                        !loadingMessages && (
-                                            <div className="flex flex-col items-center justify-center py-10 text-center">
-                                                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/10 mb-4">
-                                                    <User size={24} />
-                                                </div>
-                                                <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">No comments yet. Start the conversation!</p>
-                                            </div>
-                                        )
-                                    )}
-                                </AnimatePresence>
-                                {loadingMessages && (
-                                    <div className="flex justify-center py-10">
-                                        <Loader2 size={24} className="animate-spin text-white/10" />
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </motion.div>

@@ -8,7 +8,8 @@ import Projects from './pages/Projects';
 import Services from './pages/Services';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
-import Guestbook from './pages/Guestbook';
+import SchoolProjects from './pages/SchoolProjects';
+import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import CommandCenter from './components/CommandCenter';
 import { Terminal as TerminalIcon, Search } from 'lucide-react';
@@ -144,7 +145,7 @@ function Navbar({ setIsCommandOpen }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = ['Services', 'Work', 'Experience', 'Guestbook', 'Contact'];
+  const navLinks = ['Services', 'Work', 'School Work', 'Experience', 'Contact'];
 
   return (
     <>
@@ -170,7 +171,7 @@ function Navbar({ setIsCommandOpen }) {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
-                  'Guestbook': '/guestbook',
+                  'School Work': '/school-projects',
                   'Contact': '/contact'
                 };
                 const to = linkMap[item] || '/';
@@ -249,12 +250,12 @@ function Navbar({ setIsCommandOpen }) {
             className="fixed inset-0 z-[49] bg-[#030303]/95 backdrop-blur-2xl md:hidden flex flex-col pt-32 px-10"
           >
             <div className="flex flex-col gap-6">
-              {['Services', 'Work', 'Experience', 'Guestbook', 'About', 'Contact'].map((item, i) => {
+              {['Services', 'Work', 'School Work', 'Experience', 'About', 'Contact'].map((item, i) => {
                 const linkMap = {
                   'Work': '/projects',
                   'Services': '/services',
                   'Experience': '/experience',
-                  'Guestbook': '/guestbook',
+                  'School Work': '/school-projects',
                   'About': '/about',
                   'Contact': '/contact'
                 };
@@ -350,7 +351,7 @@ function Footer() {
               <li><Link to="/services" className="hover:text-white transition-colors border-none">Services</Link></li>
               <li><Link to="/experience" className="hover:text-white transition-colors border-none">Experience</Link></li>
               <li><Link to="/projects" className="hover:text-white transition-colors border-none">Work</Link></li>
-              <li><Link to="/guestbook" className="hover:text-white transition-colors border-none">Guestbook</Link></li>
+              <li><Link to="/school-projects" className="hover:text-white transition-colors border-none">School Work / LKPD</Link></li>
             </ul>
           </div>
           <div>
@@ -362,7 +363,7 @@ function Footer() {
           </div>
           <div className="col-span-2 md:col-span-1">
             <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Status</p>
-            <div className="flex items-center gap-2 text-sm font-medium text-green-400">
+            <div className="flex items-center gap-2 text-sm font-medium text-green-400 mb-4">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               Available for Projects
             </div>
@@ -434,8 +435,9 @@ export default function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/services" element={<Services />} />
             <Route path="/experience" element={<Experience />} />
+            <Route path="/school-projects" element={<SchoolProjects />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/guestbook" element={<Guestbook />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
