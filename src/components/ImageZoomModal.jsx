@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
 
@@ -40,7 +41,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
         setScale(prev => (prev >= 3 ? 1 : prev + 1));
     };
 
-    return (
+    return createPortal(
         <AnimatePresence>
             <motion.div
                 initial={{ opacity: 0 }}
@@ -125,6 +126,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                     💡 Scroll mouse / Klik gambar untuk zoom | Geser mouse untuk geser posisi
                 </div>
             </motion.div>
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

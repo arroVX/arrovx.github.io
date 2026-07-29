@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     BookOpen, Code2, Network, Cpu, FileText, CheckCircle2,
@@ -344,13 +345,13 @@ export default function SchoolProjects() {
             </div>
 
             {/* Modal Detail & Snippet Drawer */}
-            <AnimatePresence>
-                {activeProject && (
+            {activeProject && createPortal(
+                <AnimatePresence>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100000] flex items-center justify-center pt-24 md:pt-10 pb-6 px-4 md:px-6 bg-[#030712]/98 backdrop-blur-3xl overflow-hidden"
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-3xl overflow-hidden text-left"
                         onClick={() => setActiveProject(null)}
                     >
                         <motion.div
@@ -521,8 +522,9 @@ export default function SchoolProjects() {
                             </div>
                         </motion.div>
                     </motion.div>
-                )}
-            </AnimatePresence>
+                </AnimatePresence>,
+                document.body
+            )}
 
             <Toast
                 isOpen={toast.isOpen}

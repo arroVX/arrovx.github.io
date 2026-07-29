@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Toast from '../components/Toast';
@@ -288,13 +289,13 @@ export default function Projects() {
             </div>
 
             {/* Project Modal: Poster Style Detail View */}
-            <AnimatePresence>
-                {selectedProject && (
+            {selectedProject && createPortal(
+                <AnimatePresence>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100000] flex items-center justify-center bg-[#030712]/98 backdrop-blur-3xl pt-24 md:pt-10 pb-4 px-3 md:px-6 text-left overflow-hidden"
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-4 md:p-6 text-left overflow-hidden"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
@@ -476,8 +477,9 @@ export default function Projects() {
                             />
                         )}
                     </motion.div>
-                )}
-            </AnimatePresence>
+                </AnimatePresence>,
+                document.body
+            )}
         </main>
     );
 }

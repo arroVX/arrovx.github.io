@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Lock, ShieldCheck, Plus, Edit2, Trash2, Save, X,
@@ -687,13 +688,13 @@ export default function Admin() {
             </div>
 
             {/* FORM MODAL FOR CREATE & EDIT */}
-            <AnimatePresence>
-                {isModalOpen && (
+            {isModalOpen && createPortal(
+                <AnimatePresence>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100000] flex items-center justify-center pt-24 md:pt-10 pb-6 px-4 md:px-6 bg-[#030712]/98 backdrop-blur-3xl overflow-hidden"
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-3xl overflow-hidden"
                         onClick={() => setIsModalOpen(false)}
                     >
                         <motion.div
@@ -924,17 +925,18 @@ export default function Admin() {
                             </form>
                         </motion.div>
                     </motion.div>
-                )}
-            </AnimatePresence>
+                </AnimatePresence>,
+                document.body
+            )}
 
             {/* CUSTOM DELETE CONFIRMATION MODAL */}
-            <AnimatePresence>
-                {deleteConfirm.isOpen && (
+            {deleteConfirm.isOpen && createPortal(
+                <AnimatePresence>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-3xl"
                         onClick={() => setDeleteConfirm({ isOpen: false, id: null, title: '' })}
                     >
                         <motion.div
@@ -942,7 +944,7 @@ export default function Admin() {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="glass-card max-w-md w-full p-6 md:p-8 rounded-3xl border-red-500/20 bg-[#090d16]/95 relative shadow-2xl shadow-red-500/10 text-center"
+                            className="glass-card max-w-md w-full p-6 md:p-8 rounded-3xl border-red-500/20 bg-[#070a14] opacity-100 relative shadow-2xl text-center"
                         >
                             {/* Close Button */}
                             <button
@@ -982,8 +984,9 @@ export default function Admin() {
                             </div>
                         </motion.div>
                     </motion.div>
-                )}
-            </AnimatePresence>
+                </AnimatePresence>,
+                document.body
+            )}
 
             <Toast
                 isOpen={toast.isOpen}
