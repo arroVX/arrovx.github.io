@@ -119,39 +119,45 @@ function ImageCard({ p, project, i = 0, onClick }) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
-            className="group cursor-pointer text-left"
+            className="glass-card rounded-[24px] overflow-hidden group border border-white/10 hover:border-blue-500/40 transition-all shadow-2xl bg-[#080c16]/90 flex flex-col cursor-pointer text-left h-full"
             onClick={onClick}
         >
-            <div className="aspect-[3/4] rounded-3xl overflow-hidden mb-3 relative glass-card p-2 border-white/5 group-hover:border-blue-500/40 transition-all shadow-xl">
-                <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 border border-white/5 relative">
-                    {!isLoaded && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
-                            <Loader2 className="animate-spin text-white/20" size={24} />
-                        </div>
-                    )}
-                    <img
-                        src={item.image}
-                        loading="lazy"
-                        onLoad={() => setIsLoaded(true)}
-                        className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-                        alt={item.title || 'Project'}
-                        onError={(e) => {
-                            e.target.src = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
-                            setIsLoaded(true);
-                        }}
-                    />
-                </div>
-                <div className="absolute inset-x-2 bottom-2 p-5 bg-gradient-to-t from-black/95 via-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-b-2xl flex flex-col justify-end">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 mb-1">{item.category || 'Portfolio'}</p>
-                    <h3 className="text-sm font-bold text-white truncate mb-3">{item.title}</h3>
-                    <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-300 bg-blue-500/20 px-3 py-1.5 rounded-xl border border-blue-500/30 w-fit backdrop-blur-md">
-                        Lihat Detail Desain <ChevronRight size={13} />
+            {/* Image Poster Frame */}
+            <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-950 relative border-b border-white/5">
+                {!isLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/5 animate-pulse">
+                        <Loader2 className="animate-spin text-white/20" size={24} />
                     </div>
+                )}
+                <img
+                    src={item.image}
+                    loading="lazy"
+                    onLoad={() => setIsLoaded(true)}
+                    className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    alt={item.title || 'Project'}
+                    onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
+                        setIsLoaded(true);
+                    }}
+                />
+                {/* Hover Overlay Hint */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end p-4">
+                    <span className="text-[11px] font-bold text-blue-300 bg-blue-600/30 px-3.5 py-1.5 rounded-xl border border-blue-400/30 backdrop-blur-md flex items-center gap-1">
+                        Lihat Detail <ChevronRight size={13} />
+                    </span>
                 </div>
             </div>
-            <div className="px-2">
-                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">{item.category || 'Design'}</span>
-                <h3 className="text-sm font-bold text-white/90 truncate group-hover:text-blue-400 transition-colors">{item.title}</h3>
+
+            {/* Card Footer Info */}
+            <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-[#080c16]">
+                <div>
+                    <span className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest block mb-1">
+                        {item.category || 'Graphic Design'}
+                    </span>
+                    <h3 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors leading-snug line-clamp-2">
+                        {item.title}
+                    </h3>
+                </div>
             </div>
         </motion.div>
     );
@@ -280,7 +286,7 @@ export default function Projects() {
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                className="glass-card overflow-hidden group border-white/5 cursor-pointer relative w-full"
+                                className="overflow-hidden group cursor-pointer relative w-full rounded-[24px]"
                                 onClick={() => setSelectedProject(project)}
                             >
                                 <ImageCard project={project} />
@@ -297,7 +303,7 @@ export default function Projects() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[1000000] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-4 md:p-6 text-left overflow-hidden"
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/90 backdrop-blur-3xl text-left overflow-hidden"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
@@ -305,11 +311,11 @@ export default function Projects() {
                             animate={{ scale: 1, y: 0, opacity: 1 }}
                             exit={{ scale: 0.95, y: 40, opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#070a14] border border-white/10 opacity-100 shadow-[0_0_100px_rgba(0,0,0,0.9)] relative custom-scrollbar flex flex-col"
+                            className="w-full max-h-[88vh] md:max-h-[90vh] md:max-w-7xl rounded-[28px] sm:rounded-[36px] md:rounded-[40px] overflow-y-auto bg-[#070a14] border border-white/15 opacity-100 shadow-[0_0_100px_rgba(0,0,0,0.9)] relative custom-scrollbar flex flex-col"
                             onClick={e => e.stopPropagation()}
                         >
                             {/* Sticky Top Header Bar */}
-                            <div className="sticky top-0 z-40 bg-[#070a14]/95 backdrop-blur-md px-6 md:px-12 py-4 border-b border-white/10 flex items-center justify-between shadow-lg">
+                            <div className="sticky top-0 z-40 bg-[#070a14]/95 backdrop-blur-md px-5 sm:px-8 md:px-12 py-4 border-b border-white/10 flex items-center justify-between shadow-lg rounded-t-[28px] sm:rounded-t-[36px] md:rounded-t-[40px]">
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setSelectedProject(null)}

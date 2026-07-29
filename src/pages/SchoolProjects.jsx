@@ -351,7 +351,7 @@ export default function SchoolProjects() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-3xl overflow-hidden text-left"
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/90 backdrop-blur-3xl overflow-hidden text-left"
                         onClick={() => setActiveProject(null)}
                     >
                         <motion.div
@@ -359,7 +359,7 @@ export default function SchoolProjects() {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-3xl max-h-[80vh] md:max-h-[85vh] overflow-y-auto p-6 md:p-10 border border-white/10 bg-[#070a14] opacity-100 relative rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.9)] custom-scrollbar text-left"
+                            className="w-full max-w-3xl max-h-[85vh] overflow-y-auto p-6 md:p-10 border border-white/15 bg-[#070a14] opacity-100 relative rounded-[28px] sm:rounded-[36px] shadow-[0_0_80px_rgba(0,0,0,0.9)] custom-scrollbar text-left"
                         >
                             {/* Close Button */}
                             <button

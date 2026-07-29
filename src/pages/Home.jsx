@@ -247,7 +247,7 @@ function ProjectModal({ project, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000000] flex items-center justify-center bg-[#030712]/98 backdrop-blur-3xl pt-24 md:pt-10 pb-4 px-3 md:px-6 text-left overflow-hidden"
+            className="fixed inset-0 z-[1000000] flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/90 backdrop-blur-3xl text-left overflow-hidden"
             onClick={onClose}
         >
             <motion.div
@@ -255,11 +255,11 @@ function ProjectModal({ project, onClose }) {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.95, y: 40, opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#070a14] border border-white/10 opacity-100 shadow-[0_0_100px_rgba(0,0,0,0.9)] relative custom-scrollbar flex flex-col"
+                className="w-full max-h-[88vh] md:max-h-[90vh] md:max-w-7xl rounded-[28px] sm:rounded-[36px] md:rounded-[40px] overflow-y-auto bg-[#070a14] border border-white/15 opacity-100 shadow-[0_0_100px_rgba(0,0,0,0.9)] relative custom-scrollbar flex flex-col"
                 onClick={e => e.stopPropagation()}
             >
                 {/* Sticky Top Header Bar */}
-                <div className="sticky top-0 z-40 bg-[#070a14]/95 backdrop-blur-md px-6 md:px-12 py-4 border-b border-white/10 flex items-center justify-between shadow-lg">
+                <div className="sticky top-0 z-40 bg-[#070a14]/95 backdrop-blur-md px-5 sm:px-8 md:px-12 py-4 border-b border-white/10 flex items-center justify-between shadow-lg rounded-t-[28px] sm:rounded-t-[36px] md:rounded-t-[40px]">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={onClose}
