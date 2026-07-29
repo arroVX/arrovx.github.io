@@ -273,14 +273,14 @@ export default function Projects() {
             )}
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 mt-12">
                 {filteredProjects.map((project, idx) => (
                     <motion.div
-                        key={project.id || project.title}
+                        key={project.id || project.title || idx}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        className="glass-card overflow-hidden group border-white/5 cursor-pointer relative"
+                        className="glass-card overflow-hidden group border-white/5 cursor-pointer relative max-w-[280px] w-full justify-self-start"
                         onClick={() => setSelectedProject(project)}
                     >
                         <ImageCard project={project} />
