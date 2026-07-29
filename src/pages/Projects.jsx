@@ -107,7 +107,8 @@ const allProjects = [
     tech: p.tech || ["Graphic Design"]
 }));
 
-function ImageCard({ p, i, onClick }) {
+function ImageCard({ p, project, i = 0, onClick }) {
+    const item = p || project || {};
     const [isLoaded, setIsLoaded] = useState(false);
 
     return (
@@ -128,11 +129,11 @@ function ImageCard({ p, i, onClick }) {
                         </div>
                     )}
                     <img
-                        src={p.image}
+                        src={item.image}
                         loading="lazy"
                         onLoad={() => setIsLoaded(true)}
                         className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-                        alt={p.title}
+                        alt={item.title || 'Project'}
                         onError={(e) => {
                             e.target.src = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
                             setIsLoaded(true);
@@ -140,16 +141,16 @@ function ImageCard({ p, i, onClick }) {
                     />
                 </div>
                 <div className="absolute inset-x-2 bottom-2 p-5 bg-gradient-to-t from-black/95 via-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-b-2xl flex flex-col justify-end">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 mb-1">{p.category}</p>
-                    <h3 className="text-sm font-bold text-white truncate mb-3">{p.title}</h3>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 mb-1">{item.category || 'Portfolio'}</p>
+                    <h3 className="text-sm font-bold text-white truncate mb-3">{item.title}</h3>
                     <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-300 bg-blue-500/20 px-3 py-1.5 rounded-xl border border-blue-500/30 w-fit backdrop-blur-md">
                         Lihat Detail Desain <ChevronRight size={13} />
                     </div>
                 </div>
             </div>
             <div className="px-2">
-                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">{p.category}</span>
-                <h3 className="text-sm font-bold text-white/90 truncate group-hover:text-blue-400 transition-colors">{p.title}</h3>
+                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">{item.category || 'Design'}</span>
+                <h3 className="text-sm font-bold text-white/90 truncate group-hover:text-blue-400 transition-colors">{item.title}</h3>
             </div>
         </motion.div>
     );
@@ -208,8 +209,8 @@ export default function Projects() {
         };
     }, [selectedProject]);
 
-    // Only display projects coming directly from Firebase database
-    const displayProjects = firebaseProjects;
+    // Display projects from Firebase, or fallback to default allProjects if Firebase has no items yet
+    const displayProjects = firebaseProjects.length > 0 ? firebaseProjects : allProjects;
 
     const categories = ["All", ...new Set(displayProjects.map(p => p.category))];
     const filteredProjects = selectedCategory === "All"
