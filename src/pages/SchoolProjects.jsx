@@ -198,6 +198,17 @@ export default function SchoolProjects() {
 
     const titleScramble = useScrambleText("School Project", 0);
 
+    useEffect(() => {
+        if (activeProject) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [activeProject]);
+
     const handleCopySnippet = (snippet) => {
         navigator.clipboard.writeText(snippet);
         setCopied(true);
@@ -238,25 +249,7 @@ export default function SchoolProjects() {
                         <div className="glass-card border-red-500/20 max-w-xl mx-auto p-8 rounded-2xl">
                             <AlertCircle size={48} className="mx-auto text-red-400 mb-4" />
                             <p className="text-red-400 text-sm font-bold mb-2">Gagal mengambil data dari Firebase!</p>
-                            <p className="text-white/40 text-xs mb-6 font-mono bg-white/5 p-2 rounded">{firebaseError}</p>
-                            <div className="text-left bg-white/5 rounded-xl p-4 border border-white/10">
-                                <p className="text-blue-400 text-xs font-bold mb-2">⚡ Cara Fix — Update Firestore Rules:</p>
-                                <ol className="text-white/50 text-xs space-y-1 list-decimal list-inside">
-                                    <li>Buka <a href="https://console.firebase.google.com" target="_blank" rel="noreferrer" className="text-blue-400 underline">Firebase Console</a></li>
-                                    <li>Pilih project <span className="text-white/70 font-bold">rojing-54fcd</span></li>
-                                    <li>Klik menu <span className="text-white/70 font-bold">Firestore Database → Rules</span></li>
-                                    <li>Ganti rules dengan:</li>
-                                </ol>
-                                <pre className="mt-2 bg-black/50 text-green-400 text-[11px] p-3 rounded-lg overflow-x-auto">{`rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
-    }
-  }
-}`}</pre>
-                                <p className="text-white/30 text-[10px] mt-2">5. Klik <strong>Publish</strong>, lalu refresh halaman ini.</p>
-                            </div>
+                            <p className="text-white/40 text-xs mb-4">{firebaseError}</p>
                         </div>
                     </div>
                 )}
@@ -303,7 +296,7 @@ service cloud.firestore {
                             <div className="p-6">
                                 {/* Header Badges */}
                                 <div className="flex items-center justify-between gap-2 mb-4">
-                                    <div className="flex items-center gap-2 flex-wrap">
+                                    <div className="flex items-center gap-2">
                                         <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
                                             {item.category || 'School Project'}
                                         </span>
@@ -320,43 +313,30 @@ service cloud.firestore {
                                     {item.title}
                                 </h3>
                                 <p className="text-[11px] font-semibold text-white/40 mb-3 flex items-center gap-1.5">
-                                    <FileText size={12} className="text-blue-400" /> {item.subject || 'TKJ SMKN 3 Jepara'}
+                                    <BookOpen size={13} className="text-blue-400" /> {item.subject || 'TKJ SMKN 3 Jepara'}
                                 </p>
-
-                                {/* Description */}
-                                <p className="text-xs text-white/60 leading-relaxed mb-4 line-clamp-3">
+                                <p className="text-xs text-white/50 line-clamp-2 leading-relaxed mb-4">
                                     {item.desc}
                                 </p>
-
-                                {/* PDF / File Attachment Badge */}
-                                {item.fileUrl && (
-                                    <div className="mb-4 px-3 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between text-xs text-emerald-300">
-                                        <span className="flex items-center gap-1.5 truncate text-[11px]">
-                                            <Paperclip size={13} className="shrink-0 text-emerald-400" />
-                                            <span className="truncate">{item.fileName || 'Lampiran Berkas PDF'}</span>
-                                        </span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-400 shrink-0">PDF</span>
-                                    </div>
-                                )}
                             </div>
 
-                            <div className="px-6 pb-6">
-                                {/* Tools / Tech Badges */}
-                                <div className="flex flex-wrap gap-1.5 mb-6">
-                                    {(Array.isArray(item.tools) ? item.tools : (Array.isArray(item.tech) ? item.tech : (typeof item.tech === 'string' ? item.tech.split(',') : []))).map((t, index) => (
-                                        <span key={index} className="px-2 py-0.5 bg-white/5 rounded-md text-[10px] font-mono text-white/50 border border-white/5">
-                                            {typeof t === 'string' ? t.trim() : t}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                {/* Action Button */}
+                            {/* Actions Bar */}
+                            <div className="p-4 bg-white/2 border-t border-white/5 flex items-center justify-between gap-2">
                                 <button
                                     onClick={() => setActiveProject(item)}
-                                    className="w-full py-2.5 rounded-xl bg-white/5 hover:bg-blue-600 text-white text-xs font-bold transition-all border-none flex items-center justify-center gap-2 group/btn cursor-pointer"
+                                    className="flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors bg-transparent border-none cursor-pointer"
                                 >
-                                    Lihat Detail & Berkas <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                                    Lihat Detail & File <ChevronRight size={14} />
                                 </button>
+                                {item.fileUrl && (
+                                    <button
+                                        onClick={() => handlePreview(item.fileUrl, item.fileName || item.title)}
+                                        className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border-none cursor-pointer"
+                                        title="Preview PDF"
+                                    >
+                                        <ExternalLink size={14} />
+                                    </button>
+                                )}
                             </div>
                         </motion.div>
                     ))}
@@ -370,7 +350,7 @@ service cloud.firestore {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[10000] flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-xl"
+                        className="fixed inset-0 z-[100000] flex items-center justify-center pt-24 md:pt-10 pb-6 px-4 md:px-6 bg-[#030712]/98 backdrop-blur-3xl overflow-hidden"
                         onClick={() => setActiveProject(null)}
                     >
                         <motion.div
@@ -378,12 +358,12 @@ service cloud.firestore {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="glass-card w-full max-w-3xl max-h-[85vh] overflow-y-auto p-6 md:p-8 border-white/10 bg-[#090d16]/95 relative shadow-2xl custom-scrollbar"
+                            className="w-full max-w-3xl max-h-[80vh] md:max-h-[85vh] overflow-y-auto p-6 md:p-10 border border-white/10 bg-[#070a14] opacity-100 relative rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.9)] custom-scrollbar text-left"
                         >
                             {/* Close Button */}
                             <button
                                 onClick={() => setActiveProject(null)}
-                                className="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/40 hover:text-white transition-all border-none"
+                                className="absolute top-6 right-6 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/10 cursor-pointer shadow-md"
                             >
                                 <X size={18} />
                             </button>

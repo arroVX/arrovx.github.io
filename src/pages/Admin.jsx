@@ -96,6 +96,17 @@ export default function Admin() {
     const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
     const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, id: null, title: '' });
 
+    useEffect(() => {
+        if (isModalOpen || deleteConfirm?.isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isModalOpen, deleteConfirm?.isOpen]);
+
     // Handle Auth Login
     const handleLogin = (e) => {
         e.preventDefault();
@@ -682,7 +693,7 @@ export default function Admin() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[10000] flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-xl"
+                        className="fixed inset-0 z-[100000] flex items-center justify-center pt-24 md:pt-10 pb-6 px-4 md:px-6 bg-[#030712]/98 backdrop-blur-3xl overflow-hidden"
                         onClick={() => setIsModalOpen(false)}
                     >
                         <motion.div
@@ -690,11 +701,11 @@ export default function Admin() {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="glass-card w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 md:p-8 border-white/10 bg-[#070b16]/95 relative shadow-2xl custom-scrollbar text-left"
+                            className="w-full max-w-2xl max-h-[80vh] md:max-h-[85vh] overflow-y-auto p-6 md:p-10 border border-white/10 bg-[#070a14] opacity-100 relative rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.9)] custom-scrollbar text-left"
                         >
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/40 hover:text-white transition-all border-none cursor-pointer"
+                                className="absolute top-6 right-6 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/10 cursor-pointer shadow-md"
                             >
                                 <X size={18} />
                             </button>

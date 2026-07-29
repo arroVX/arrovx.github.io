@@ -247,7 +247,7 @@ function ProjectModal({ project, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-1000000 flex items-center justify-center backdrop-blur-3xl bg-[#030303]/95"
+            className="fixed inset-0 z-[1000000] flex items-center justify-center bg-[#030712]/98 backdrop-blur-3xl pt-24 md:pt-10 pb-4 px-3 md:px-6 text-left overflow-hidden"
             onClick={onClose}
         >
             <motion.div
@@ -255,32 +255,34 @@ function ProjectModal({ project, onClose }) {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.95, y: 40, opacity: 0 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#080808] border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] relative custom-scrollbar"
+                className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#070a14] border border-white/10 opacity-100 shadow-[0_0_100px_rgba(0,0,0,0.9)] relative custom-scrollbar flex flex-col"
                 onClick={e => e.stopPropagation()}
             >
-                <button
-                    onClick={onClose}
-                    className="md:hidden fixed top-6 right-6 z-50 w-12 h-12 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center text-white border-none"
-                >
-                    <X size={24} />
-                </button>
-
-                <div className="p-8 md:p-16 lg:p-20">
-                    <div className="flex items-center gap-4 mb-12">
+                {/* Sticky Top Header Bar */}
+                <div className="sticky top-0 z-40 bg-[#070a14]/95 backdrop-blur-md px-6 md:px-12 py-4 border-b border-white/10 flex items-center justify-between shadow-lg">
+                    <div className="flex items-center gap-3">
                         <button
                             onClick={onClose}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold text-white/50 hover:text-white transition-all border-none"
+                            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-xs font-bold text-white transition-all border border-white/10 cursor-pointer shadow-md"
                         >
-                            <ArrowLeft size={16} /> Kembali
+                            <ArrowLeft size={16} /> Back
                         </button>
-                        <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white/20">
-                            <span>Karya</span>
-                            <div className="w-1 h-1 bg-white/20 rounded-full" />
-                            <span className="text-blue-500">{project.title}</span>
+                        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 truncate max-w-[180px] sm:max-w-xs">
+                            <span>Projects</span>
+                            <div className="w-1 h-1 bg-white/20 rounded-full shrink-0" />
+                            <span className="text-blue-400 truncate">{project.title}</span>
                         </div>
                     </div>
+                    <button
+                        onClick={onClose}
+                        className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/10 cursor-pointer shrink-0"
+                    >
+                        <X size={18} />
+                    </button>
+                </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                <div className="p-6 md:p-12 lg:p-16 flex-1">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
                         <div className="lg:col-span-7 space-y-12">
                             <div>
                                 <motion.h2
@@ -391,6 +393,17 @@ export default function Home() {
         });
         return () => unsub();
     }, []);
+
+    useEffect(() => {
+        if (selectedProject || showMusicModal) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [selectedProject, showMusicModal]);
 
     // Contact States
     const [contactName, setContactName] = useState('');

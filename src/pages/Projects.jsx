@@ -197,6 +197,17 @@ export default function Projects() {
         return () => unsub();
     }, []);
 
+    useEffect(() => {
+        if (selectedProject) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [selectedProject]);
+
     // Only display projects coming directly from Firebase database
     const displayProjects = firebaseProjects;
 
@@ -208,80 +219,71 @@ export default function Projects() {
     return (
         <main className="relative z-10 pt-32 pb-20 px-6 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-                    <div className="max-w-2xl">
-                        <Link to="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-8 group">
-                            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
-                        </Link>
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="text-5xl md:text-7xl font-bold tracking-tighter mb-6"
-                        >
-                            Visual <span className="text-linear">Archive.</span>
-                        </motion.h1>
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-lg text-white/50 leading-relaxed"
-                        >
-                            Full collection featuring {displayProjects.length} my projecrs works.
-                        </motion.p>
-                    </div>
-
-                    {/* Category Filter */}
-                    {categories.length > 1 && (
-                        <div className="flex flex-wrap gap-2">
-                            {categories.map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setSelectedCategory(cat)}
-                                    className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none cursor-pointer ${selectedCategory === cat
-                                        ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-                                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
-                                        }`}
-                                >
-                                    {cat}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                {/* Header */}
+                <div className="text-left mb-16">
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-blue-500 font-bold tracking-widest uppercase text-xs mb-4"
+                    >
+                        Portfolio Archive
+                    </motion.p>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-5xl md:text-7xl font-bold tracking-tighter mb-6"
+                    >
+                        Visual <span className="text-linear">Archive.</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="text-lg text-white/50 leading-relaxed"
+                    >
+                        Full collection featuring {displayProjects.length} my projecrs works.
+                    </motion.p>
                 </div>
 
-                {/* Loading State */}
-                {loading && (
-                    <TerminalLoading message="Memuat proyek dari database Firebase..." />
-                )}
-
-                {/* Projects Grid */}
-                {!loading && filteredProjects.length > 0 && (
-                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-                        <AnimatePresence mode="popLayout">
-                            {filteredProjects.map((p, i) => (
-                                <ImageCard
-                                    key={p.id || p.title || p.image}
-                                    p={p}
-                                    i={i}
-                                    onClick={() => setSelectedProject(p)}
-                                />
-                            ))}
-                        </AnimatePresence>
+                {/* Category Filter */}
+                {categories.length > 1 && (
+                    <div className="flex flex-wrap gap-2">
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setSelectedCategory(cat)}
+                                className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none cursor-pointer ${selectedCategory === cat
+                                    ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                                    : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                    }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
                     </div>
                 )}
+            </div>
 
-                {/* Empty State */}
-                {!loading && filteredProjects.length === 0 && (
-                    <div className="py-32 text-center">
-                        <ImageIcon size={48} className="mx-auto text-white/10 mb-4" />
-                        <h3 className="text-xl font-bold text-white/40 mb-2">Belum ada proyek di database</h3>
-                        <p className="text-white/30 text-xs">
-                            Tambahkan proyek baru melalui terminal command <code className="bg-white/10 px-2 py-0.5 rounded text-blue-400 font-mono">admin</code>.
-                        </p>
-                    </div>
-                )}
+            {/* Loading State */}
+            {loading && (
+                <TerminalLoading message="Memuat proyek dari database Firebase..." />
+            )}
+
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                {filteredProjects.map((project, idx) => (
+                    <motion.div
+                        key={project.id || project.title}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: idx * 0.1 }}
+                        className="glass-card overflow-hidden group border-white/5 cursor-pointer relative"
+                        onClick={() => setSelectedProject(project)}
+                    >
+                        <ImageCard project={project} />
+                    </motion.div>
+                ))}
             </div>
 
             {/* Project Modal: Poster Style Detail View */}
@@ -291,7 +293,7 @@ export default function Projects() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100000] flex items-center justify-center backdrop-blur-3xl bg-[#030303]/95 p-4 md:p-6 text-left"
+                        className="fixed inset-0 z-[100000] flex items-center justify-center bg-[#030712]/98 backdrop-blur-3xl pt-24 md:pt-10 pb-4 px-3 md:px-6 text-left overflow-hidden"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
@@ -299,34 +301,34 @@ export default function Projects() {
                             animate={{ scale: 1, y: 0, opacity: 1 }}
                             exit={{ scale: 0.95, y: 40, opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#080808] border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] relative custom-scrollbar"
+                            className="w-full h-full md:h-[90vh] md:max-w-7xl md:rounded-[40px] overflow-y-auto bg-[#070a14] border border-white/10 opacity-100 shadow-[0_0_100px_rgba(0,0,0,0.9)] relative custom-scrollbar flex flex-col"
                             onClick={e => e.stopPropagation()}
                         >
-                            {/* Close Button */}
-                            <button
-                                onClick={() => setSelectedProject(null)}
-                                className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white transition-all border-none cursor-pointer"
-                            >
-                                <X size={20} />
-                            </button>
-
-                            <div className="p-8 md:p-16 lg:p-20">
-                                {/* Navigation Header */}
-                                <div className="flex items-center gap-4 mb-12">
+                            {/* Sticky Top Header Bar */}
+                            <div className="sticky top-0 z-40 bg-[#070a14]/95 backdrop-blur-md px-6 md:px-12 py-4 border-b border-white/10 flex items-center justify-between shadow-lg">
+                                <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setSelectedProject(null)}
-                                        className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold text-white/50 hover:text-white transition-all border-none"
+                                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-xs font-bold text-white transition-all border border-white/10 cursor-pointer shadow-md"
                                     >
                                         <ArrowLeft size={16} /> Back
                                     </button>
-                                    <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white/20">
+                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 truncate max-w-[180px] sm:max-w-xs">
                                         <span>Projects</span>
-                                        <div className="w-1 h-1 bg-white/20 rounded-full" />
-                                        <span className="text-blue-500">{selectedProject.title}</span>
+                                        <div className="w-1 h-1 bg-white/20 rounded-full shrink-0" />
+                                        <span className="text-blue-400 truncate">{selectedProject.title}</span>
                                     </div>
                                 </div>
+                                <button
+                                    onClick={() => setSelectedProject(null)}
+                                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/10 cursor-pointer shrink-0"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
 
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                            <div className="p-6 md:p-12 lg:p-16 flex-1">
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
                                     {/* Left Content Column */}
                                     <div className="lg:col-span-7 space-y-12">
                                         <div>
