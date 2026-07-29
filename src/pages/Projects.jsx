@@ -250,12 +250,12 @@ export default function Projects() {
 
                 {/* Category Filter */}
                 {categories.length > 1 && (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2.5 mb-12">
                         {categories.map(cat => (
                             <button
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none cursor-pointer ${selectedCategory === cat
+                                className={`px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border-none cursor-pointer ${selectedCategory === cat
                                     ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.5)]"
                                     : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
                                     }`}
@@ -265,27 +265,29 @@ export default function Projects() {
                         ))}
                     </div>
                 )}
-            </div>
 
-            {/* Loading State */}
-            {loading && (
-                <TerminalLoading message="Memuat proyek dari database Firebase..." />
-            )}
+                {/* Loading State */}
+                {loading && (
+                    <TerminalLoading message="Memuat proyek dari database Firebase..." />
+                )}
 
-            {/* Projects Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 mt-12">
-                {filteredProjects.map((project, idx) => (
-                    <motion.div
-                        key={project.id || project.title || idx}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        className="glass-card overflow-hidden group border-white/5 cursor-pointer relative max-w-[280px] w-full justify-self-start"
-                        onClick={() => setSelectedProject(project)}
-                    >
-                        <ImageCard project={project} />
-                    </motion.div>
-                ))}
+                {/* Projects Grid */}
+                {!loading && (
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                        {filteredProjects.map((project, idx) => (
+                            <motion.div
+                                key={project.id || project.title || idx}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                                className="glass-card overflow-hidden group border-white/5 cursor-pointer relative w-full"
+                                onClick={() => setSelectedProject(project)}
+                            >
+                                <ImageCard project={project} />
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Project Modal: Poster Style Detail View */}
