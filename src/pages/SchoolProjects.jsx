@@ -278,23 +278,30 @@ export default function SchoolProjects() {
                     </p>
                 </div>
 
-                {/* Class Level Filter Tabs */}
+                {/* Cyber Terminal Filter Bar */}
                 {!loading && firebaseSchoolProjects.length > 0 && (
-                    <div className="flex flex-wrap items-center justify-start gap-2.5 mb-12">
-                        {classOptions.map(cls => (
-                            <button
-                                key={cls}
-                                onClick={() => setSelectedClass(cls)}
-                                className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border-none cursor-pointer flex items-center gap-2 ${
-                                    selectedClass === cls
-                                        ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.4)] scale-105"
-                                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white border border-white/5"
-                                }`}
-                            >
-                                <Filter size={13} className={selectedClass === cls ? "text-white" : "text-blue-400"} />
-                                {cls}
-                            </button>
-                        ))}
+                    <div className="flex justify-center mb-12">
+                        <div className="p-1.5 bg-[#060913]/90 backdrop-blur-2xl border border-white/10 rounded-full inline-flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+                            {classOptions.map(cls => {
+                                const isActive = selectedClass === cls;
+                                return (
+                                    <button
+                                        key={cls}
+                                        onClick={() => setSelectedClass(cls)}
+                                        className={`px-4 sm:px-6 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center gap-2 ${
+                                            isActive
+                                                ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.5)] scale-[1.02]"
+                                                : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
+                                        }`}
+                                    >
+                                        <span className={`text-[10px] font-mono font-extrabold ${isActive ? "text-blue-200" : "text-blue-500/70"}`}>
+                                            &gt;_
+                                        </span>
+                                        {cls}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 
