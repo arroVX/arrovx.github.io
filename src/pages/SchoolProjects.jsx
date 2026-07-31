@@ -280,7 +280,7 @@ export default function SchoolProjects() {
 
                 {/* Class Level Filter Tabs */}
                 {!loading && firebaseSchoolProjects.length > 0 && (
-                    <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+                    <div className="flex flex-wrap items-center justify-start gap-2.5 mb-12">
                         {classOptions.map(cls => (
                             <button
                                 key={cls}
