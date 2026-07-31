@@ -280,15 +280,15 @@ export default function SchoolProjects() {
 
                 {/* Cyber Terminal Filter Bar */}
                 {!loading && firebaseSchoolProjects.length > 0 && (
-                    <div className="flex justify-center mb-12">
-                        <div className="p-1.5 bg-[#060913]/90 backdrop-blur-2xl border border-white/10 rounded-full inline-flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+                    <div className="flex justify-center mb-10 md:mb-14 px-2">
+                        <div className="w-full max-w-sm sm:max-w-none sm:w-auto p-1.5 bg-[#060913]/90 backdrop-blur-2xl border border-white/10 rounded-2xl sm:rounded-full grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-1.5 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
                             {classOptions.map(cls => {
                                 const isActive = selectedClass === cls;
                                 return (
                                     <button
                                         key={cls}
                                         onClick={() => setSelectedClass(cls)}
-                                        className={`px-4 sm:px-6 py-2.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center gap-2 ${
+                                        className={`w-full sm:w-auto px-3.5 sm:px-6 py-2.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
                                             isActive
                                                 ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.5)] scale-[1.02]"
                                                 : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
