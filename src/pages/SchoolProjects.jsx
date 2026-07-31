@@ -162,6 +162,17 @@ export default function SchoolProjects() {
     const [loading, setLoading] = useState(true);
     const [firebaseError, setFirebaseError] = useState('');
     const [isImageZoomed, setIsImageZoomed] = useState(false);
+    const [selectedClass, setSelectedClass] = useState("Semua Kelas");
+
+    const classOptions = ["Semua Kelas", "Kelas X", "Kelas XI", "Kelas XII"];
+
+    const filteredSchoolProjects = firebaseSchoolProjects.filter(item => {
+        if (selectedClass === "Semua Kelas") return true;
+        if (!item.classLevel) return false;
+        const target = selectedClass.toLowerCase();
+        const itemClass = item.classLevel.toLowerCase();
+        return itemClass === target || itemClass.includes(target.replace('kelas ', '')) || target.includes(itemClass);
+    });
 
     const handlePreview = (e, fileUrl, title) => {
         e.preventDefault();
@@ -244,6 +255,26 @@ export default function SchoolProjects() {
                     </p>
                 </div>
 
+                {/* Class Level Filter Tabs */}
+                {!loading && firebaseSchoolProjects.length > 0 && (
+                    <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+                        {classOptions.map(cls => (
+                            <button
+                                key={cls}
+                                onClick={() => setSelectedClass(cls)}
+                                className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border-none cursor-pointer flex items-center gap-2 ${
+                                    selectedClass === cls
+                                        ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.4)] scale-105"
+                                        : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white border border-white/5"
+                                }`}
+                            >
+                                <Filter size={13} className={selectedClass === cls ? "text-white" : "text-blue-400"} />
+                                {cls}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 {/* Firestore Error State */}
                 {!loading && firebaseError && (
                     <div className="text-center py-16">
@@ -264,6 +295,15 @@ export default function SchoolProjects() {
                     </div>
                 )}
 
+                {/* Filter Empty State */}
+                {!loading && !firebaseError && filteredSchoolProjects.length === 0 && firebaseSchoolProjects.length > 0 && (
+                    <div className="text-center py-16 glass-card border-white/5 max-w-md mx-auto rounded-3xl p-8 mb-12">
+                        <FileText size={40} className="mx-auto text-white/20 mb-3" />
+                        <p className="text-white/60 text-sm font-medium mb-1">Belum ada LKPD untuk {selectedClass}.</p>
+                        <p className="text-white/30 text-xs">Pilih filter kelas lain atau tambahkan data melalui Admin Panel.</p>
+                    </div>
+                )}
+
                 {/* Loading State */}
                 {loading && (
                     <TerminalLoading message="Memuat data LKPD & Praktikum dari Firebase..." />
@@ -271,7 +311,7 @@ export default function SchoolProjects() {
 
                 {/* LKPD & Projects Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {firebaseSchoolProjects.map((item, idx) => (
+                    {filteredSchoolProjects.map((item, idx) => (
                         <motion.div
                             key={item.id}
                             initial={{ opacity: 0, y: 20 }}
