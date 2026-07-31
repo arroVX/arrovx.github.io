@@ -442,33 +442,63 @@ export default function Home() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
                     {/* Left Column: Bio & CTA & Mini Terminal */}
                     <motion.div
-                        initial={{ opacity: 0, x: -40 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="lg:col-span-7 space-y-6 text-left"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="lg:col-span-7 space-y-6 text-left relative"
                     >
+                        {/* Ambient Background Glow */}
+                        <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-600/15 rounded-full blur-[100px] pointer-events-none" />
+
                         {/* Greeting Subtitle */}
-                        <p className="text-blue-400 font-mono text-sm md:text-base font-medium tracking-wider">
-                            Hello, I'm
-                        </p>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.1 }}
+                        >
+                            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-mono text-xs md:text-sm font-semibold tracking-wider">
+                                <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+                                Hello, I'm
+                            </span>
+                        </motion.div>
 
                         {/* Name Headline */}
-                        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter text-white leading-[1.05]">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={{ duration: 0.8, delay: 0.2, type: 'spring', damping: 20 }}
+                            className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter text-white leading-[1.05]"
+                        >
                             Arroudhil <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-blue-600">Anfi.</span>
-                        </h1>
+                        </motion.h1>
 
                         {/* Subtitle / Main Role */}
-                        <h2 className="text-2xl md:text-3xl text-white/50 font-normal tracking-tight">
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.35 }}
+                            className="text-2xl md:text-3xl text-white/50 font-normal tracking-tight"
+                        >
                             Web Dev & Designer Graphic
-                        </h2>
+                        </motion.h2>
 
                         {/* Bio Paragraph */}
-                        <p className="text-base md:text-lg text-white/60 max-w-xl leading-relaxed font-normal">
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.45 }}
+                            className="text-base md:text-lg text-white/60 max-w-xl leading-relaxed font-normal"
+                        >
                             Siswa <span className="text-blue-300 font-medium">TKJ SMKN 3 Jepara</span> & <span className="text-sky-300 font-medium">2x Gold Medalist Informatika</span>. Exploring <span className="text-blue-300 font-medium">Network Infrastructure</span>, <span className="text-sky-400 font-medium">Web Developer</span> & <span className="text-blue-400 font-medium">Graphic Design</span>.
-                        </p>
+                        </motion.p>
 
                         {/* Action Buttons & Now Playing Row */}
-                        <div className="flex flex-wrap items-center gap-4 pt-2">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.55 }}
+                            className="flex flex-wrap items-center gap-4 pt-2"
+                        >
                             <MagneticButton>
                                 <Link
                                     to="/projects"
@@ -507,11 +537,16 @@ export default function Home() {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Interactive Mini Terminal Box */}
-                        <div className="pt-4 max-w-md">
-                            <div className="bg-[#070b14] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.65 }}
+                            className="pt-4 max-w-md"
+                        >
+                            <div className="bg-[#070b14] border border-white/10 rounded-xl overflow-hidden shadow-2xl hover:border-blue-500/30 transition-colors">
                                 <div className="px-4 py-3 bg-[#0d1322] flex items-center gap-2 border-b border-white/5">
                                     <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
                                     <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
@@ -523,16 +558,17 @@ export default function Home() {
                                     <span className="w-2 h-4 bg-emerald-400 inline-block animate-pulse" />
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
 
                     {/* Right Column: Interactive Cyber Console Animation */}
                     <motion.div
-                        initial={{ opacity: 0, x: 40 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="lg:col-span-5"
+                        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 0.9, delay: 0.3, type: 'spring', damping: 20, stiffness: 90 }}
+                        className="lg:col-span-5 relative"
                     >
+                        <div className="absolute -inset-4 bg-blue-500/10 rounded-3xl blur-2xl opacity-60 animate-pulse pointer-events-none" />
                         <CodeConsoleAnimation />
                     </motion.div>
                 </div>
