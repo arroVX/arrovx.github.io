@@ -168,10 +168,22 @@ export default function SchoolProjects() {
 
     const filteredSchoolProjects = firebaseSchoolProjects.filter(item => {
         if (selectedClass === "Semua Kelas") return true;
-        if (!item.classLevel) return false;
-        const target = selectedClass.toLowerCase();
-        const itemClass = item.classLevel.toLowerCase();
-        return itemClass === target || itemClass.includes(target.replace('kelas ', '')) || target.includes(itemClass);
+        
+        const classLevelStr = (item.classLevel || '').toLowerCase().trim();
+        const titleStr = (item.title || '').toLowerCase();
+        const descStr = (item.desc || '').toLowerCase();
+        const combinedStr = `${classLevelStr} ${titleStr} ${descStr}`;
+
+        if (selectedClass === "Kelas X") {
+            return classLevelStr === 'kelas x' || classLevelStr === 'x' || classLevelStr === '10' || combinedStr.includes('kelas x') || combinedStr.includes('kelas 10');
+        }
+        if (selectedClass === "Kelas XI") {
+            return classLevelStr === 'kelas xi' || classLevelStr === 'xi' || classLevelStr === '11' || combinedStr.includes('kelas xi') || combinedStr.includes('kelas 11');
+        }
+        if (selectedClass === "Kelas XII") {
+            return classLevelStr === 'kelas xii' || classLevelStr === 'xii' || classLevelStr === '12' || combinedStr.includes('kelas xii') || combinedStr.includes('kelas 12');
+        }
+        return true;
     });
 
     const handlePreview = (e, fileUrl, title) => {
