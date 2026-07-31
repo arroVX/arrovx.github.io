@@ -166,25 +166,36 @@ export default function SchoolProjects() {
 
     const classOptions = ["Semua Kelas", "Kelas X", "Kelas XI", "Kelas XII"];
 
-    const filteredSchoolProjects = firebaseSchoolProjects.filter(item => {
-        if (selectedClass === "Semua Kelas") return true;
+    const getClassGroup = (classLevel = '', title = '', desc = '') => {
+        const rawClass = String(classLevel || '').trim().toUpperCase();
         
-        const classLevelStr = (item.classLevel || '').toLowerCase().trim();
-        const titleStr = (item.title || '').toLowerCase();
-        const descStr = (item.desc || '').toLowerCase();
-        const combinedStr = `${classLevelStr} ${titleStr} ${descStr}`;
+        // Strict order check: XII first, then XI, then X
+        if (rawClass.includes('XII') || rawClass.includes('12')) return 'KELAS XII';
+        if (rawClass.includes('XI') || rawClass.includes('11')) return 'KELAS XI';
+        if (rawClass.includes('X') || rawClass.includes('10')) return 'KELAS X';
 
-        if (selectedClass === "Kelas X") {
-            return classLevelStr === 'kelas x' || classLevelStr === 'x' || classLevelStr === '10' || combinedStr.includes('kelas x') || combinedStr.includes('kelas 10');
-        }
-        if (selectedClass === "Kelas XI") {
-            return classLevelStr === 'kelas xi' || classLevelStr === 'xi' || classLevelStr === '11' || combinedStr.includes('kelas xi') || combinedStr.includes('kelas 11');
-        }
-        if (selectedClass === "Kelas XII") {
-            return classLevelStr === 'kelas xii' || classLevelStr === 'xii' || classLevelStr === '12' || combinedStr.includes('kelas xii') || combinedStr.includes('kelas 12');
-        }
-        return true;
-    });
+        // Fallback to combined title & desc text if classLevel is missing
+        const combined = `${title} ${desc}`.toUpperCase();
+        if (combined.includes('XII') || combined.includes('KELAS 12')) return 'KELAS XII';
+        if (combined.includes('XI') || combined.includes('KELAS 11')) return 'KELAS XI';
+        if (combined.includes('KELAS X') || combined.includes('KELAS 10')) return 'KELAS X';
+
+        return 'KELAS X';
+    };
+
+    const classOrder = { 'KELAS X': 1, 'KELAS XI': 2, 'KELAS XII': 3 };
+
+    const filteredSchoolProjects = firebaseSchoolProjects
+        .filter(item => {
+            if (selectedClass === "Semua Kelas") return true;
+            const group = getClassGroup(item.classLevel, item.title, item.desc);
+            return group === selectedClass.toUpperCase();
+        })
+        .sort((a, b) => {
+            const groupA = getClassGroup(a.classLevel, a.title, a.desc);
+            const groupB = getClassGroup(b.classLevel, b.title, b.desc);
+            return (classOrder[groupA] || 99) - (classOrder[groupB] || 99);
+        });
 
     const handlePreview = (e, fileUrl, title) => {
         e.preventDefault();
@@ -353,11 +364,9 @@ export default function SchoolProjects() {
                                         <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
                                             {item.category || 'School Project'}
                                         </span>
-                                        {item.classLevel && (
-                                            <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
-                                                {item.classLevel}
-                                            </span>
-                                        )}
+                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
+                                            {getClassGroup(item.classLevel, item.title, item.desc)}
+                                        </span>
                                     </div>
                                 </div>
 
