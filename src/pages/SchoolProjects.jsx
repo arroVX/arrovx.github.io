@@ -278,29 +278,55 @@ export default function SchoolProjects() {
                     </p>
                 </div>
 
-                {/* Cyber Terminal Filter Bar */}
+                {/* Cyber Terminal Command Line Filter Window */}
                 {!loading && firebaseSchoolProjects.length > 0 && (
-                    <div className="flex justify-center mb-10 md:mb-14 px-2">
-                        <div className="w-full max-w-sm sm:max-w-none sm:w-auto p-1.5 bg-[#060913]/90 backdrop-blur-2xl border border-white/10 rounded-2xl sm:rounded-full grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-1.5 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
-                            {classOptions.map(cls => {
-                                const isActive = selectedClass === cls;
-                                return (
-                                    <button
-                                        key={cls}
-                                        onClick={() => setSelectedClass(cls)}
-                                        className={`w-full sm:w-auto px-3.5 sm:px-6 py-2.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
-                                            isActive
-                                                ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.5)] scale-[1.02]"
-                                                : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
-                                        }`}
-                                    >
-                                        <span className={`text-[10px] font-mono font-extrabold ${isActive ? "text-blue-200" : "text-blue-500/70"}`}>
-                                            &gt;_
-                                        </span>
-                                        {cls}
-                                    </button>
-                                );
-                            })}
+                    <div className="max-w-xl mx-auto mb-12 px-2 flex flex-col items-center">
+                        {/* Terminal Header Banner */}
+                        <div className="w-full bg-[#070b16]/95 border border-white/10 rounded-t-2xl px-5 sm:px-6 py-3.5 flex items-center justify-between shadow-lg">
+                            <div className="flex items-center gap-3 text-left">
+                                <div className="text-blue-400 font-mono font-extrabold text-base leading-none">
+                                    &gt;_
+                                </div>
+                                <div>
+                                    <h4 className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white uppercase leading-tight">
+                                        ARROOS COMMAND LINE
+                                    </h4>
+                                    <p className="text-[10px] sm:text-[11px] font-mono font-semibold tracking-wider text-blue-400/90 uppercase leading-tight mt-0.5">
+                                        CLASS ARCHIVE — SELECT FILTER
+                                    </p>
+                                </div>
+                            </div>
+                            {/* Terminal Status Lights */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Terminal Active" />
+                                <div className="w-2 h-2 rounded-full bg-blue-500/40" />
+                                <div className="w-2 h-2 rounded-full bg-white/20" />
+                            </div>
+                        </div>
+
+                        {/* Filter Panel Window */}
+                        <div className="w-full p-2 bg-[#040711]/90 backdrop-blur-2xl border-x border-b border-white/10 rounded-b-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)]">
+                            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-1.5">
+                                {classOptions.map(cls => {
+                                    const isActive = selectedClass === cls;
+                                    return (
+                                        <button
+                                            key={cls}
+                                            onClick={() => setSelectedClass(cls)}
+                                            className={`w-full sm:w-auto px-3.5 sm:px-6 py-2.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
+                                                isActive
+                                                    ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.5)] scale-[1.02]"
+                                                    : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
+                                            }`}
+                                        >
+                                            <span className={`text-[10px] font-mono font-extrabold ${isActive ? "text-blue-200" : "text-blue-500/70"}`}>
+                                                &gt;_
+                                            </span>
+                                            {cls}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 )}
