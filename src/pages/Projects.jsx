@@ -11,7 +11,7 @@ import {
     ArrowLeft, ExternalLink, X, Image as ImageIcon,
     Search, Loader2, Github, Terminal, Layers,
     Link as LinkIcon, Star, CheckCircle2, Globe,
-    FileText, Download, ChevronRight, ZoomIn
+    FileText, Download, ChevronRight, ZoomIn, Sparkles
 } from 'lucide-react';
 
 const allProjects = [
@@ -229,13 +229,13 @@ export default function Projects() {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-left mb-16">
-                    <motion.p
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-blue-500 font-bold tracking-widest uppercase text-xs mb-4"
+                        className="inline-flex items-center gap-2 px-4 py-1.5 glass-card rounded-full text-xs font-bold text-blue-400 mb-6 tracking-widest uppercase border border-white/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]"
                     >
-                        Portfolio Archive
-                    </motion.p>
+                        <Sparkles size={13} className="text-blue-400" /> PORTFOLIO ARCHIVE
+                    </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -248,9 +248,9 @@ export default function Projects() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-lg text-white/50 leading-relaxed"
+                        className="text-lg text-white/50 leading-relaxed max-w-2xl"
                     >
-                        Full collection featuring {displayProjects.length} my projecrs works.
+                        Kumpulan lengkap <span className="text-blue-400 font-semibold">{displayProjects.length} karya proyek</span> visual, poster investigatif, branding, dan desain digital.
                     </motion.p>
                 </div>
 
