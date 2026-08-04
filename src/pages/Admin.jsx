@@ -1215,43 +1215,69 @@ export default function Admin() {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="glass-card max-w-md w-full p-6 md:p-8 rounded-3xl border-red-500/20 bg-[#070a14] opacity-100 relative shadow-2xl text-center"
+                            className="max-w-lg w-full bg-[#070a14] border border-red-500/30 rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(239,68,68,0.25)] text-left font-mono relative"
                         >
-                            {/* Close Button */}
-                            <button
-                                onClick={() => setDeleteConfirm({ isOpen: false, id: null, title: '' })}
-                                className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/40 hover:text-white transition-all border-none cursor-pointer"
-                            >
-                                <X size={16} />
-                            </button>
-
-                            {/* Warning Icon Container */}
-                            <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto mb-5 shadow-[0_0_30px_rgba(239,68,68,0.2)]">
-                                <Trash2 size={28} />
+                            {/* Terminal Window Header Bar */}
+                            <div className="px-5 py-3.5 bg-[#0c101c] border-b border-red-500/20 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-red-400 font-bold text-sm select-none">&gt;_</span>
+                                    <div>
+                                        <div className="text-xs font-bold tracking-wider text-white">
+                                            ARROOS TERMINAL — PURGE CONFIRM
+                                        </div>
+                                        <div className="text-[9px] font-semibold text-red-400/90 tracking-widest uppercase">
+                                            DELETION PROTOCOL RUNNING
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" title="Danger Zone" />
+                                    <button
+                                        onClick={() => setDeleteConfirm({ isOpen: false, id: null, title: '' })}
+                                        className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white flex items-center justify-center transition-all border border-white/10 cursor-pointer ml-1"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                </div>
                             </div>
 
-                            {/* Content */}
-                            <h3 className="text-xl font-bold text-white mb-2 tracking-tight">
-                                Hapus Proyek Ini?
-                            </h3>
-                            <p className="text-xs text-white/60 leading-relaxed mb-6">
-                                Apakah Anda yakin ingin menghapus <span className="text-red-400 font-semibold font-mono bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20">"{deleteConfirm.title}"</span>? Data yang dihapus dari Firebase tidak dapat dikembalikan.
-                            </p>
+                            {/* Terminal Console Body */}
+                            <div className="p-6 space-y-5">
+                                {/* Command Log View */}
+                                <div className="bg-[#03050c] p-4 rounded-2xl border border-red-500/20 space-y-2 text-xs">
+                                    <div className="flex items-center gap-2 text-white/50">
+                                        <span className="text-red-400 font-bold">&gt;</span>
+                                        <span>exec --purge --target-id="{deleteConfirm.id || 'record'}"</span>
+                                    </div>
+                                    <div className="text-red-400 font-semibold flex items-center gap-2">
+                                        <AlertCircle size={14} className="shrink-0" />
+                                        <span>[PURGE WARNING] Permanent Firestore document deletion requested!</span>
+                                    </div>
+                                    <div className="pt-2 text-white/80 leading-relaxed font-sans text-xs">
+                                        Apakah Anda yakin ingin menghapus <span className="text-red-400 font-mono font-bold bg-red-500/10 px-2 py-0.5 rounded border border-red-500/30 break-all inline-block">"{deleteConfirm.title}"</span>?
+                                    </div>
+                                </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-3">
-                                <button
-                                    onClick={() => setDeleteConfirm({ isOpen: false, id: null, title: '' })}
-                                    className="flex-1 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 font-bold text-xs transition-all border border-white/10 cursor-pointer"
-                                >
-                                    Batal
-                                </button>
-                                <button
-                                    onClick={handleExecuteDelete}
-                                    className="flex-1 py-3 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-all shadow-lg shadow-red-600/30 border-none cursor-pointer flex items-center justify-center gap-2"
-                                >
-                                    <Trash2 size={14} /> Ya, Hapus Data
-                                </button>
+                                <div className="text-[11px] text-white/40 flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping" />
+                                    <span>Tindakan ini menghapus data secara permanen dari database Firebase.</span>
+                                </div>
+
+                                {/* Terminal Actions Bar */}
+                                <div className="flex items-center gap-3 pt-1">
+                                    <button
+                                        onClick={() => setDeleteConfirm({ isOpen: false, id: null, title: '' })}
+                                        className="flex-1 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 font-bold text-xs transition-all border border-white/10 cursor-pointer flex items-center justify-center gap-2"
+                                    >
+                                        &gt; cancel --abort
+                                    </button>
+                                    <button
+                                        onClick={handleExecuteDelete}
+                                        className="flex-1 py-3 px-4 rounded-xl bg-red-600/90 hover:bg-red-500 text-white font-bold text-xs transition-all shadow-[0_0_25px_rgba(239,68,68,0.5)] border border-red-400/50 cursor-pointer flex items-center justify-center gap-2"
+                                    >
+                                        <Trash2 size={14} /> &gt; confirm --force
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     </motion.div>
