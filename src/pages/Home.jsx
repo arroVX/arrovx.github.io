@@ -870,96 +870,187 @@ export default function Home() {
             </section>
 
             {/* Contact Section */}
-            <section className="py-32 px-6 max-w-7xl mx-auto">
-                <div className="text-center mb-20">
+            <section className="py-24 md:py-32 px-4 sm:px-6 max-w-7xl mx-auto relative">
+                {/* Ambient glow background */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+
+                <div className="text-center mb-16 relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center gap-2 px-4 py-1.5 glass-card rounded-full text-xs font-bold text-blue-400 mb-6 tracking-widest uppercase border border-blue-500/20 shadow-[0_0_25px_rgba(59,130,246,0.2)]"
+                    >
+                        <Sparkles size={14} className="text-blue-400" /> GET IN TOUCH
+                    </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-5xl md:text-7xl font-bold tracking-tighter mb-4"
+                        className="text-4xl md:text-7xl font-bold tracking-tighter mb-4"
                     >
-                        Hubungi <span className="text-linear">Saya</span>
+                        Mari Berkolaborasi <span className="text-linear">&amp; Diskusi.</span>
                     </motion.h2>
-                    <p className="text-white/40 max-w-2xl mx-auto">Punya pertanyaan? Kirimi saya pesan, dan saya akan segera membalasnya.</p>
+                    <p className="text-white/50 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+                        Punya proyek menarik, pertanyaan, atau ide hebat? Kirim pesan langsung dan mari kita wujudkan bersama.
+                    </p>
                 </div>
 
-                <div className="max-w-3xl mx-auto">
-                    {/* Contact Form */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="glass-card p-8 md:p-12 border-white/5 relative group"
-                    >
-                        <div className="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 className="text-3xl font-bold mb-2">Hubungi</h3>
-                                <p className="text-white/30 text-sm">Ada yang ingin didiskusikan? Kirim saya pesan dan mari kita bicara.</p>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
+                    {/* Left Column: Direct Info & Social Cards */}
+                    <div className="lg:col-span-5 space-y-6">
+                        {/* Status Card */}
+                        <div className="glass-card p-6 border-white/10 bg-[#070b16]/90 rounded-3xl relative overflow-hidden text-left shadow-xl">
+                            <div className="flex items-center gap-3 mb-3">
+                                <span className="relative flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                                <span className="text-xs font-bold uppercase tracking-widest text-emerald-400 font-mono">
+                                    Status: Open For Projects
+                                </span>
                             </div>
-                            <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center text-white/40 border border-white/5">
-                                <Share2 size={18} />
-                            </div>
-                        </div>
-
-                        <form onSubmit={handleContactSubmit} className="space-y-4">
-                            <div className="relative group/input">
-                                <User size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-blue-500 transition-colors" />
-                                <input
-                                    type="text"
-                                    value={contactName}
-                                    onChange={(e) => setContactName(e.target.value)}
-                                    placeholder="Nama Anda"
-                                    required
-                                    className="w-full bg-white/2 border border-white/5 rounded-2xl px-14 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium"
-                                />
-                            </div>
-                            <div className="relative group/input">
-                                <Mail size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within/input:text-blue-500 transition-colors" />
-                                <input
-                                    type="email"
-                                    value={contactEmail}
-                                    onChange={(e) => setContactEmail(e.target.value)}
-                                    placeholder="Email Anda"
-                                    required
-                                    className="w-full bg-white/2 border border-white/5 rounded-2xl px-14 py-4 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium"
-                                />
-                            </div>
-                            <div className="relative group/input">
-                                <MessageCircle size={18} className="absolute left-5 top-6 text-white/20 group-focus-within/input:text-blue-500 transition-colors" />
-                                <textarea
-                                    value={contactMessage}
-                                    onChange={(e) => setContactMessage(e.target.value)}
-                                    placeholder="Pesan Anda"
-                                    required
-                                    rows={5}
-                                    className="w-full bg-white/2 border border-white/5 rounded-3xl px-14 py-5 focus:outline-none focus:border-blue-500/50 focus:bg-white/5 transition-all text-sm font-medium resize-none shadow-none"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                disabled={sendingContact}
-                                className="w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl font-black text-xs tracking-[0.2em] uppercase transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 border-none"
-                            >
-                                {sendingContact ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />} Kirim Pesan
-                            </button>
-                        </form>
-
-                        <div className="mt-12 pt-12 border-t border-white/5">
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-6 flex items-center gap-4">
-                                <span className="w-8 h-px bg-white/10" /> Connect With Me
+                            <p className="text-xs text-white/60 leading-relaxed">
+                                Siap membantu proyek web development, desain grafis, maupun konsultasi infrastruktur jaringan (TKJ).
                             </p>
-                            <div className="grid grid-cols-2 gap-4">
-                                <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="glass-card p-4 flex items-center gap-3 hover:bg-white/5 transition-all border-none">
-                                    <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center"><Github size={20} /></div>
-                                    <span className="text-xs font-bold text-white/70">GitHub</span>
-                                </a>
-                                <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="glass-card p-4 flex items-center gap-3 hover:bg-white/5 transition-all border-none">
-                                    <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center"><Instagram size={20} /></div>
-                                    <span className="text-xs font-bold text-white/70">Instagram</span>
-                                </a>
+                        </div>
+
+                        {/* Direct Email Info Card */}
+                        <div className="glass-card p-6 border-white/10 bg-[#070b16]/90 rounded-3xl text-left space-y-4 shadow-xl">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                                    <Mail size={22} />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-0.5">Email Direct</div>
+                                    <a href="mailto:arroudhilanfi01@gmail.com" className="text-sm font-bold text-white hover:text-blue-400 transition-colors font-mono block truncate">
+                                        arroudhilanfi01@gmail.com
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </motion.div>
+
+                        {/* Social Links Cards Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <a
+                                href="https://github.com/arroVX"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="glass-card p-5 border-white/10 bg-[#070b16]/90 rounded-2xl flex items-center gap-3.5 hover:bg-white/10 transition-all border-none group text-left"
+                            >
+                                <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white/70 group-hover:text-white group-hover:scale-110 transition-transform">
+                                    <Github size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-[10px] font-bold text-white/40 uppercase tracking-wider">GitHub</div>
+                                    <div className="text-xs font-bold text-white group-hover:text-blue-400 transition-colors">@arroVX</div>
+                                </div>
+                            </a>
+
+                            <a
+                                href="https://www.instagram.com/jingroo_"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="glass-card p-5 border-white/10 bg-[#070b16]/90 rounded-2xl flex items-center gap-3.5 hover:bg-white/10 transition-all border-none group text-left"
+                            >
+                                <div className="w-10 h-10 bg-pink-500/10 rounded-xl flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+                                    <Instagram size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Instagram</div>
+                                    <div className="text-xs font-bold text-white group-hover:text-pink-400 transition-colors">@jingroo_</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Right Column: High-Tech Glassmorphic Contact Form */}
+                    <div className="lg:col-span-7">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="bg-[#070b18]/95 border border-white/15 rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] backdrop-blur-3xl text-left"
+                        >
+                            {/* Terminal Window Header Bar */}
+                            <div className="px-6 py-4 bg-[#0a0f22] border-b border-white/10 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-blue-400 font-mono font-extrabold text-sm">&gt;_</span>
+                                    <div>
+                                        <div className="text-xs font-mono font-bold tracking-wider text-white">
+                                            CONTACT MESSAGE PROTOCOL
+                                        </div>
+                                        <div className="text-[9px] font-mono text-blue-400/80 uppercase tracking-widest">
+                                            SECURE DIRECT MESSAGING
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" title="System Ready" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500/40" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                                </div>
+                            </div>
+
+                            {/* Form Content */}
+                            <div className="p-6 md:p-8">
+                                <form onSubmit={handleContactSubmit} className="space-y-5">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="space-y-1.5">
+                                            <label className="block text-[11px] font-bold uppercase tracking-wider text-white/60 flex items-center gap-1.5">
+                                                <User size={13} className="text-blue-400" /> Nama Lengkap
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={contactName}
+                                                onChange={(e) => setContactName(e.target.value)}
+                                                placeholder="Masukkan nama Anda..."
+                                                required
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all font-medium"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1.5">
+                                            <label className="block text-[11px] font-bold uppercase tracking-wider text-white/60 flex items-center gap-1.5">
+                                                <Mail size={13} className="text-blue-400" /> Alamat Email
+                                            </label>
+                                            <input
+                                                type="email"
+                                                value={contactEmail}
+                                                onChange={(e) => setContactEmail(e.target.value)}
+                                                placeholder="email@domain.com"
+                                                required
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all font-medium"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="block text-[11px] font-bold uppercase tracking-wider text-white/60 flex items-center gap-1.5">
+                                            <MessageCircle size={13} className="text-blue-400" /> Isi Pesan
+                                        </label>
+                                        <textarea
+                                            value={contactMessage}
+                                            onChange={(e) => setContactMessage(e.target.value)}
+                                            placeholder="Tuliskan pesan, pertanyaan, atau detail proyek Anda di sini..."
+                                            required
+                                            rows={5}
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs text-white placeholder-white/20 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all font-medium resize-none"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={sendingContact}
+                                        className="w-full py-4 bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-xl font-bold text-xs tracking-widest uppercase transition-all shadow-[0_10px_30px_rgba(37,99,235,0.3)] hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 border-none cursor-pointer text-white"
+                                    >
+                                        {sendingContact ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                                        {sendingContact ? "Mengirim Pesan..." : "Kirim Pesan Sekarang"}
+                                    </button>
+                                </form>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
