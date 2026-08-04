@@ -892,7 +892,7 @@ export default function Admin() {
 
                             <div>
                                 <h4 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Isi Pesan</h4>
-                                <div className="bg-[#040711] p-5 rounded-2xl border border-white/10 font-sans text-sm text-white/90 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto custom-scrollbar">
+                                <div className="bg-[#040711] p-5 rounded-2xl border border-white/10 text-sm text-white/90 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto custom-scrollbar">
                                     {selectedMessage.message}
                                 </div>
                             </div>
