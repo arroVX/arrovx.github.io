@@ -6,7 +6,7 @@ import {
     FolderKanban, BookOpen, Layers, Check, ExternalLink,
     AlertCircle, Sparkles, RefreshCw, LogOut, Code2, UploadCloud, Loader2,
     Upload, FileText, Image as ImageIcon, File, Paperclip, CheckCircle,
-    HardDrive, Video, Play, Link as LinkIcon
+    HardDrive, Video, Play, Link as LinkIcon, MessageSquare, Mail, User, Clock, Inbox, Send, Eye
 } from 'lucide-react';
 import { db } from '../firebase';
 import {
@@ -61,6 +61,8 @@ export default function Admin() {
     // Data States from Firebase
     const [projects, setProjects] = useState([]);
     const [schoolProjects, setSchoolProjects] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const [selectedMessage, setSelectedMessage] = useState(null);
     const [activeTab, setActiveTab] = useState('projects');
     const [loading, setLoading] = useState(true);
     const [firebaseErrorMsg, setFirebaseErrorMsg] = useState('');
@@ -158,11 +160,52 @@ export default function Admin() {
             setFirebaseErrorMsg(error.message);
         });
 
+        // Listen for incoming contact messages
+        const unsubContacts = onSnapshot(collection(db, "contacts"), (snapshot) => {
+            const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            list.sort((a, b) => {
+                const getTime = (item) => {
+                    if (item.timestamp?.seconds) return item.timestamp.seconds * 1000;
+                    if (item.createdAt) return new Date(item.createdAt).getTime();
+                    return 0;
+                };
+                return getTime(b) - getTime(a);
+            });
+            setMessages(list);
+        }, (error) => {
+            console.error("Error fetching contacts:", error);
+        });
+
         return () => {
             unsubProjects();
             unsubSchool();
+            unsubContacts();
         };
     }, [isAuthenticated]);
+
+    const formatDate = (timestamp) => {
+        if (!timestamp) return 'Baru Saja';
+        if (timestamp.seconds) {
+            return new Date(timestamp.seconds * 1000).toLocaleString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        const d = new Date(timestamp);
+        if (!isNaN(d.getTime())) {
+            return d.toLocaleString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        return 'Baru Saja';
+    };
 
     // Handle File Upload — Direct FileReader (always works, no Firebase Storage needed)
     const handleFileUpload = (e, type) => {
@@ -367,9 +410,9 @@ export default function Admin() {
         setDeleteConfirm({ isOpen: false, id: null, title: '' });
 
         try {
-            const collectionName = activeTab === 'projects' ? 'projects' : 'school_projects';
+            const collectionName = activeTab === 'projects' ? 'projects' : (activeTab === 'school' ? 'school_projects' : 'contacts');
             await deleteDoc(doc(db, collectionName, id));
-            setToast({ isOpen: true, message: `"${title}" berhasil dihapus.`, type: 'success' });
+            setToast({ isOpen: true, message: `"${title || 'Pesan'}" berhasil dihapus.`, type: 'success' });
         } catch (error) {
             console.error("Delete Error:", error);
             setToast({ isOpen: true, message: "Gagal menghapus data: " + error.message, type: 'error' });
@@ -537,12 +580,14 @@ export default function Admin() {
                 </div>
 
                 <div className="flex items-center gap-3 w-full md:w-auto">
-                    <button
-                        onClick={() => handleOpenModal()}
-                        className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 border-none cursor-pointer flex-1 md:flex-initial"
-                    >
-                        <Plus size={16} /> Tambah {activeTab === 'projects' ? 'Proyek' : 'LKPD'}
-                    </button>
+                    {activeTab !== 'messages' && (
+                        <button
+                            onClick={() => handleOpenModal()}
+                            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 border-none cursor-pointer flex-1 md:flex-initial"
+                        >
+                            <Plus size={16} /> Tambah {activeTab === 'projects' ? 'Proyek' : 'LKPD'}
+                        </button>
+                    )}
                     <button
                         onClick={handleLogout}
                         className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-white/60 hover:text-red-400 font-semibold text-xs transition-all border border-white/10 cursor-pointer flex items-center gap-1.5"
@@ -572,7 +617,7 @@ export default function Admin() {
             )}
 
             {/* Navigation Tabs */}
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex flex-wrap items-center gap-3 mb-8">
                 <button
                     onClick={() => setActiveTab('projects')}
                     className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'projects'
@@ -580,7 +625,7 @@ export default function Admin() {
                             : 'bg-white/5 text-white/40 hover:text-white'
                         }`}
                 >
-                    <FolderKanban size={16} /> Proyek Portofolio Utama ({projects.length})
+                    <FolderKanban size={16} /> Proyek Utama ({projects.length})
                 </button>
                 <button
                     onClick={() => setActiveTab('school')}
@@ -589,7 +634,16 @@ export default function Admin() {
                             : 'bg-white/5 text-white/40 hover:text-white'
                         }`}
                 >
-                    <BookOpen size={16} /> School Project & LKPD ({schoolProjects.length})
+                    <BookOpen size={16} /> School Project ({schoolProjects.length})
+                </button>
+                <button
+                    onClick={() => setActiveTab('messages')}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'messages'
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+                            : 'bg-white/5 text-white/40 hover:text-white'
+                        }`}
+                >
+                    <MessageSquare size={16} /> Pesan Masuk / Get In Touch ({messages.length})
                 </button>
             </div>
 
@@ -617,84 +671,261 @@ export default function Admin() {
                 <TerminalLoading message="Menghubungkan ke ArroOS Firestore kernel..." />
             )}
 
-            {/* List Table / Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentList.map((item) => (
-                    <motion.div
-                        key={item.id}
-                        layout
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="glass-card p-6 border-white/10 bg-[#070b16]/90 flex flex-col justify-between group hover:border-blue-500/40 transition-all relative"
-                    >
-                        <div>
-                            {/* Badges */}
-                            <div className="flex items-center justify-between gap-2 mb-3">
-                                <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
-                                    {item.category || 'General'}
-                                </span>
-                            </div>
-
-                            {/* Title & Description */}
-                            <h3 className="text-lg font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
-                                {item.title}
-                            </h3>
-
-                            {item.subject && (
-                                <p className="text-xs text-white/40 mb-3 font-medium flex items-center gap-1.5">
-                                    <BookOpen size={12} className="text-blue-400" /> {item.subject}
-                                </p>
-                            )}
-
-                            <p className="text-xs text-white/60 leading-relaxed mb-4 line-clamp-3">
-                                {item.desc}
-                            </p>
-
-                            {/* File Attachment indicator if exists */}
-                            {item.fileUrl && (
-                                <div className="mb-4 px-3 py-2 bg-blue-500/10 rounded-xl border border-blue-500/20 flex items-center justify-between text-xs text-blue-300">
-                                    <span className="flex items-center gap-1.5 truncate">
-                                        <Paperclip size={14} className="shrink-0" />
-                                        <span className="truncate">{item.fileName || 'Lampiran File/PDF'}</span>
+            {/* List Table / Cards Grid for Projects & School Projects */}
+            {activeTab !== 'messages' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {currentList.map((item) => (
+                        <motion.div
+                            key={item.id}
+                            layout
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="glass-card p-6 border-white/10 bg-[#070b16]/90 flex flex-col justify-between group hover:border-blue-500/40 transition-all relative text-left"
+                        >
+                            <div>
+                                {/* Badges */}
+                                <div className="flex items-center justify-between gap-2 mb-3">
+                                    <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
+                                        {item.category || 'General'}
                                     </span>
-                                    <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-white font-bold text-[10px] underline ml-2 shrink-0">
-                                        Buka
-                                    </a>
                                 </div>
-                            )}
-                        </div>
 
-                        {/* Tech tags & Actions */}
-                        <div>
-                            {item.tech && (
-                                <div className="flex flex-wrap gap-1.5 mb-6">
-                                    {(Array.isArray(item.tech) ? item.tech : String(item.tech).split(',')).map((t, idx) => (
-                                        <span key={idx} className="px-2 py-0.5 bg-white/5 rounded-md text-[10px] font-mono text-white/50 border border-white/5">
-                                            {t.trim()}
+                                {/* Title & Description */}
+                                <h3 className="text-lg font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
+                                    {item.title}
+                                </h3>
+
+                                {item.subject && (
+                                    <p className="text-xs text-white/40 mb-3 font-medium flex items-center gap-1.5">
+                                        <BookOpen size={12} className="text-blue-400" /> {item.subject}
+                                    </p>
+                                )}
+
+                                <p className="text-xs text-white/60 leading-relaxed mb-4 line-clamp-3">
+                                    {item.desc}
+                                </p>
+
+                                {/* File Attachment indicator if exists */}
+                                {item.fileUrl && (
+                                    <div className="mb-4 px-3 py-2 bg-blue-500/10 rounded-xl border border-blue-500/20 flex items-center justify-between text-xs text-blue-300">
+                                        <span className="flex items-center gap-1.5 truncate">
+                                            <Paperclip size={14} className="shrink-0" />
+                                            <span className="truncate">{item.fileName || 'Lampiran File/PDF'}</span>
                                         </span>
-                                    ))}
+                                        <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-white font-bold text-[10px] underline ml-2 shrink-0">
+                                            Buka
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Tech tags & Actions */}
+                            <div>
+                                {item.tech && (
+                                    <div className="flex flex-wrap gap-1.5 mb-6">
+                                        {(Array.isArray(item.tech) ? item.tech : String(item.tech).split(',')).map((t, idx) => (
+                                            <span key={idx} className="px-2 py-0.5 bg-white/5 rounded-md text-[10px] font-mono text-white/50 border border-white/5">
+                                                {t.trim()}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                                    <button
+                                        onClick={() => handleOpenModal(item)}
+                                        className="flex-1 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition-all border border-blue-500/30 flex items-center justify-center gap-1.5 cursor-pointer"
+                                    >
+                                        <Edit2 size={13} /> Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(item.id, item.title)}
+                                        className="py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold transition-all border border-red-500/20 flex items-center justify-center cursor-pointer"
+                                        title="Hapus"
+                                    >
+                                        <Trash2 size={13} />
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            )}
+
+            {/* PESAN MASUK / CONTACT MESSAGES TAB */}
+            {activeTab === 'messages' && (
+                <div>
+                    {messages.length === 0 && !loading ? (
+                        <div className="glass-card p-12 text-center border-white/10 max-w-lg mx-auto rounded-3xl">
+                            <Mail size={44} className="mx-auto text-blue-400/60 mb-3" />
+                            <h3 className="text-lg font-bold text-white mb-2">Belum Ada Pesan Masuk</h3>
+                            <p className="text-xs text-white/40 leading-relaxed">
+                                Pesan yang dikirim pengunjung melalui formulir <b>Get In Touch</b> di halaman Contact/Home akan otomatis muncul secara realtime di sini.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {messages.map((item) => (
+                                <motion.div
+                                    key={item.id}
+                                    layout
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="glass-card p-6 border-white/10 bg-[#070b16]/90 flex flex-col justify-between group hover:border-blue-500/40 transition-all relative text-left"
+                                >
+                                    <div>
+                                        {/* Header info */}
+                                        <div className="flex items-center justify-between gap-2 mb-3">
+                                            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20 flex items-center gap-1">
+                                                <Mail size={12} /> Pesan Masuk
+                                            </span>
+                                            <span className="text-[10px] font-mono text-white/40 flex items-center gap-1">
+                                                <Clock size={11} /> {formatDate(item.timestamp || item.createdAt)}
+                                            </span>
+                                        </div>
+
+                                        {/* Sender Name & Email */}
+                                        <div className="mb-3">
+                                            <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors flex items-center gap-2">
+                                                <User size={15} className="text-blue-400 shrink-0" />
+                                                <span className="truncate">{item.name || 'Pengunjung Anonim'}</span>
+                                            </h3>
+                                            {item.email && (
+                                                <a
+                                                    href={`mailto:${item.email}`}
+                                                    className="text-xs text-blue-400/80 hover:text-blue-300 font-mono underline block mt-0.5 truncate"
+                                                >
+                                                    {item.email}
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        {/* Subject if exists */}
+                                        {item.subject && (
+                                            <div className="mb-3 px-3 py-1.5 bg-white/5 rounded-xl border border-white/5 text-xs text-white/80 font-semibold truncate">
+                                                Subjek: <span className="text-blue-300">{item.subject}</span>
+                                            </div>
+                                        )}
+
+                                        {/* Message Body */}
+                                        <p className="text-xs text-white/70 leading-relaxed mb-4 line-clamp-4 bg-black/40 p-3 rounded-xl border border-white/5 whitespace-pre-wrap">
+                                            "{item.message}"
+                                        </p>
+                                    </div>
+
+                                    {/* Card Actions */}
+                                    <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                                        <button
+                                            onClick={() => setSelectedMessage(item)}
+                                            className="flex-1 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition-all border border-blue-500/30 flex items-center justify-center gap-1.5 cursor-pointer"
+                                        >
+                                            <Eye size={13} /> Baca Detail
+                                        </button>
+                                        {item.email && (
+                                            <a
+                                                href={`mailto:${item.email}?subject=Re: ${encodeURIComponent(item.subject || 'Pesan Portofolio')}`}
+                                                className="py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white text-xs font-bold transition-all border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer no-underline"
+                                                title="Balas via Email"
+                                            >
+                                                <Send size={13} /> Balas
+                                            </a>
+                                        )}
+                                        <button
+                                            onClick={() => handleDelete(item.id, item.name ? `Pesan dari ${item.name}` : 'Pesan')}
+                                            className="py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold transition-all border border-red-500/20 flex items-center justify-center cursor-pointer"
+                                            title="Hapus Pesan"
+                                        >
+                                            <Trash2 size={13} />
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* DETAIL MESSAGE MODAL */}
+            {selectedMessage && createPortal(
+                <AnimatePresence>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-3xl text-left"
+                        onClick={() => setSelectedMessage(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="glass-card max-w-2xl w-full p-6 md:p-8 rounded-3xl border-white/15 bg-[#070a14] opacity-100 relative shadow-2xl space-y-6"
+                        >
+                            {/* Close Button */}
+                            <button
+                                onClick={() => setSelectedMessage(null)}
+                                className="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/10 cursor-pointer"
+                            >
+                                <X size={18} />
+                            </button>
+
+                            <div className="pr-8">
+                                <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-2">
+                                    <Mail size={14} /> PESAN MASUK — GET IN TOUCH
+                                </div>
+                                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                                    <User size={22} className="text-blue-400" /> {selectedMessage.name || 'Pengunjung Anonim'}
+                                </h2>
+                                <p className="text-xs text-white/40 mt-1 flex items-center gap-3">
+                                    <span>Email: <a href={`mailto:${selectedMessage.email}`} className="text-blue-400 underline">{selectedMessage.email}</a></span>
+                                    <span>•</span>
+                                    <span>{formatDate(selectedMessage.timestamp || selectedMessage.createdAt)}</span>
+                                </p>
+                            </div>
+
+                            {selectedMessage.subject && (
+                                <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-300 font-semibold">
+                                    Subjek: {selectedMessage.subject}
                                 </div>
                             )}
 
-                            <div className="flex items-center gap-2 pt-4 border-t border-white/5">
-                                <button
-                                    onClick={() => handleOpenModal(item)}
-                                    className="flex-1 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition-all border border-blue-500/30 flex items-center justify-center gap-1.5 cursor-pointer"
-                                >
-                                    <Edit2 size={13} /> Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(item.id, item.title)}
-                                    className="py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold transition-all border border-red-500/20 flex items-center justify-center cursor-pointer"
-                                    title="Hapus"
-                                >
-                                    <Trash2 size={13} />
-                                </button>
+                            <div>
+                                <h4 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">Isi Pesan</h4>
+                                <div className="bg-[#040711] p-5 rounded-2xl border border-white/10 font-sans text-sm text-white/90 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto custom-scrollbar">
+                                    {selectedMessage.message}
+                                </div>
                             </div>
-                        </div>
+
+                            <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+                                <button
+                                    onClick={() => handleDelete(selectedMessage.id, selectedMessage.name ? `Pesan dari ${selectedMessage.name}` : 'Pesan')}
+                                    className="px-4 py-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold rounded-xl transition-all border border-red-500/20 flex items-center gap-1.5 cursor-pointer"
+                                >
+                                    <Trash2 size={14} /> Hapus Pesan Ini
+                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => setSelectedMessage(null)}
+                                        className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 text-xs font-bold rounded-xl transition-all border-none cursor-pointer"
+                                    >
+                                        Tutup
+                                    </button>
+                                    {selectedMessage.email && (
+                                        <a
+                                            href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.subject || 'Pesan Portofolio')}`}
+                                            className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-emerald-600/20 border-none cursor-pointer no-underline"
+                                        >
+                                            <Send size={14} /> Balas via Email
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
                     </motion.div>
-                ))}
-            </div>
+                </AnimatePresence>,
+                document.body
+            )}
 
             {/* FORM MODAL FOR CREATE & EDIT */}
             {isModalOpen && createPortal(
