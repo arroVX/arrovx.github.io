@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     BookOpen, Code2, Network, Cpu, FileText, CheckCircle2,
     Search, Award, ExternalLink, Download, Copy, Check, ChevronRight,
-    Terminal, Layers, Monitor, Sparkles, Filter, X, AlertCircle, Paperclip
+    Terminal, Layers, Monitor, Sparkles, Filter, X, AlertCircle, Paperclip,
+    HardDrive, Video, Play
 } from 'lucide-react';
 import { useScrambleText } from '../utils/animations';
 import { db } from '../firebase';
@@ -23,6 +24,8 @@ const schoolProjectsData = [
         grade: "100 / A+",
         status: "Selesai",
         desc: "Konfigurasi Virtual Local Area Network (VLAN 10: Lab TKJ, VLAN 20: Ruang Guru) menggunakan Router Cisco 2911 & Switch Catalyst 2960 dengan metode Router-on-a-Stick.",
+        driveUrl: "https://drive.google.com",
+        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         objectives: [
             "Memahami konsep dasar segmentasi jaringan dengan VLAN",
             "Mengonfigurasi Trunking (IEEE 802.1Q) pada Switch Cisco Catalyst",
@@ -153,6 +156,20 @@ Color Mode: RGB Digital / CMYK Print Ready
 Export Formats: PDF, PNG-24 High Res`
     }
 ];
+
+const getYouTubeEmbedUrl = (url) => {
+    if (!url) return null;
+    try {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        if (match && match[2].length === 11) {
+            return `https://www.youtube.com/embed/${match[2]}`;
+        }
+    } catch (e) {
+        return null;
+    }
+    return null;
+};
 
 export default function SchoolProjects() {
     const [activeProject, setActiveProject] = useState(null);
@@ -423,15 +440,46 @@ export default function SchoolProjects() {
                                 >
                                     Lihat Detail & File <ChevronRight size={14} />
                                 </button>
-                                {item.fileUrl && (
-                                    <button
-                                        onClick={() => handlePreview(item.fileUrl, item.fileName || item.title)}
-                                        className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border-none cursor-pointer"
-                                        title="Preview PDF"
-                                    >
-                                        <ExternalLink size={14} />
-                                    </button>
-                                )}
+                                <div className="flex items-center gap-1.5">
+                                    {item.driveUrl && (
+                                        <a
+                                            href={item.driveUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="p-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 transition-colors border border-blue-500/20 flex items-center gap-1 text-[10px] font-bold"
+                                            title="Buka Google Drive"
+                                        >
+                                            <HardDrive size={13} />
+                                            <span className="hidden sm:inline">Drive</span>
+                                        </a>
+                                    )}
+                                    {item.videoUrl && (
+                                        <a
+                                            href={item.videoUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors border border-red-500/20 flex items-center gap-1 text-[10px] font-bold"
+                                            title="Tonton Video Demo"
+                                        >
+                                            <Video size={13} />
+                                            <span className="hidden sm:inline">Video</span>
+                                        </a>
+                                    )}
+                                    {item.fileUrl && (
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handlePreview(e, item.fileUrl, item.fileName || item.title);
+                                            }}
+                                            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border-none cursor-pointer"
+                                            title="Preview PDF"
+                                        >
+                                            <ExternalLink size={14} />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </motion.div>
                     ))}
@@ -595,6 +643,75 @@ export default function SchoolProjects() {
                                             <Download size={14} /> Download
                                         </a>
                                     </div>
+                                </div>
+                            )}
+
+                            {/* Google Drive Link Section */}
+                            {activeProject.driveUrl && (
+                                <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 border border-blue-400/30">
+                                            <HardDrive size={20} />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <div className="text-xs font-bold text-white flex items-center gap-2">
+                                                Link Google Drive / Berkas Proyek
+                                            </div>
+                                            <div className="text-[10px] text-white/50 truncate font-mono mt-0.5">
+                                                {activeProject.driveUrl}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a
+                                        href={activeProject.driveUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/30 border-none shrink-0"
+                                    >
+                                        <ExternalLink size={14} /> Akses Google Drive
+                                    </a>
+                                </div>
+                            )}
+
+                            {/* Video Link & Embed Section */}
+                            {activeProject.videoUrl && (
+                                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl space-y-4">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 shrink-0 border border-red-400/30">
+                                                <Video size={20} />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <div className="text-xs font-bold text-white flex items-center gap-2">
+                                                    Link Video Demo / Praktikum
+                                                </div>
+                                                <div className="text-[10px] text-white/50 truncate font-mono mt-0.5">
+                                                    {activeProject.videoUrl}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a
+                                            href={activeProject.videoUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="px-4 py-2.5 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-600/30 border-none shrink-0"
+                                        >
+                                            <Play size={14} /> Tonton / Akses Video
+                                        </a>
+                                    </div>
+
+                                    {/* Responsive YouTube Embed Preview */}
+                                    {getYouTubeEmbedUrl(activeProject.videoUrl) && (
+                                        <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/10 bg-black shadow-2xl mt-3">
+                                            <iframe
+                                                src={getYouTubeEmbedUrl(activeProject.videoUrl)}
+                                                title="Video Demo Proyek"
+                                                className="w-full h-full border-none"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )}
 

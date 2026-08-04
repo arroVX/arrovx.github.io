@@ -5,7 +5,8 @@ import {
     Lock, ShieldCheck, Plus, Edit2, Trash2, Save, X,
     FolderKanban, BookOpen, Layers, Check, ExternalLink,
     AlertCircle, Sparkles, RefreshCw, LogOut, Code2, UploadCloud, Loader2,
-    Upload, FileText, Image as ImageIcon, File, Paperclip, CheckCircle
+    Upload, FileText, Image as ImageIcon, File, Paperclip, CheckCircle,
+    HardDrive, Video, Play, Link as LinkIcon
 } from 'lucide-react';
 import { db } from '../firebase';
 import {
@@ -91,7 +92,9 @@ export default function Admin() {
         grade: '100 / A+',
         snippet: '',
         fileUrl: '', // Attachment PDF / File URL
-        fileName: ''
+        fileName: '',
+        driveUrl: '',
+        videoUrl: ''
     });
 
     const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
@@ -266,7 +269,9 @@ export default function Admin() {
                 grade: item.grade || '100 / A+',
                 snippet: item.snippet || '',
                 fileUrl: item.fileUrl || '',
-                fileName: item.fileName || ''
+                fileName: item.fileName || '',
+                driveUrl: item.driveUrl || '',
+                videoUrl: item.videoUrl || ''
             });
         } else {
             setEditingItem(null);
@@ -284,7 +289,9 @@ export default function Admin() {
                 grade: '100 / A+',
                 snippet: '',
                 fileUrl: '',
-                fileName: ''
+                fileName: '',
+                driveUrl: '',
+                videoUrl: ''
             });
         }
         setIsModalOpen(true);
@@ -315,6 +322,8 @@ export default function Admin() {
                 tech: formData.tech.split(',').map(t => t.trim()).filter(Boolean),
                 fileUrl: formData.fileUrl || '',
                 fileName: formData.fileName || '',
+                driveUrl: formData.driveUrl || '',
+                videoUrl: formData.videoUrl || '',
                 updatedAt: new Date().toISOString()
             };
 
@@ -847,6 +856,37 @@ export default function Admin() {
                                             )}
                                         </div>
                                     ) : null}
+                                </div>
+
+                                {/* LINK DRIVE & LINK VIDEO SECTION */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white/3 border border-white/10 rounded-2xl">
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1 flex items-center gap-1.5">
+                                            <HardDrive size={14} className="text-blue-400" /> Link Google Drive (Opsional)
+                                        </label>
+                                        <input
+                                            type="url"
+                                            value={formData.driveUrl}
+                                            onChange={(e) => setFormData({ ...formData, driveUrl: e.target.value })}
+                                            placeholder="https://drive.google.com/..."
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                                        />
+                                        <p className="text-[10px] text-white/30 mt-1">Paste link Google Drive file/folder proyek</p>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1 flex items-center gap-1.5">
+                                            <Video size={14} className="text-red-400" /> Link Video / Demo (Opsional)
+                                        </label>
+                                        <input
+                                            type="url"
+                                            value={formData.videoUrl}
+                                            onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                                            placeholder="https://youtube.com/watch?v=... atau link video"
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                                        />
+                                        <p className="text-[10px] text-white/30 mt-1">Paste link YouTube atau video praktikum</p>
+                                    </div>
                                 </div>
 
                                 {activeTab === 'school' && (
