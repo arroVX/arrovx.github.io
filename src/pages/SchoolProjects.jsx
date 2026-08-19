@@ -339,16 +339,16 @@ export default function SchoolProjects() {
                         </div>
 
                         {/* Filter Panel Window */}
-                        <div className="w-full p-3 bg-[#040711]/90 backdrop-blur-2xl border-x border-b border-white/10 rounded-b-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex flex-col gap-3">
-                            {/* Mapel Filter */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-1.5">
+                        <div className="w-full p-4 bg-[#040711]/90 backdrop-blur-2xl border-x border-b border-white/10 rounded-b-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex flex-col md:flex-row items-center justify-between gap-4">
+                            {/* Mapel Filter Buttons */}
+                            <div className="grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-1.5 w-full md:w-auto">
                                 {mapelOptions.map(mapel => {
                                     const isActive = selectedMapel === mapel;
                                     return (
                                         <button
                                             key={mapel}
                                             onClick={() => setSelectedMapel(mapel)}
-                                            className={`w-full lg:w-auto px-3.5 sm:px-6 py-2.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
+                                            className={`w-full lg:w-auto px-3.5 sm:px-5 py-2.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
                                                 isActive
                                                     ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.5)] scale-[1.02]"
                                                     : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
@@ -363,29 +363,28 @@ export default function SchoolProjects() {
                                 })}
                             </div>
 
-                            <div className="h-px w-full bg-white/5"></div>
-
-                            {/* Class Filter */}
-                            <div className="grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-1.5">
-                                {classOptions.map(cls => {
-                                    const isActive = selectedClass === cls;
-                                    return (
-                                        <button
-                                            key={cls}
-                                            onClick={() => setSelectedClass(cls)}
-                                            className={`w-full lg:w-auto px-3.5 sm:px-6 py-2.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
-                                                isActive
-                                                    ? "bg-emerald-600 text-white shadow-[0_0_25px_rgba(16,185,129,0.5)] scale-[1.02]"
-                                                    : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
-                                            }`}
-                                        >
-                                            <span className={`text-[10px] font-mono font-extrabold ${isActive ? "text-emerald-200" : "text-emerald-500/70"}`}>
-                                                &gt;_
-                                            </span>
-                                            {cls}
-                                        </button>
-                                    );
-                                })}
+                            {/* Class Filter Dropdown Option */}
+                            <div className="w-full md:w-auto shrink-0 flex items-center gap-2.5">
+                                <div className="hidden md:flex items-center gap-1.5 px-2">
+                                    <Filter size={14} className="text-white/30" />
+                                    <span className="text-[10px] font-mono font-bold text-white/30 uppercase tracking-widest">Filter Kelas:</span>
+                                </div>
+                                <div className="relative w-full md:w-44">
+                                    <select
+                                        value={selectedClass}
+                                        onChange={(e) => setSelectedClass(e.target.value)}
+                                        className="w-full appearance-none bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 text-white text-xs font-mono font-bold py-2.5 pl-4 pr-10 rounded-xl focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 cursor-pointer transition-all"
+                                    >
+                                        {classOptions.map(cls => (
+                                            <option key={cls} value={cls} className="bg-[#070b16] text-white">
+                                                {cls}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-white/40">
+                                        <ChevronRight size={14} className="rotate-90" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
