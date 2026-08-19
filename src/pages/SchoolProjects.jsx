@@ -180,6 +180,23 @@ export default function SchoolProjects() {
     const [firebaseError, setFirebaseError] = useState('');
     const [isImageZoomed, setIsImageZoomed] = useState(false);
     const [selectedMapel, setSelectedMapel] = useState("Semua Mapel");
+    const [selectedClass, setSelectedClass] = useState("Semua Kelas");
+
+    const classOptions = ["Semua Kelas", "Kelas X", "Kelas XI", "Kelas XII"];
+    const classOrder = { 'KELAS X': 1, 'KELAS XI': 2, 'KELAS XII': 3 };
+
+    const getClassGroup = (classLevel = '', title = '', desc = '') => {
+        const rawClass = String(classLevel || '').trim().toUpperCase();
+        if (rawClass.includes('XII') || rawClass.includes('12')) return 'KELAS XII';
+        if (rawClass.includes('XI') || rawClass.includes('11')) return 'KELAS XI';
+        if (rawClass.includes('X') || rawClass.includes('10')) return 'KELAS X';
+
+        const combined = `${title} ${desc}`.toUpperCase();
+        if (combined.includes('XII') || combined.includes('KELAS 12')) return 'KELAS XII';
+        if (combined.includes('XI') || combined.includes('KELAS 11')) return 'KELAS XI';
+        if (combined.includes('KELAS X') || combined.includes('KELAS 10')) return 'KELAS X';
+        return 'KELAS X';
+    };
 
     const mapelOptions = [
         "Semua Mapel", 
@@ -198,9 +215,20 @@ export default function SchoolProjects() {
 
     const filteredSchoolProjects = firebaseSchoolProjects
         .filter(item => {
-            if (selectedMapel === "Semua Mapel") return true;
-            const group = getMapelGroup(item.subject, item.title, item.desc);
-            return group === selectedMapel;
+            if (selectedMapel !== "Semua Mapel") {
+                const groupMapel = getMapelGroup(item.subject, item.title, item.desc);
+                if (groupMapel !== selectedMapel) return false;
+            }
+            if (selectedClass !== "Semua Kelas") {
+                const groupClass = getClassGroup(item.classLevel, item.title, item.desc);
+                if (groupClass !== selectedClass.toUpperCase()) return false;
+            }
+            return true;
+        })
+        .sort((a, b) => {
+            const groupA = getClassGroup(a.classLevel, a.title, a.desc);
+            const groupB = getClassGroup(b.classLevel, b.title, b.desc);
+            return (classOrder[groupA] || 99) - (classOrder[groupB] || 99);
         });
 
     const handlePreview = (e, fileUrl, title) => {
@@ -311,7 +339,8 @@ export default function SchoolProjects() {
                         </div>
 
                         {/* Filter Panel Window */}
-                        <div className="w-full p-2 bg-[#040711]/90 backdrop-blur-2xl border-x border-b border-white/10 rounded-b-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)]">
+                        <div className="w-full p-3 bg-[#040711]/90 backdrop-blur-2xl border-x border-b border-white/10 rounded-b-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex flex-col gap-3">
+                            {/* Mapel Filter */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-1.5">
                                 {mapelOptions.map(mapel => {
                                     const isActive = selectedMapel === mapel;
@@ -329,6 +358,31 @@ export default function SchoolProjects() {
                                                 &gt;_
                                             </span>
                                             {mapel}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <div className="h-px w-full bg-white/5"></div>
+
+                            {/* Class Filter */}
+                            <div className="grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-1.5">
+                                {classOptions.map(cls => {
+                                    const isActive = selectedClass === cls;
+                                    return (
+                                        <button
+                                            key={cls}
+                                            onClick={() => setSelectedClass(cls)}
+                                            className={`w-full lg:w-auto px-3.5 sm:px-6 py-2.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-1.5 ${
+                                                isActive
+                                                    ? "bg-emerald-600 text-white shadow-[0_0_25px_rgba(16,185,129,0.5)] scale-[1.02]"
+                                                    : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
+                                            }`}
+                                        >
+                                            <span className={`text-[10px] font-mono font-extrabold ${isActive ? "text-emerald-200" : "text-emerald-500/70"}`}>
+                                                &gt;_
+                                            </span>
+                                            {cls}
                                         </button>
                                     );
                                 })}
@@ -361,7 +415,7 @@ export default function SchoolProjects() {
                 {!loading && !firebaseError && filteredSchoolProjects.length === 0 && firebaseSchoolProjects.length > 0 && (
                     <div className="text-center py-16 glass-card border-white/5 max-w-md mx-auto rounded-3xl p-8 mb-12">
                         <FileText size={40} className="mx-auto text-white/20 mb-3" />
-                        <p className="text-white/60 text-sm font-medium mb-1">Belum ada LKPD untuk {selectedMapel}.</p>
+                        <p className="text-white/60 text-sm font-medium mb-1">Belum ada LKPD untuk {selectedMapel} - {selectedClass}.</p>
                         <p className="text-white/30 text-xs">Pilih filter mapel lain atau tambahkan data melalui Admin Panel.</p>
                     </div>
                 )}
