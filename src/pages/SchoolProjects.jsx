@@ -185,8 +185,7 @@ export default function SchoolProjects() {
         "Semua Mapel", 
         "ASJ", 
         "TJKN", 
-        "KJ",
-        "Lainnya"
+        "KJ"
     ];
 
     const getMapelGroup = (subject = '', title = '', desc = '') => {
