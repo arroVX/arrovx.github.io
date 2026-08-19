@@ -183,17 +183,17 @@ export default function SchoolProjects() {
 
     const mapelOptions = [
         "Semua Mapel", 
-        "Administrasi Sistem Jaringan", 
-        "Teknik Jaringan Kabel dan Nirkabel", 
-        "Keamanan Jaringan",
+        "ASJ", 
+        "TJKN", 
+        "KJ",
         "Lainnya"
     ];
 
     const getMapelGroup = (subject = '', title = '', desc = '') => {
         const text = `${subject} ${title} ${desc}`.toLowerCase();
-        if (text.includes('administrasi sistem jaringan') || text.includes('asj')) return 'Administrasi Sistem Jaringan';
-        if (text.includes('teknik jaringan kabel') || text.includes('nirkabel')) return 'Teknik Jaringan Kabel dan Nirkabel';
-        if (text.includes('keamanan jaringan')) return 'Keamanan Jaringan';
+        if (text.includes('administrasi sistem jaringan') || text.includes('asj')) return 'ASJ';
+        if (text.includes('teknik jaringan kabel') || text.includes('nirkabel') || text.includes('tjkn')) return 'TJKN';
+        if (text.includes('keamanan jaringan') || text.includes('kj')) return 'KJ';
         return 'Lainnya';
     };
 
