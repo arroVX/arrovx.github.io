@@ -78,9 +78,9 @@ export default function Contact() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="min-h-screen pt-32 pb-20 px-6 relative z-10 overflow-x-hidden"
+                className="min-h-screen pt-32 pb-20 relative z-10 overflow-x-hidden"
             >
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-7xl mx-auto px-4 md:px-6">
                     <div className="text-center mb-20">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}

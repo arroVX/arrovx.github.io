@@ -28,8 +28,8 @@ const services = [
 
 export default function Services() {
     return (
-        <main className="relative z-10 pt-32 pb-20 px-6 min-h-screen">
-            <div className="max-w-4xl mx-auto">
+        <main className="relative z-10 pt-32 pb-20 min-h-screen">
+            <div className="max-w-4xl mx-auto px-4 md:px-6">
                 <Link to="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-12 group">
                     <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
                 </Link>

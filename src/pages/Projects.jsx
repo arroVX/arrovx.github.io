@@ -211,8 +211,8 @@ export default function Projects() {
         : displayProjects.filter(p => p.category === selectedCategory);
 
     return (
-        <main className="relative z-10 pt-32 pb-20 px-6 min-h-screen">
-            <div className="max-w-7xl mx-auto">
+        <main className="relative z-10 pt-32 pb-20 min-h-screen">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
                 {/* Header */}
                 <div className="text-left mb-16">
                     <motion.div
@@ -228,7 +228,7 @@ export default function Projects() {
                         transition={{ duration: 0.8 }}
                         className="text-5xl md:text-7xl font-bold tracking-tighter mb-6"
                     >
-                        Visual <span className="text-linear">Archive.</span>
+                        Visual Archive.
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

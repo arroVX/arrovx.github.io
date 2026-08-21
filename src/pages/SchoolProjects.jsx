@@ -276,9 +276,9 @@ export default function SchoolProjects() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen pt-32 pb-24 px-4 md:px-6 relative z-10 overflow-x-hidden text-white"
+            className="min-h-screen pt-32 pb-24 relative z-10 overflow-x-hidden text-white"
         >
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto px-4 md:px-6">
                 {/* Hero Header */}
                 <div className="text-center mb-16">
                     <motion.div

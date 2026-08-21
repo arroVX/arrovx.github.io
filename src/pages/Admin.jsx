@@ -566,7 +566,7 @@ export default function Admin() {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="min-h-screen pt-32 pb-24 px-4 md:px-8 relative z-10 text-white max-w-7xl mx-auto"
+            className="min-h-screen pt-32 pb-24 px-4 md:px-6 relative z-10 text-white max-w-7xl mx-auto"
         >
             {/* Header Dashboard */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10 pb-6 border-b border-white/10">
