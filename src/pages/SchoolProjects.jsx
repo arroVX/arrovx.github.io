@@ -179,10 +179,11 @@ export default function SchoolProjects() {
     const [loading, setLoading] = useState(true);
     const [firebaseError, setFirebaseError] = useState('');
     const [isImageZoomed, setIsImageZoomed] = useState(false);
-    const [selectedMapel, setSelectedMapel] = useState("Semua Mapel");
-    const [selectedClass, setSelectedClass] = useState("Semua Kelas");
+    const [selectionStep, setSelectionStep] = useState(1);
+    const [selectedMapel, setSelectedMapel] = useState("");
+    const [selectedClass, setSelectedClass] = useState("");
 
-    const classOptions = ["Semua Kelas", "Kelas X", "Kelas XI", "Kelas XII"];
+    const classOptions = ["Kelas X", "Kelas XI", "Kelas XII"];
     const classOrder = { 'KELAS X': 1, 'KELAS XI': 2, 'KELAS XII': 3 };
 
     const getClassGroup = (classLevel = '', title = '', desc = '') => {
@@ -199,7 +200,6 @@ export default function SchoolProjects() {
     };
 
     const mapelOptions = [
-        "Semua Mapel", 
         "ASJ", 
         "TJKN", 
         "KJ"
@@ -215,11 +215,11 @@ export default function SchoolProjects() {
 
     const filteredSchoolProjects = firebaseSchoolProjects
         .filter(item => {
-            if (selectedMapel !== "Semua Mapel") {
+            if (selectedMapel) {
                 const groupMapel = getMapelGroup(item.subject, item.title, item.desc);
                 if (groupMapel !== selectedMapel) return false;
             }
-            if (selectedClass !== "Semua Kelas") {
+            if (selectedClass) {
                 const groupClass = getClassGroup(item.classLevel, item.title, item.desc);
                 if (groupClass !== selectedClass.toUpperCase()) return false;
             }
@@ -312,84 +312,58 @@ export default function SchoolProjects() {
                     </p>
                 </div>
 
-                {/* Cyber Terminal Command Line Filter Window */}
-                {!loading && firebaseSchoolProjects.length > 0 && (
-                    <div className="max-w-xl mx-auto mb-6 px-2 flex flex-col items-center">
-                        {/* Terminal Header Banner */}
-                        <div className="w-full bg-[#070b16]/95 border border-white/10 rounded-t-2xl px-5 sm:px-6 py-3.5 flex items-center justify-between shadow-lg">
-                            <div className="flex items-center gap-3 text-left">
-                                <div className="text-blue-400 font-mono font-extrabold text-base leading-none">
-                                    &gt;_
-                                </div>
-                                <div>
-                                    <h4 className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white uppercase leading-tight">
-                                        ARROOS COMMAND LINE
-                                    </h4>
-                                    <p className="text-[10px] sm:text-[11px] font-mono font-semibold tracking-wider text-blue-400/90 uppercase leading-tight mt-0.5">
-                                        CLASS ARCHIVE — SELECT FILTER
-                                    </p>
-                                </div>
-                            </div>
-                            {/* Terminal Status Lights */}
-                            <div className="flex items-center gap-1.5 shrink-0">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Terminal Active" />
-                                <div className="w-2 h-2 rounded-full bg-blue-500/40" />
-                                <div className="w-2 h-2 rounded-full bg-white/20" />
-                            </div>
+                {/* Step Navigation */}
+                {!loading && firebaseSchoolProjects.length > 0 && selectionStep === 1 && (
+                    <div className="py-12">
+                        <h2 className="text-2xl font-bold text-center mb-8">Pilih Kelas</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                            {classOptions.map(cls => (
+                                <button key={cls} onClick={() => { setSelectedClass(cls); setSelectionStep(2); }} className="glass-card p-10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all flex flex-col items-center justify-center gap-4 cursor-pointer">
+                                    <Layers size={48} className="text-blue-400" />
+                                    <h3 className="text-xl font-bold text-white">{cls}</h3>
+                                </button>
+                            ))}
                         </div>
+                    </div>
+                )}
 
-                        {/* Filter Panel Window */}
-                        <div className="w-full p-4 bg-[#040711]/90 backdrop-blur-2xl border-x border-b border-white/10 rounded-b-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex items-center justify-center">
-                            {/* Mapel Filter Buttons */}
-                            <div className="grid grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-2 w-full md:w-auto">
-                                {mapelOptions.map(mapel => {
-                                    const isActive = selectedMapel === mapel;
-                                    return (
-                                        <button
-                                            key={mapel}
-                                            onClick={() => setSelectedMapel(mapel)}
-                                            className={`w-full lg:w-auto px-4 sm:px-6 py-2.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold tracking-wider transition-all duration-300 border-none cursor-pointer flex items-center justify-center gap-2 ${
-                                                isActive
-                                                    ? "bg-blue-600 text-white shadow-[0_0_25px_rgba(37,99,235,0.5)] scale-[1.02]"
-                                                    : "bg-transparent text-white/40 hover:text-white hover:bg-white/5"
-                                            }`}
-                                        >
-                                            <span className={`text-[10px] font-mono font-extrabold ${isActive ? "text-blue-200" : "text-blue-500/70"}`}>
-                                                &gt;_
-                                            </span>
-                                            {mapel}
-                                        </button>
-                                    );
-                                })}
+                {!loading && firebaseSchoolProjects.length > 0 && selectionStep === 2 && (
+                    <div className="py-12">
+                        <div className="max-w-4xl mx-auto">
+                            <button onClick={() => setSelectionStep(1)} className="mb-8 flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-bold bg-transparent border-none cursor-pointer px-4 py-2 hover:bg-white/5 rounded-xl transition-colors">
+                                <ChevronRight size={16} className="rotate-180" /> Kembali ke Pilih Kelas
+                            </button>
+                            <h2 className="text-2xl font-bold text-center mb-8">Pilih Mata Pelajaran ({selectedClass})</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {mapelOptions.map(mapel => (
+                                    <button key={mapel} onClick={() => { setSelectedMapel(mapel); setSelectionStep(3); }} className="glass-card p-10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all flex flex-col items-center justify-center gap-4 cursor-pointer">
+                                        <Network size={48} className="text-blue-400" />
+                                        <h3 className="text-xl font-bold text-white">{mapel}</h3>
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Class Filter Dropdown (Outside Command Line) */}
-                {!loading && firebaseSchoolProjects.length > 0 && (
-                    <div className="flex justify-end mb-8 px-2 max-w-7xl mx-auto">
+                {!loading && firebaseSchoolProjects.length > 0 && selectionStep === 3 && (
+                    <div className="mb-10 flex flex-col sm:flex-row items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10 gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2 px-2">
-                                <Filter size={16} className="text-white/40" />
-                                <span className="text-xs font-bold text-white/50 tracking-wide">Filter Kelas:</span>
+                            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
+                                <Filter size={18} />
                             </div>
-                            <div className="relative w-40 sm:w-48">
-                                <select
-                                    value={selectedClass}
-                                    onChange={(e) => setSelectedClass(e.target.value)}
-                                    className="w-full appearance-none bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 text-white text-xs sm:text-sm font-bold py-2.5 pl-4 pr-10 rounded-xl focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 cursor-pointer transition-all shadow-lg"
-                                >
-                                    {classOptions.map(cls => (
-                                        <option key={cls} value={cls} className="bg-[#070b16] text-white">
-                                            {cls}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-white/40">
-                                    <ChevronRight size={16} className="rotate-90" />
-                                </div>
+                            <div>
+                                <h3 className="text-sm font-bold text-white">Menampilkan Proyek</h3>
+                                <p className="text-xs text-white/50">{selectedClass} — {selectedMapel}</p>
                             </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setSelectionStep(2)} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-xs font-bold rounded-xl transition-all border-none cursor-pointer">
+                                Ubah Mapel
+                            </button>
+                            <button onClick={() => setSelectionStep(1)} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition-all border-none cursor-pointer">
+                                Ubah Kelas
+                            </button>
                         </div>
                     </div>
                 )}
@@ -415,7 +389,7 @@ export default function SchoolProjects() {
                 )}
 
                 {/* Filter Empty State */}
-                {!loading && !firebaseError && filteredSchoolProjects.length === 0 && firebaseSchoolProjects.length > 0 && (
+                {!loading && !firebaseError && selectionStep === 3 && filteredSchoolProjects.length === 0 && firebaseSchoolProjects.length > 0 && (
                     <div className="text-center py-16 glass-card border-white/5 max-w-md mx-auto rounded-3xl p-8 mb-12">
                         <FileText size={40} className="mx-auto text-white/20 mb-3" />
                         <p className="text-white/60 text-sm font-medium mb-1">Belum ada LKPD untuk {selectedMapel} - {selectedClass}.</p>
@@ -429,6 +403,7 @@ export default function SchoolProjects() {
                 )}
 
                 {/* LKPD & Projects Grid */}
+                {!loading && selectionStep === 3 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredSchoolProjects.map((item, idx) => (
                         <motion.div
@@ -438,20 +413,25 @@ export default function SchoolProjects() {
                             transition={{ delay: idx * 0.08 }}
                             className="glass-card border-white/5 flex flex-col justify-between group hover:border-blue-500/30 hover:bg-white/5 transition-all relative overflow-hidden text-left"
                         >
-                            {/* Card Image Banner if exists */}
-                            {item.image && !item.image.includes('0001_0.png') && (
-                                <div className="h-44 w-full overflow-hidden relative bg-black/40 border-b border-white/5">
+                            {/* Card Image Banner */}
+                            <div className="h-44 w-full overflow-hidden relative bg-[#070b16] border-b border-white/5 flex items-center justify-center">
+                                {item.image && !item.image.includes('0001_0.png') ? (
                                     <img
                                         src={item.image}
                                         alt={item.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                         onError={(e) => {
-                                            e.target.style.display = 'none';
+                                            e.target.src = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800";
                                         }}
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#070b16] via-transparent to-transparent opacity-80" />
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="w-full h-full flex flex-col items-center justify-center bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors">
+                                        <Code2 size={40} className="text-blue-500/30 mb-2" />
+                                        <span className="text-[10px] font-bold text-blue-400/50 uppercase tracking-widest">No Preview</span>
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#070b16] via-transparent to-transparent opacity-90" />
+                            </div>
 
                             <div className="p-6">
                                 {/* Header Badges */}
@@ -530,6 +510,7 @@ export default function SchoolProjects() {
                         </motion.div>
                     ))}
                 </div>
+                )}
             </div>
 
             {/* Modal Detail & Snippet Drawer */}
