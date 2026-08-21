@@ -5,7 +5,7 @@ import {
     BookOpen, Code2, Network, Cpu, FileText, CheckCircle2,
     Search, Award, ExternalLink, Download, Copy, Check, ChevronRight,
     Terminal, Layers, Monitor, Sparkles, Filter, X, AlertCircle, Paperclip,
-    HardDrive, Video, Play
+    HardDrive, Video, Play, ShieldCheck, Lock
 } from 'lucide-react';
 import { useScrambleText } from '../utils/animations';
 import { db } from '../firebase';
@@ -425,68 +425,105 @@ export default function SchoolProjects() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.08 }}
-                            className="glass-card border-white/5 flex flex-col justify-between group hover:border-blue-500/30 hover:bg-white/5 transition-all relative overflow-hidden text-left"
+                            className="bg-[#070a12]/95 border border-blue-500/20 rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(37,99,235,0.14)] backdrop-blur-2xl font-mono flex flex-col justify-between group hover:border-blue-400/60 hover:shadow-[0_0_55px_rgba(59,130,246,0.3)] transition-all text-left relative"
                         >
-                            {/* Card Image Banner */}
-                            <div className="h-44 w-full overflow-hidden relative bg-[#070b16] border-b border-white/5 flex items-center justify-center">
-                                {item.image && !item.image.includes('0001_0.png') ? (
-                                    <img
-                                        src={item.image}
-                                        alt={item.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        onError={(e) => {
-                                            e.target.src = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800";
-                                        }}
-                                    />
-                                ) : item.fileUrl ? (
-                                    <iframe 
-                                        src={`${item.fileUrl}#view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
-                                        className="w-full h-full border-none pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity"
-                                        title={item.title}
-                                        scrolling="no"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex flex-col items-center justify-center bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors">
-                                        <Code2 size={40} className="text-blue-500/30 mb-2" />
-                                        <span className="text-[10px] font-bold text-blue-400/50 uppercase tracking-widest">No Preview</span>
-                                    </div>
-                                )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#070b16] via-transparent to-transparent opacity-90" />
-                            </div>
-
-                            <div className="p-6">
-                                {/* Header Badges */}
-                                <div className="flex items-center justify-between gap-2 mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
-                                            {item.category || 'School Project'}
-                                        </span>
-                                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
-                                            {getMapelGroup(item.subject, item.title, item.desc)}
-                                        </span>
+                            {/* Terminal Window Header Bar */}
+                            <div className="px-5 py-4 bg-[#0c101c] border-b border-white/5 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-blue-400 font-bold text-sm select-none">&gt;_</span>
+                                    <div>
+                                        <div className="text-xs font-bold tracking-wider text-white/90 uppercase font-mono">
+                                            ARROOS COMMAND LINE
+                                        </div>
+                                        <div className="text-[9px] font-semibold text-blue-400/80 tracking-widest uppercase font-mono">
+                                            {item.subject ? getMapelGroup(item.subject, item.title, item.desc) : 'SCHOOL PROJECT'} — AUTHORIZED ONLY
+                                        </div>
                                     </div>
                                 </div>
-
-                                {/* Title & Subject */}
-                                <h3 className="text-lg font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
-                                    {item.title}
-                                </h3>
-                                <p className="text-[11px] font-semibold text-white/40 mb-3 flex items-center gap-1.5">
-                                    <BookOpen size={13} className="text-blue-400" /> {item.subject || 'TKJ SMKN 3 Jepara'}
-                                </p>
-                                <p className="text-xs text-white/50 line-clamp-2 leading-relaxed mb-4">
-                                    {item.desc}
-                                </p>
+                                {item.grade && (
+                                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                                        {item.grade}
+                                    </span>
+                                )}
                             </div>
 
-                            {/* Actions Bar */}
-                            <div className="p-4 bg-white/2 border-t border-white/5 flex items-center justify-between gap-2">
+                            {/* Terminal Media Viewport (Image / PDF preview if exists) */}
+                            {(item.image && !item.image.includes('0001_0.png')) || item.fileUrl ? (
+                                <div className="h-36 w-full overflow-hidden relative bg-[#04060d] border-b border-white/5 flex items-center justify-center">
+                                    {item.image && !item.image.includes('0001_0.png') ? (
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                            onError={(e) => {
+                                                e.target.src = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800";
+                                            }}
+                                        />
+                                    ) : item.fileUrl ? (
+                                        <iframe 
+                                            src={`${item.fileUrl}#view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
+                                            className="w-full h-full border-none pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity"
+                                            title={item.title}
+                                            scrolling="no"
+                                        />
+                                    ) : null}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#070a12] via-transparent to-transparent opacity-90" />
+                                    <div className="absolute top-2 left-3 text-[9px] font-mono text-white/40 bg-black/60 px-2 py-0.5 rounded border border-white/10">
+                                        MEDIA_VIEWPORT // ACTIVE
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            {/* Console Body */}
+                            <div className="p-5 space-y-3 text-xs leading-relaxed flex-1 flex flex-col justify-between">
+                                {/* Boot / Metadata info */}
+                                <div className="space-y-1.5">
+                                    <div className="text-white/60 text-[11px] font-mono font-semibold">
+                                        ArroOS v2.0.26 [{item.category || 'School Project'}]
+                                    </div>
+                                    <div className="text-white/90 font-bold text-sm font-mono leading-snug group-hover:text-blue-400 transition-colors line-clamp-2">
+                                        {item.title}
+                                    </div>
+                                    <div className="text-white/40 text-[11px] font-mono flex items-center gap-1.5 pt-1">
+                                        <BookOpen size={12} className="text-blue-400 shrink-0" />
+                                        <span className="truncate">{item.subject || 'TKJ SMKN 3 Jepara'}</span>
+                                        {item.date && <span className="text-white/20">• {item.date}</span>}
+                                    </div>
+                                    <p className="text-white/50 text-[11px] font-mono line-clamp-2 leading-relaxed pt-1">
+                                        {item.desc}
+                                    </p>
+                                </div>
+
+                                {/* Divider */}
+                                <div className="border-t border-white/5 my-2" />
+
+                                {/* Interactive Styled Command Box (matching screenshot) */}
+                                <div className="flex items-center gap-2 border border-blue-500/30 bg-white/3 group-hover:border-blue-400/60 rounded-xl px-4 py-2.5 my-1 transition-all font-mono">
+                                    <span className="text-blue-400 font-bold shrink-0">&gt;</span>
+                                    <span className="text-white/40 shrink-0 font-semibold text-[11px]">inspect --id</span>
+                                    <span className="text-white/70 text-[11px] truncate">{item.id || 'lkpd-project'}...</span>
+                                    <span className="inline-block w-1.5 h-3.5 bg-blue-400 shrink-0 shadow-[0_0_6px_rgba(59,130,246,0.9)] animate-pulse ml-auto" />
+                                </div>
+
+                                {/* Main Action Execute Button (matching screenshot) */}
                                 <button
                                     onClick={() => setActiveProject(item)}
-                                    className="flex items-center gap-1.5 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors bg-transparent border-none cursor-pointer"
+                                    className="w-full py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-400/60 text-blue-400 font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 cursor-pointer font-mono shadow-md shadow-blue-500/10"
                                 >
-                                    Lihat Detail & File <ChevronRight size={14} />
+                                    <span className="text-blue-400 font-bold">&gt;_</span> EXECUTE PROJECT DETAILS
                                 </button>
+                            </div>
+
+                            {/* Footer Bar (matching screenshot) */}
+                            <div className="px-5 py-3 bg-[#0c101c]/90 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40 font-mono">
+                                <div className="flex items-center gap-3">
+                                    <span className="flex items-center gap-1.5 font-bold text-blue-400/90">
+                                        <ShieldCheck size={11} className="text-blue-400" /> VERIFIED LKPD
+                                    </span>
+                                    <span className="font-semibold tracking-wider text-white/30 hidden sm:inline">
+                                        USER@ARRO-PC:~$
+                                    </span>
+                                </div>
                                 <div className="flex items-center gap-1.5">
                                     {item.driveUrl && (
                                         <a
@@ -494,10 +531,10 @@ export default function SchoolProjects() {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="p-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 hover:text-blue-300 transition-colors border border-blue-500/20 flex items-center gap-1 text-[10px] font-bold"
-                                            title="Buka Google Drive"
+                                            className="p-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-colors border border-blue-500/20 flex items-center gap-1 text-[10px] font-bold"
+                                            title="Google Drive"
                                         >
-                                            <HardDrive size={13} />
+                                            <HardDrive size={11} />
                                             <span className="hidden sm:inline">Drive</span>
                                         </a>
                                     )}
@@ -507,10 +544,10 @@ export default function SchoolProjects() {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors border border-red-500/20 flex items-center gap-1 text-[10px] font-bold"
-                                            title="Tonton Video Demo"
+                                            className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors border border-red-500/20 flex items-center gap-1 text-[10px] font-bold"
+                                            title="Video Demo"
                                         >
-                                            <Video size={13} />
+                                            <Video size={11} />
                                             <span className="hidden sm:inline">Video</span>
                                         </a>
                                     )}
@@ -520,10 +557,10 @@ export default function SchoolProjects() {
                                                 e.stopPropagation();
                                                 handlePreview(e, item.fileUrl, item.fileName || item.title);
                                             }}
-                                            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border-none cursor-pointer"
+                                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border-none cursor-pointer"
                                             title="Preview PDF"
                                         >
-                                            <ExternalLink size={14} />
+                                            <ExternalLink size={11} />
                                         </button>
                                     )}
                                 </div>
