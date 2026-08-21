@@ -32,55 +32,156 @@ function BackgroundSystem() {
 }
 
 const CustomCursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
+  const dotRef = useRef(null);
+  const outlineRef = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    };
+    let mouseX = -100;
+    let mouseY = -100;
+    let outlineX = -100;
+    let outlineY = -100;
+    let isHovering = false;
+    let isClicking = false;
+    let isVisible = false;
+    let frameId = null;
 
-    const handleMouseOver = (e) => {
-      if (e.target.closest('a, button, [role="button"]')) {
-        setIsHovering(true);
+    const render = () => {
+      // High lerp factor (0.85) for instant zero-delay tracking with smooth subpixel precision
+      const lerp = 0.85;
+      outlineX += (mouseX - outlineX) * lerp;
+      outlineY += (mouseY - outlineY) * lerp;
+
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        dotRef.current.style.opacity = isVisible ? '1' : '0';
+      }
+
+      if (outlineRef.current) {
+        const scale = isClicking ? 0.75 : isHovering ? 1.5 : 1;
+        outlineRef.current.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) scale(${scale})`;
+        outlineRef.current.style.opacity = isVisible ? '1' : '0';
+      }
+
+      const dx = Math.abs(mouseX - outlineX);
+      const dy = Math.abs(mouseY - outlineY);
+
+      if (dx > 0.05 || dy > 0.05) {
+        frameId = requestAnimationFrame(render);
+      } else {
+        // Snap when stationary and pause RAF loop to keep CPU/GPU lightweight
+        outlineX = mouseX;
+        outlineY = mouseY;
+        if (outlineRef.current) {
+          const scale = isClicking ? 0.75 : isHovering ? 1.5 : 1;
+          outlineRef.current.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) scale(${scale})`;
+        }
+        frameId = null;
       }
     };
 
-    const handleMouseOut = (e) => {
-      if (e.target.closest('a, button, [role="button"]')) {
-        setIsHovering(false);
+    const scheduleRender = () => {
+      if (!frameId) {
+        frameId = requestAnimationFrame(render);
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseover', handleMouseOver);
-    window.addEventListener('mouseout', handleMouseOut);
+    const onMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isVisible) isVisible = true;
+      scheduleRender();
+    };
+
+    const onMouseDown = () => {
+      isClicking = true;
+      scheduleRender();
+    };
+
+    const onMouseUp = () => {
+      isClicking = false;
+      scheduleRender();
+    };
+
+    const onMouseOver = (e) => {
+      const target = e.target;
+      if (
+        target &&
+        target.closest &&
+        target.closest('a, button, [role="button"], input, select, textarea, .cursor-pointer, [data-cursor]')
+      ) {
+        if (!isHovering) {
+          isHovering = true;
+          if (outlineRef.current) {
+            outlineRef.current.classList.add('cursor-active');
+          }
+          scheduleRender();
+        }
+      }
+    };
+
+    const onMouseOut = (e) => {
+      const target = e.target;
+      if (
+        target &&
+        target.closest &&
+        target.closest('a, button, [role="button"], input, select, textarea, .cursor-pointer, [data-cursor]')
+      ) {
+        const related = e.relatedTarget;
+        if (
+          !related ||
+          !related.closest ||
+          !related.closest('a, button, [role="button"], input, select, textarea, .cursor-pointer, [data-cursor]')
+        ) {
+          isHovering = false;
+          if (outlineRef.current) {
+            outlineRef.current.classList.remove('cursor-active');
+          }
+          scheduleRender();
+        }
+      }
+    };
+
+    const onMouseLeave = () => {
+      isVisible = false;
+      scheduleRender();
+    };
+
+    const onMouseEnter = () => {
+      isVisible = true;
+      scheduleRender();
+    };
+
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mousedown', onMouseDown, { passive: true });
+    window.addEventListener('mouseup', onMouseUp, { passive: true });
+    window.addEventListener('mouseover', onMouseOver, { passive: true });
+    window.addEventListener('mouseout', onMouseOut, { passive: true });
+    document.addEventListener('mouseleave', onMouseLeave, { passive: true });
+    document.addEventListener('mouseenter', onMouseEnter, { passive: true });
+
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseover', handleMouseOver);
-      window.removeEventListener('mouseout', handleMouseOut);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('mouseover', onMouseOver);
+      window.removeEventListener('mouseout', onMouseOut);
+      document.removeEventListener('mouseleave', onMouseLeave);
+      document.removeEventListener('mouseenter', onMouseEnter);
+      if (frameId) cancelAnimationFrame(frameId);
     };
   }, []);
 
   return (
-    <div className="hidden lg:block">
-      <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-blue-500/50 pointer-events-none z-2000000"
-        animate={{
-          x: position.x - 16,
-          y: position.y - 16,
-          scale: isHovering ? 2.5 : 1,
-          backgroundColor: isHovering ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-        }}
-        transition={{ type: 'spring', damping: 30, stiffness: 200, mass: 0.5 }}
+    <div className="hidden lg:block pointer-events-none z-[2000000] fixed inset-0 overflow-hidden">
+      {/* Outer Glow Ring */}
+      <div
+        ref={outlineRef}
+        className="absolute top-0 left-0 w-8 h-8 -ml-4 -mt-4 rounded-full border border-blue-400/60 bg-blue-500/10 backdrop-blur-[2px] shadow-[0_0_12px_rgba(59,130,246,0.3)] transition-[border-color,background-color,box-shadow] duration-200 ease-out will-change-transform opacity-0 [&.cursor-active]:border-cyan-300 [&.cursor-active]:bg-cyan-400/25 [&.cursor-active]:shadow-[0_0_20px_rgba(34,211,238,0.6)]"
       />
-      <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-blue-500 pointer-events-none z-2000000"
-        animate={{
-          x: position.x - 3,
-          y: position.y - 3,
-        }}
-        transition={{ type: 'spring', damping: 40, stiffness: 400, mass: 0.2 }}
+      {/* Inner Glowing Core Dot */}
+      <div
+        ref={dotRef}
+        className="absolute top-0 left-0 w-2 h-2 -ml-1 -mt-1 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,1),0_0_16px_rgba(59,130,246,0.8)] will-change-transform opacity-0"
       />
     </div>
   );

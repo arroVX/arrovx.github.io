@@ -7,15 +7,17 @@
 @media (min-width: 1024px) {
 
   html,
-  body {
-    cursor: none !important;
-    scroll-behavior: smooth;
-  }
-
+  body,
   a,
   button,
-  [role="button"] {
+  [role="button"],
+  input,
+  select,
+  textarea,
+  .cursor-pointer,
+  [data-cursor] {
     cursor: none !important;
+    scroll-behavior: smooth;
   }
 }
 
