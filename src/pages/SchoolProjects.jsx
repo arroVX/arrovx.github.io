@@ -424,6 +424,13 @@ export default function SchoolProjects() {
                                             e.target.src = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800";
                                         }}
                                     />
+                                ) : item.fileUrl ? (
+                                    <iframe 
+                                        src={`${item.fileUrl}#view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
+                                        className="w-full h-full border-none pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity"
+                                        title={item.title}
+                                        scrolling="no"
+                                    />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors">
                                         <Code2 size={40} className="text-blue-500/30 mb-2" />
