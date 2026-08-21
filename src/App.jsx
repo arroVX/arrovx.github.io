@@ -246,7 +246,7 @@ function Navbar({ setIsCommandOpen }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = ['Beranda', 'Services', 'Work', 'School Work', 'Experience', 'Contact'];
+  const navLinks = ['Beranda', 'Work', 'School Work', 'Contact'];
 
   return (
     <>
@@ -271,8 +271,6 @@ function Navbar({ setIsCommandOpen }) {
                 const linkMap = {
                   'Beranda': '/',
                   'Work': '/projects',
-                  'Services': '/services',
-                  'Experience': '/experience',
                   'School Work': '/school-projects',
                   'Contact': '/contact'
                 };
@@ -352,12 +350,10 @@ function Navbar({ setIsCommandOpen }) {
             className="fixed inset-0 z-[49] bg-[#030303]/95 backdrop-blur-2xl md:hidden flex flex-col pt-32 px-10"
           >
             <div className="flex flex-col gap-6">
-              {['Beranda', 'Services', 'Work', 'School Work', 'Experience', 'About', 'Contact'].map((item, i) => {
+              {['Beranda', 'Work', 'School Work', 'About', 'Contact'].map((item, i) => {
                 const linkMap = {
                   'Beranda': '/',
                   'Work': '/projects',
-                  'Services': '/services',
-                  'Experience': '/experience',
                   'School Work': '/school-projects',
                   'About': '/about',
                   'Contact': '/contact'
