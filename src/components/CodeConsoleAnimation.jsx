@@ -79,77 +79,70 @@ export default function CodeConsoleAnimation() {
             <div className="bg-[#070a12]/95 border border-blue-500/20 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(37,99,235,0.15)] backdrop-blur-2xl transition-all duration-500 hover:border-blue-500/40 font-mono">
 
                 {/* Header Bar */}
-                <div className="px-5 py-4 bg-[#0c101c] border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/5">
                     <div className="flex items-center gap-3">
-                        <span className="text-blue-400 font-bold text-sm select-none">&gt;_</span>
-                        <div>
-                            <div className="text-xs font-bold tracking-wider text-white/90 flex items-center gap-2">
-                                ARROOS COMMAND LINE
-                            </div>
-                            <div className="text-[9px] font-semibold text-blue-400/80 tracking-widest uppercase">
-                                KERNEL 2.0.26-BUILD
-                            </div>
+                        <Terminal size={18} className="text-blue-500 animate-pulse" />
+                        <div className="flex flex-col">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 leading-tight">ArroOS Command Line</span>
+                            <span className="text-[8px] text-blue-500/50 uppercase tracking-widest font-mono">Kernel 2.0.26-build</span>
                         </div>
                     </div>
 
                     <button
-                        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/30 hover:text-white transition-all border-none"
+                        className="w-8 h-8 rounded-full hover:bg-white/5 flex items-center justify-center text-white/30 hover:text-white transition-all"
                         title="Close Console"
                     >
-                        <X size={14} />
+                        <X size={18} />
                     </button>
                 </div>
 
                 {/* Console Body Area */}
-                <div className="p-6 text-left min-h-[260px] max-h-[340px] overflow-y-auto space-y-4 custom-scrollbar text-xs md:text-sm leading-relaxed">
+                <div className="p-6 md:p-8 text-left min-h-[260px] max-h-[340px] overflow-y-auto space-y-3 custom-scrollbar text-xs md:text-sm leading-relaxed">
                     {/* Welcome Banners */}
-                    <div className="space-y-1">
-                        <div className="text-white/60 font-semibold">
-                            ArroOS v2.0.26 [Authorized Access Only]
-                        </div>
-                        <div className="text-white/40">
-                            Type "help" for a list of available commands.
+                    <div className="flex gap-3 text-white/40 mb-6">
+                        <div className="flex-1 space-y-2">
+                            <p className="leading-relaxed whitespace-pre-wrap font-bold text-white/80">ArroOS v2.0.26 [Authorized Access Only]</p>
+                            <p className="leading-relaxed whitespace-pre-wrap">Type "help" for a list of available commands.</p>
                         </div>
                     </div>
 
                     {/* Historical Command Logs */}
                     {history.map((item, idx) => (
-                        <div key={idx} className="space-y-1.5">
-                            <div className="flex items-center gap-2 text-white/90 font-semibold">
-                                <span className="text-blue-400 font-bold">&gt;</span>
-                                <span>{item.cmd}</span>
+                        <div key={idx} className="space-y-1">
+                            <div className="flex gap-3 text-white">
+                                <span className="text-blue-500 font-bold opacity-80">❯</span>
+                                <div className="flex-1 font-semibold">{item.cmd}</div>
                             </div>
-                            <div className="pl-4 text-blue-300/80 whitespace-pre-wrap">
-                                {item.output}
+                            <div className="flex gap-3 text-blue-400 font-medium">
+                                <span className="text-blue-500 font-bold opacity-0">❯</span>
+                                <div className="flex-1 whitespace-pre-wrap">{item.output}</div>
                             </div>
                         </div>
                     ))}
 
                     {/* Current Typing Command Prompt */}
-                    <div className="flex items-center gap-2 pt-1">
-                        <span className="text-blue-400 font-bold">&gt;</span>
-                        <span className="text-white font-medium">{currentInput}</span>
-                        <motion.span
-                            animate={{ opacity: [1, 0, 1] }}
-                            transition={{ repeat: Infinity, duration: 0.6 }}
-                            className="inline-block w-2 h-4 bg-blue-400 ml-0.5 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
-                        />
+                    <div className="flex gap-3 text-white pt-2">
+                        <span className="text-blue-500 font-bold italic animate-pulse">❯</span>
+                        <div className="flex-1 flex items-center font-medium">
+                            {currentInput}
+                            <motion.span
+                                animate={{ opacity: [1, 0, 1] }}
+                                transition={{ repeat: Infinity, duration: 0.6 }}
+                                className="inline-block w-2 h-4 bg-blue-400 ml-1.5 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 {/* Footer Bar */}
-                <div className="px-5 py-3 bg-[#0c101c]/90 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40">
-                    <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5 font-bold text-blue-400/90">
-                            <Zap size={12} className="text-blue-400" /> LATENCY: 4MS
-                        </span>
-                        <span className="font-semibold tracking-wider text-white/30 hidden sm:inline">
-                            USER@ARRO-PC:~$
-                        </span>
+                <div className="px-6 py-3 border-t border-white/5 bg-black/60 flex items-center justify-between text-[9px] font-bold text-white/20 uppercase tracking-widest">
+                    <div className="flex gap-4">
+                        <span className="flex items-center gap-1.5"><Zap size={10} className="text-blue-500" /> Latency: 4ms</span>
+                        <span className="hidden sm:inline">User@Arro-PC:~$</span>
                     </div>
 
-                    <div className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/5 text-[9px] font-bold text-white/40 tracking-wider flex items-center gap-1.5">
-                        <Command size={10} /> INTERACTIVE TERMINAL
+                    <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-md">
+                        <Command size={10} /> <span>Interactive Terminal</span>
                     </div>
                 </div>
 
