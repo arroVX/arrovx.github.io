@@ -352,7 +352,7 @@ export default function SchoolProjects() {
 
                 {!loading && firebaseSchoolProjects.length > 0 && selectionStep === 3 && (
                     <div className="mb-10 flex flex-col sm:flex-row items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10 gap-4">
-                        <button onClick={() => setSelectionStep(1)} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-xs font-bold rounded-xl transition-all border-none cursor-pointer flex items-center gap-2">
+                        <button onClick={() => setSelectionStep(2)} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-xs font-bold rounded-xl transition-all border-none cursor-pointer flex items-center gap-2">
                             <ChevronRight size={16} className="rotate-180" /> Kembali
                         </button>
                         <div className="flex items-center gap-3 text-right sm:text-left">
