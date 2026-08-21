@@ -304,23 +304,18 @@ export default function SchoolProjects() {
                         <h2 className="text-2xl font-bold text-center mb-8">Pilih Kelas</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                             {classOptions.map(cls => (
-                                <button key={cls} onClick={() => { setSelectedClass(cls); setSelectionStep(2); }} className="w-full bg-[#050811] border border-white/10 hover:border-blue-500/50 rounded-2xl overflow-hidden transition-all group cursor-pointer text-left flex flex-col shadow-lg shadow-black/50">
-                                    <div className="px-4 py-3 bg-black/60 border-b border-white/5 flex items-center gap-2">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
-                                        <span className="ml-2 text-[10px] font-mono text-white/30 group-hover:text-blue-400/70 transition-colors">bash - class_select</span>
-                                    </div>
-                                    <div className="p-6 flex flex-col items-start justify-center gap-4 relative min-h-[140px]">
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-blue-500 font-mono text-xl font-black">&gt;_</span>
-                                            <h3 className="text-2xl font-mono font-bold text-white group-hover:text-blue-400 transition-colors">{cls}</h3>
+                                <button key={cls} onClick={() => { setSelectedClass(cls); setSelectionStep(2); }} className="w-full glass-card border-white/5 hover:border-blue-500/30 hover:bg-white/5 rounded-2xl p-6 transition-all group cursor-pointer text-left flex items-center justify-between shadow-lg relative overflow-hidden min-h-[120px]">
+                                    <div className="flex items-center gap-4 relative z-10">
+                                        <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-500/20 transition-all border border-blue-500/20">
+                                            <Layers size={24} className="text-blue-400" />
                                         </div>
-                                        <div className="text-[10px] font-mono text-white/40 group-hover:text-emerald-400/80 transition-colors flex items-center gap-2 uppercase tracking-widest mt-auto">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/0 group-hover:bg-emerald-500 animate-pulse transition-all"></span>
-                                            Execute selection
+                                        <div>
+                                            <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">{cls}</h3>
+                                            <p className="text-xs text-white/50 mt-1">Pilih kelas untuk melihat mapel</p>
                                         </div>
                                     </div>
+                                    <ChevronRight size={20} className="text-white/20 group-hover:text-blue-400 group-hover:translate-x-1 transition-all relative z-10" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                 </button>
                             ))}
                         </div>
@@ -336,23 +331,18 @@ export default function SchoolProjects() {
                             <h2 className="text-2xl font-bold text-center mb-8">Pilih Mata Pelajaran ({selectedClass})</h2>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {mapelOptions.map(mapel => (
-                                    <button key={mapel} onClick={() => { setSelectedMapel(mapel); setSelectionStep(3); }} className="w-full bg-[#050811] border border-white/10 hover:border-blue-500/50 rounded-2xl overflow-hidden transition-all group cursor-pointer text-left flex flex-col shadow-lg shadow-black/50">
-                                        <div className="px-4 py-3 bg-black/60 border-b border-white/5 flex items-center gap-2">
-                                            <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
-                                            <span className="ml-2 text-[10px] font-mono text-white/30 group-hover:text-blue-400/70 transition-colors">bash - mapel_select</span>
-                                        </div>
-                                        <div className="p-6 flex flex-col items-start justify-center gap-4 relative min-h-[140px]">
-                                            <div className="flex items-center gap-3">
-                                                <span className="text-blue-500 font-mono text-xl font-black">&gt;_</span>
-                                                <h3 className="text-2xl font-mono font-bold text-white group-hover:text-blue-400 transition-colors">{mapel}</h3>
+                                    <button key={mapel} onClick={() => { setSelectedMapel(mapel); setSelectionStep(3); }} className="w-full glass-card border-white/5 hover:border-blue-500/30 hover:bg-white/5 rounded-2xl p-6 transition-all group cursor-pointer text-left flex items-center justify-between shadow-lg relative overflow-hidden min-h-[120px]">
+                                        <div className="flex items-center gap-4 relative z-10">
+                                            <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-500/20 transition-all border border-blue-500/20">
+                                                <BookOpen size={24} className="text-blue-400" />
                                             </div>
-                                            <div className="text-[10px] font-mono text-white/40 group-hover:text-emerald-400/80 transition-colors flex items-center gap-2 uppercase tracking-widest mt-auto">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/0 group-hover:bg-emerald-500 animate-pulse transition-all"></span>
-                                                Execute selection
+                                            <div>
+                                                <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">{mapel}</h3>
+                                                <p className="text-xs text-white/50 mt-1">Lihat proyek mapel ini</p>
                                             </div>
                                         </div>
+                                        <ChevronRight size={20} className="text-white/20 group-hover:text-blue-400 group-hover:translate-x-1 transition-all relative z-10" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                     </button>
                                 ))}
                             </div>
