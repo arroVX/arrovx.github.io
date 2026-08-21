@@ -233,21 +233,7 @@ export default function SchoolProjects() {
 
     const handlePreview = (e, fileUrl, title) => {
         e.preventDefault();
-        const win = window.open();
-        if (win) {
-            win.document.write(`
-                <html>
-                    <head>
-                        <title>${title}</title>
-                        <style>body{margin:0;overflow:hidden;}</style>
-                    </head>
-                    <body>
-                        <iframe src="${fileUrl}" width="100%" height="100%" style="border:none;"></iframe>
-                    </body>
-                </html>
-            `);
-            win.document.close();
-        }
+        window.open(fileUrl, '_blank');
     };
 
     useEffect(() => {
