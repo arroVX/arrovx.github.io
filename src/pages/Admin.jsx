@@ -559,9 +559,9 @@ export default function Admin() {
             </div>
         );
     }
-    const uniqueCategories = [...new Set(projects.map(p => p.category).filter(Boolean))];
-    const uniqueClasses = [...new Set(schoolProjects.map(p => p.classLevel).filter(Boolean))];
-    const uniqueSubjects = [...new Set(schoolProjects.map(p => p.subject).filter(Boolean))];
+    const uniqueCategories = [...new Set(projects.map(p => p.category?.trim()).filter(Boolean))];
+    const uniqueClasses = [...new Set(schoolProjects.map(p => p.classLevel?.trim()).filter(Boolean))];
+    const uniqueSubjects = [...new Set(schoolProjects.map(p => p.subject?.trim()).filter(Boolean))];
 
     let currentList = activeTab === 'projects' ? projects : schoolProjects;
 
