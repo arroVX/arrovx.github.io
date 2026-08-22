@@ -3,22 +3,8 @@
 
 @config "../tailwind.config.js";
 
-/* Custom Cursor - Hide default only on desktop */
-@media (min-width: 1024px) {
-
-  html,
-  body,
-  a,
-  button,
-  [role="button"],
-  input,
-  select,
-  textarea,
-  .cursor-pointer,
-  [data-cursor] {
-    cursor: none !important;
-    scroll-behavior: smooth;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 :root {
