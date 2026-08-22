@@ -6,7 +6,8 @@ import {
     FolderKanban, BookOpen, Layers, Check, ExternalLink,
     AlertCircle, Sparkles, RefreshCw, LogOut, Code2, UploadCloud, Loader2,
     Upload, FileText, Image as ImageIcon, File, Paperclip, CheckCircle,
-    HardDrive, Video, Play, Link as LinkIcon, MessageSquare, Mail, User, Clock, Inbox, Send, Eye
+    HardDrive, Video, Play, Link as LinkIcon, MessageSquare, Mail, User, Clock, Inbox, Send, Eye,
+    Search, Filter
 } from 'lucide-react';
 import { db } from '../firebase';
 import {
@@ -66,6 +67,11 @@ export default function Admin() {
     const [activeTab, setActiveTab] = useState('projects');
     const [loading, setLoading] = useState(true);
     const [firebaseErrorMsg, setFirebaseErrorMsg] = useState('');
+    // Filter States
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filterClass, setFilterClass] = useState('');
+    const [filterSubject, setFilterSubject] = useState('');
+    const [filterCategory, setFilterCategory] = useState('');
 
     // Form Modal States
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -542,11 +548,6 @@ export default function Admin() {
                         </div>
 
                     </div>
-
-                    {/* Hint below */}
-                    <div className="mt-4 text-center text-[11px] text-white/20 font-mono">
-                        Default PIN: <span className="text-blue-400/60">arro2025</span>
-                    </div>
                 </motion.div>
 
                 <Toast
@@ -558,9 +559,36 @@ export default function Admin() {
             </div>
         );
     }
+    const uniqueCategories = [...new Set(projects.map(p => p.category).filter(Boolean))];
+    const uniqueClasses = [...new Set(schoolProjects.map(p => p.classLevel).filter(Boolean))];
+    const uniqueSubjects = [...new Set(schoolProjects.map(p => p.subject).filter(Boolean))];
 
+    let currentList = activeTab === 'projects' ? projects : schoolProjects;
 
-    const currentList = activeTab === 'projects' ? projects : schoolProjects;
+    if (activeTab === 'projects') {
+        if (searchQuery) {
+            currentList = currentList.filter(p => 
+                p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                p.desc?.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        if (filterCategory) {
+            currentList = currentList.filter(p => p.category === filterCategory);
+        }
+    } else if (activeTab === 'school') {
+        if (searchQuery) {
+            currentList = currentList.filter(p => 
+                p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                p.desc?.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        if (filterClass) {
+            currentList = currentList.filter(p => p.classLevel === filterClass);
+        }
+        if (filterSubject) {
+            currentList = currentList.filter(p => p.subject === filterSubject);
+        }
+    }
 
     return (
         <motion.div
@@ -646,6 +674,95 @@ export default function Admin() {
                     <MessageSquare size={16} /> Pesan Masuk / Get In Touch ({messages.length})
                 </button>
             </div>
+
+            {/* Filter Bar */}
+            {activeTab !== 'messages' && (
+                <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col md:flex-row items-center gap-3 mb-8"
+                >
+                    <div className="relative w-full md:flex-1">
+                        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+                        <input
+                            type="text"
+                            placeholder={`Cari nama ${activeTab === 'projects' ? 'proyek' : 'LKPD'}...`}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 focus:border-blue-500/50 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-white/30 focus:outline-none transition-all"
+                        />
+                    </div>
+                    
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <div className="flex items-center gap-2 px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl w-full md:w-auto">
+                            <Filter size={14} className="text-white/40 shrink-0" />
+                            
+                            {activeTab === 'projects' ? (
+                                <select
+                                    value={filterCategory}
+                                    onChange={(e) => setFilterCategory(e.target.value)}
+                                    className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pr-4 w-full"
+                                >
+                                    <option value="" className="bg-[#0c101c] text-white">Semua Kategori</option>
+                                    {uniqueCategories.map((cat, i) => (
+                                        <option key={i} value={cat} className="bg-[#0c101c] text-white">{cat}</option>
+                                    ))}
+                                </select>
+                            ) : (
+                                <div className="flex items-center gap-2 w-full">
+                                    <select
+                                        value={filterClass}
+                                        onChange={(e) => setFilterClass(e.target.value)}
+                                        className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pr-2 border-r border-white/10 flex-1"
+                                    >
+                                        <option value="" className="bg-[#0c101c] text-white">Semua Kelas</option>
+                                        {uniqueClasses.map((cls, i) => (
+                                            <option key={i} value={cls} className="bg-[#0c101c] text-white">{cls}</option>
+                                        ))}
+                                    </select>
+                                    
+                                    <select
+                                        value={filterSubject}
+                                        onChange={(e) => setFilterSubject(e.target.value)}
+                                        className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pl-2 flex-1"
+                                    >
+                                        <option value="" className="bg-[#0c101c] text-white">Semua Mapel</option>
+                                        {uniqueSubjects.map((sub, i) => (
+                                            <option key={i} value={sub} className="bg-[#0c101c] text-white">{sub}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                        </div>
+                        
+                        {(searchQuery || filterClass || filterSubject || filterCategory) && (
+                            <button
+                                onClick={() => {
+                                    setSearchQuery('');
+                                    setFilterClass('');
+                                    setFilterSubject('');
+                                    setFilterCategory('');
+                                }}
+                                className="p-2.5 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                                title="Reset Filters"
+                            >
+                                <X size={14} />
+                            </button>
+                        )}
+                    </div>
+                </motion.div>
+            )}
+
+            {/* Empty State for Filter */}
+            {activeTab !== 'messages' && currentList.length === 0 && !loading && (searchQuery || filterClass || filterSubject || filterCategory) && (
+                <div className="glass-card p-12 text-center border-white/10 mb-8 max-w-xl mx-auto">
+                    <Search size={40} className="mx-auto text-blue-400/50 mb-3" />
+                    <h3 className="text-lg font-bold mb-2">Tidak ada data ditemukan</h3>
+                    <p className="text-xs text-white/50 mb-0 leading-relaxed">
+                        Coba ubah kata kunci atau hapus beberapa filter untuk melihat lebih banyak data.
+                    </p>
+                </div>
+            )}
 
             {/* Empty State Banner with Seed Button */}
             {activeTab === 'projects' && projects.length === 0 && !loading && (
