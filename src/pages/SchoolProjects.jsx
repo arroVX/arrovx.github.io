@@ -202,7 +202,8 @@ export default function SchoolProjects() {
     const mapelOptions = [
         "ASJ", 
         "TJKN", 
-        "KJ"
+        "KJ",
+        "English"
     ];
 
     const getMapelGroup = (subject = '', title = '', desc = '') => {
@@ -210,6 +211,7 @@ export default function SchoolProjects() {
         if (text.includes('administrasi sistem jaringan') || text.includes('asj')) return 'ASJ';
         if (text.includes('teknik jaringan kabel') || text.includes('nirkabel') || text.includes('tjkn')) return 'TJKN';
         if (text.includes('keamanan jaringan') || text.includes('kj')) return 'KJ';
+        if (text.includes('english') || text.includes('bahasa inggris') || text.includes('inggris')) return 'English';
         return 'Lainnya';
     };
 
