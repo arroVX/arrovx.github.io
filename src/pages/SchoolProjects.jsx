@@ -203,7 +203,8 @@ export default function SchoolProjects() {
         "ASJ", 
         "TJKN", 
         "KJ",
-        "English"
+        "English",
+        "Bahasa Jepang"
     ];
 
     const getMapelGroup = (subject = '', title = '', desc = '') => {
@@ -212,6 +213,7 @@ export default function SchoolProjects() {
         if (text.includes('teknik jaringan kabel') || text.includes('nirkabel') || text.includes('tjkn')) return 'TJKN';
         if (text.includes('keamanan jaringan') || text.includes('kj')) return 'KJ';
         if (text.includes('english') || text.includes('bahasa inggris') || text.includes('inggris')) return 'English';
+        if (text.includes('jepang') || text.includes('bahasa jepang') || text.includes('jepan')) return 'Bahasa Jepang';
         return 'Lainnya';
     };
 
