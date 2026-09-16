@@ -4,10 +4,11 @@ import { Terminal, X, ChevronRight, Zap, Command, Github, Instagram, Linkedin, M
 import { useNavigate } from 'react-router-dom';
 
 const COMMANDS = {
-    'help': 'Available commands: help, about, projects, school, admin, services, experience, ping, clear, whoami, skills, achievements, social, contact, music, version',
+    'help': 'Available commands: help, about, projects, school, achievements, awards, admin, services, experience, ping, clear, whoami, skills, social, contact, music, version',
     'about': 'Navigating to About page...',
     'projects': 'Navigating to Projects page...',
     'school': 'Navigating to School Projects & LKPD page...',
+    'achievements': 'Navigating to Achievements & Certificates page...',
     'admin': 'Authenticating & Navigating to Admin Dashboard...',
     'services': 'Navigating to Services page...',
     'experience': 'Navigating to Experience section...',
@@ -15,7 +16,7 @@ const COMMANDS = {
     'ping': 'Pong! (64 bytes from arrovx.github.io: icmp_seq=1 ttl=64 time=0.042 ms)',
     'whoami': 'Arroudhil Anfi - TKJ Student / Visionary Designer / Gold Medalist in Informatics.',
     'skills': 'Primary: Networking (TKJ), Photoshop, Premiere Pro, React, Tailwind CSS, C++. Hobbies: Math Rock Guitar, Photography.',
-    'achievements': '2025: Medali Emas FSBN & ONSP (Informatika). 2022: Medali Perak POSN (Informatika) & Excellent Award Robotic.',
+    'awards': '2025: Medali Emas FSBN & ONSP (Informatika). 2022: Medali Perak POSN (Informatika) & Excellent Award Robotic.',
     'social': 'GitHub: github.com/arroVX | Instagram: @jingroo_ | Discord: arro.nx',
     'github': 'Opening GitHub profile in new tab...',
     'instagram': 'Opening Instagram profile in new tab...',
@@ -70,6 +71,7 @@ export default function CommandCenter({ isOpen, onClose }) {
                     'about': () => { navigate('/about'); onClose(); },
                     'projects': () => { navigate('/projects'); onClose(); },
                     'school': () => { navigate('/school-projects'); onClose(); },
+                    'achievements': () => { navigate('/achievements'); onClose(); },
                     'admin': () => { navigate('/admin'); onClose(); },
                     'services': () => { navigate('/#services'); onClose(); }, // scroll indicator
                     'experience': () => { navigate('/#experience'); onClose(); },

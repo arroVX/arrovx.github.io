@@ -818,7 +818,10 @@ export default function Home() {
             <section id="experience" className="py-24 px-6 max-w-4xl mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl font-bold mb-4">Milestones & Awards</h2>
-                    <p className="text-white/40">Proof of dedication and technical excellence.</p>
+                    <p className="text-white/40 mb-8">Proof of dedication and technical excellence.</p>
+                    <Link to="/achievements" className="group inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-all text-xs font-bold uppercase tracking-widest">
+                        View All Achievements <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={16} />
+                    </Link>
                 </div>
 
                 <div className="space-y-6">

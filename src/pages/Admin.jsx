@@ -7,7 +7,7 @@ import {
     AlertCircle, Sparkles, RefreshCw, LogOut, Code2, UploadCloud, Loader2,
     Upload, FileText, Image as ImageIcon, File, Paperclip, CheckCircle,
     HardDrive, Video, Play, Link as LinkIcon, MessageSquare, Mail, User, Clock, Inbox, Send, Eye,
-    Search, Filter
+    Search, Filter, Trophy, Award
 } from 'lucide-react';
 import { db } from '../firebase';
 import {
@@ -51,6 +51,62 @@ const defaultProjectsSeed = [
     }
 ];
 
+// Default achievements seed (4 data awal)
+const defaultAchievementsSeed = [
+    {
+        title: "Medali Emas FSBN 2025",
+        category: "Nasional",
+        year: "2025",
+        organizer: "Festival Sains & Budaya Nasional",
+        rank: "Juara 1 / Gold Medal",
+        desc: "Bidang Informatika - Tingkat Nasional.",
+        image: "",
+        fileUrl: "/certificates/FSBN_2025.pdf",
+        fileName: "FSBN_2025.pdf",
+        icon: "trophy",
+        color: "bg-yellow-500/10"
+    },
+    {
+        title: "Medali Emas ONSP 2025",
+        category: "Akademik",
+        year: "2025",
+        organizer: "Olimpiade Nasional Sains Prestasi",
+        rank: "Gold Medal",
+        desc: "Bidang Informatika - Prestasi Akademik.",
+        image: "",
+        fileUrl: "/certificates/ONSP_2025.pdf",
+        fileName: "ONSP_2025.pdf",
+        icon: "sparkles",
+        color: "bg-blue-500/10"
+    },
+    {
+        title: "Excellent Award Robotic",
+        category: "Robotik",
+        year: "2022",
+        organizer: "Maze Solving Competition",
+        rank: "Excellent Award",
+        desc: "Creative Coding - Maze Solving Competition 2022.",
+        image: "",
+        fileUrl: "",
+        fileName: "",
+        icon: "terminal",
+        color: "bg-green-500/10"
+    },
+    {
+        title: "Medali Perak POSN 2022",
+        category: "Olimpiade",
+        year: "2022",
+        organizer: "Olimpiade Sains Nasional",
+        rank: "Silver Medal",
+        desc: "Bidang Informatika - Olimpiade Sains Nasional 2022.",
+        image: "",
+        fileUrl: "",
+        fileName: "",
+        icon: "award",
+        color: "bg-slate-500/10"
+    }
+];
+
 export default function Admin() {
     // Auth State
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -62,6 +118,7 @@ export default function Admin() {
     // Data States from Firebase
     const [projects, setProjects] = useState([]);
     const [schoolProjects, setSchoolProjects] = useState([]);
+    const [achievements, setAchievements] = useState([]);
     const [messages, setMessages] = useState([]);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [activeTab, setActiveTab] = useState('projects');
@@ -90,6 +147,10 @@ export default function Admin() {
         title: '',
         category: 'Graphic Design',
         classLevel: '',
+        year: new Date().getFullYear().toString(),
+        organizer: '',
+        rank: '',
+        icon: 'trophy',
         image: 'project-assets/images/0001_0.png',
         desc: '',
         longDesc: '',
@@ -166,6 +227,14 @@ export default function Admin() {
             setFirebaseErrorMsg(error.message);
         });
 
+        // Listen for achievements
+        const unsubAchievements = onSnapshot(collection(db, "achievements"), (snapshot) => {
+            const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setAchievements(list);
+        }, (error) => {
+            console.error("Error fetching achievements:", error);
+        });
+
         // Listen for incoming contact messages
         const unsubContacts = onSnapshot(collection(db, "contacts"), (snapshot) => {
             const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -185,6 +254,7 @@ export default function Admin() {
         return () => {
             unsubProjects();
             unsubSchool();
+            unsubAchievements();
             unsubContacts();
         };
     }, [isAuthenticated]);
@@ -306,9 +376,13 @@ export default function Admin() {
             setEditingItem(item);
             setFormData({
                 title: item.title || '',
-                category: item.category || (activeTab === 'projects' ? 'Graphic Design' : 'LKPD & Jaringan'),
+                category: item.category || (activeTab === 'projects' ? 'Graphic Design' : activeTab === 'achievements' ? 'Nasional' : 'LKPD & Jaringan'),
                 classLevel: item.classLevel || '',
-                image: item.image || 'project-assets/images/0001_0.png',
+                year: item.year || new Date().getFullYear().toString(),
+                organizer: item.organizer || '',
+                rank: item.rank || '',
+                icon: item.icon || 'trophy',
+                image: item.image || (activeTab === 'achievements' ? '' : 'project-assets/images/0001_0.png'),
                 desc: item.desc || '',
                 longDesc: item.longDesc || '',
                 tech: Array.isArray(item.tech) ? item.tech.join(', ') : item.tech || '',
@@ -326,9 +400,13 @@ export default function Admin() {
             setEditingItem(null);
             setFormData({
                 title: '',
-                category: activeTab === 'projects' ? 'Graphic Design' : 'LKPD & Jaringan',
+                category: activeTab === 'projects' ? 'Graphic Design' : activeTab === 'achievements' ? 'Nasional' : 'LKPD & Jaringan',
                 classLevel: '',
-                image: 'project-assets/images/0001_0.png',
+                year: new Date().getFullYear().toString(),
+                organizer: '',
+                rank: '',
+                icon: 'trophy',
+                image: activeTab === 'achievements' ? '' : 'project-assets/images/0001_0.png',
                 desc: '',
                 longDesc: '',
                 tech: 'Photoshop, React, Tailwind',
@@ -359,7 +437,35 @@ export default function Admin() {
         setIsSubmitting(true);
 
         try {
-            const collectionName = activeTab === 'projects' ? 'projects' : 'school_projects';
+            const collectionName = activeTab === 'projects' ? 'projects' : activeTab === 'achievements' ? 'achievements' : 'school_projects';
+
+            if (activeTab === 'achievements') {
+                const payload = {
+                    title: formData.title,
+                    category: formData.category || 'Nasional',
+                    year: formData.year || new Date().getFullYear().toString(),
+                    organizer: formData.organizer || '',
+                    rank: formData.rank || '',
+                    desc: formData.desc,
+                    image: formData.image || '',
+                    fileUrl: formData.fileUrl || '',
+                    fileName: formData.fileName || '',
+                    icon: formData.icon || 'trophy',
+                    color: 'bg-yellow-500/10',
+                    updatedAt: new Date().toISOString()
+                };
+                if (editingItem) {
+                    await updateDoc(doc(db, collectionName, editingItem.id), payload);
+                    setToast({ isOpen: true, message: "Achievement berhasil diperbarui di Firebase!", type: 'success' });
+                } else {
+                    payload.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, collectionName), payload);
+                    setToast({ isOpen: true, message: "Achievement baru berhasil ditambahkan ke Firebase!", type: 'success' });
+                }
+                setIsSubmitting(false);
+                setIsModalOpen(false);
+                return;
+            }
 
             const payload = {
                 title: formData.title,
@@ -416,7 +522,7 @@ export default function Admin() {
         setDeleteConfirm({ isOpen: false, id: null, title: '' });
 
         try {
-            const collectionName = activeTab === 'projects' ? 'projects' : (activeTab === 'school' ? 'school_projects' : 'contacts');
+            const collectionName = activeTab === 'projects' ? 'projects' : (activeTab === 'achievements' ? 'achievements' : (activeTab === 'school' ? 'school_projects' : 'contacts'));
             await deleteDoc(doc(db, collectionName, id));
             setToast({ isOpen: true, message: `"${title || 'Pesan'}" berhasil dihapus.`, type: 'success' });
         } catch (error) {
@@ -440,6 +546,24 @@ export default function Admin() {
         } catch (err) {
             setIsSubmitting(false);
             setToast({ isOpen: true, message: "Gagal me-seed: " + err.message, type: 'error' });
+        }
+    };
+
+    // Seed Achievements to Firebase
+    const handleSeedAchievements = async () => {
+        setIsSubmitting(true);
+        try {
+            for (const item of defaultAchievementsSeed) {
+                await addDoc(collection(db, 'achievements'), {
+                    ...item,
+                    createdAt: new Date().toISOString()
+                });
+            }
+            setIsSubmitting(false);
+            setToast({ isOpen: true, message: "4 achievements bawaan berhasil di-seed ke Firebase!", type: 'success' });
+        } catch (err) {
+            setIsSubmitting(false);
+            setToast({ isOpen: true, message: "Gagal me-seed achievements: " + err.message, type: 'error' });
         }
     };
 
@@ -562,14 +686,27 @@ export default function Admin() {
     const uniqueCategories = [...new Set(projects.map(p => p.category?.trim()).filter(Boolean))];
     const uniqueClasses = [...new Set(schoolProjects.map(p => p.classLevel?.trim()).filter(Boolean))];
     const uniqueSubjects = [...new Set(schoolProjects.map(p => p.subject?.trim()).filter(Boolean))];
+    const uniqueAchCategories = [...new Set(achievements.map(p => p.category?.trim()).filter(Boolean))];
 
-    let currentList = activeTab === 'projects' ? projects : schoolProjects;
+    let currentList = activeTab === 'projects' ? projects : activeTab === 'achievements' ? achievements : schoolProjects;
 
     if (activeTab === 'projects') {
         if (searchQuery) {
             currentList = currentList.filter(p => 
                 p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                 p.desc?.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        if (filterCategory) {
+            currentList = currentList.filter(p => p.category === filterCategory);
+        }
+    } else if (activeTab === 'achievements') {
+        if (searchQuery) {
+            currentList = currentList.filter(p =>
+                p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.desc?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.organizer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.rank?.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
         if (filterCategory) {
@@ -603,7 +740,7 @@ export default function Admin() {
                         <ShieldCheck size={14} /> FIREBASE ADMIN DASHBOARD — PROJECT: rojing-54fcd
                     </div>
                     <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-                        Manajemen Proyek & LKPD
+                        Manajemen Proyek, LKPD & Achievements
                     </h1>
                 </div>
 
@@ -613,7 +750,7 @@ export default function Admin() {
                             onClick={() => handleOpenModal()}
                             className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 border-none cursor-pointer flex-1 md:flex-initial"
                         >
-                            <Plus size={16} /> Tambah {activeTab === 'projects' ? 'Proyek' : 'LKPD'}
+                            <Plus size={16} /> Tambah {activeTab === 'projects' ? 'Proyek' : activeTab === 'achievements' ? 'Achievement' : 'LKPD'}
                         </button>
                     )}
                     <button
@@ -665,6 +802,15 @@ export default function Admin() {
                     <BookOpen size={16} /> School Project ({schoolProjects.length})
                 </button>
                 <button
+                    onClick={() => setActiveTab('achievements')}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'achievements'
+                            ? 'bg-yellow-600 text-white shadow-lg shadow-yellow-500/30'
+                            : 'bg-white/5 text-white/40 hover:text-white'
+                        }`}
+                >
+                    <Trophy size={16} /> Achievements ({achievements.length})
+                </button>
+                <button
                     onClick={() => setActiveTab('messages')}
                     className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'messages'
                             ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
@@ -686,7 +832,7 @@ export default function Admin() {
                         <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
                         <input
                             type="text"
-                            placeholder={`Cari nama ${activeTab === 'projects' ? 'proyek' : 'LKPD'}...`}
+                            placeholder={`Cari nama ${activeTab === 'projects' ? 'proyek' : activeTab === 'achievements' ? 'achievement' : 'LKPD'}...`}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 focus:border-blue-500/50 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-white/30 focus:outline-none transition-all"
@@ -697,14 +843,14 @@ export default function Admin() {
                         <div className="flex items-center gap-2 px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl w-full md:w-auto">
                             <Filter size={14} className="text-white/40 shrink-0" />
                             
-                            {activeTab === 'projects' ? (
+                            {activeTab === 'projects' || activeTab === 'achievements' ? (
                                 <select
                                     value={filterCategory}
                                     onChange={(e) => setFilterCategory(e.target.value)}
                                     className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pr-4 w-full"
                                 >
                                     <option value="" className="bg-[#0c101c] text-white">Semua Kategori</option>
-                                    {uniqueCategories.map((cat, i) => (
+                                    {(activeTab === 'projects' ? uniqueCategories : uniqueAchCategories).map((cat, i) => (
                                         <option key={i} value={cat} className="bg-[#0c101c] text-white">{cat}</option>
                                     ))}
                                 </select>
@@ -783,6 +929,25 @@ export default function Admin() {
                 </div>
             )}
 
+            {/* Empty State Banner for Achievements */}
+            {activeTab === 'achievements' && achievements.length === 0 && !loading && (
+                <div className="glass-card p-8 text-center border-white/10 mb-8 max-w-xl mx-auto">
+                    <Trophy size={40} className="mx-auto text-yellow-400 mb-3" />
+                    <h3 className="text-lg font-bold mb-2">Belum Ada Achievement di Firebase</h3>
+                    <p className="text-xs text-white/50 mb-6 leading-relaxed">
+                        Seed 4 data bawaan (FSBN 2025, ONSP 2025, Robotic 2022, POSN 2022) ke koleksi <b>achievements</b>.
+                    </p>
+                    <button
+                        onClick={handleSeedAchievements}
+                        disabled={isSubmitting}
+                        className="px-6 py-2.5 bg-yellow-600 hover:bg-yellow-500 text-white font-bold text-xs rounded-xl transition-all border-none cursor-pointer inline-flex items-center gap-2 shadow-lg shadow-yellow-500/20"
+                    >
+                        {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                        Seed 4 Achievements ke Firebase
+                    </button>
+                </div>
+            )}
+
             {/* Loading State */}
             {loading && (
                 <TerminalLoading message="Menghubungkan ke ArroOS Firestore kernel..." />
@@ -811,6 +976,13 @@ export default function Admin() {
                                 <h3 className="text-lg font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
                                     {item.title}
                                 </h3>
+
+                                {(item.organizer || item.rank || item.year) && (
+                                    <div className="text-xs text-white/40 mb-3 font-medium space-y-1">
+                                        {item.organizer && <p className="flex items-center gap-1.5"><Award size={12} className="text-yellow-400" /> {item.organizer}</p>}
+                                        {(item.rank || item.year) && <p className="font-mono text-[11px] text-yellow-300/80">{[item.rank, item.year].filter(Boolean).join(' • ')}</p>}
+                                    </div>
+                                )}
 
                                 {item.subject && (
                                     <p className="text-xs text-white/40 mb-3 font-medium flex items-center gap-1.5">
@@ -1069,7 +1241,7 @@ export default function Admin() {
                             </button>
 
                             <h2 className="text-2xl font-bold mb-1">
-                                {editingItem ? 'Edit Data Proyek' : 'Tambah Proyek Baru'} ({activeTab === 'projects' ? 'Proyek Utama' : 'LKPD Sekolah'})
+                                {editingItem ? 'Edit Data' : 'Tambah Data Baru'} ({activeTab === 'projects' ? 'Proyek Utama' : activeTab === 'achievements' ? 'Achievement' : 'LKPD Sekolah'})
                             </h2>
                             <p className="text-xs text-white/40 mb-6">
                                 Data & lampiran file akan tersimpan ke Firebase Firestore & Storage secara realtime.
@@ -1085,18 +1257,73 @@ export default function Admin() {
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
-                                        Judul Proyek / LKPD *
+                                        {activeTab === 'achievements' ? 'Judul Achievement *' : 'Judul Proyek / LKPD *'}
                                     </label>
                                     <input
                                         type="text"
                                         required
                                         value={formData.title}
                                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        placeholder="Contoh: Liga Korupsi Indonesia / LKPD 01 Konfigurasi VLAN"
+                                        placeholder={activeTab === 'achievements' ? "Contoh: Medali Emas FSBN 2025" : "Contoh: Liga Korupsi Indonesia / LKPD 01 Konfigurasi VLAN"}
                                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
                                     />
                                 </div>
 
+                                {activeTab === 'achievements' ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                                                Kategori
+                                            </label>
+                                            <select
+                                                value={formData.category}
+                                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
+                                            >
+                                                <option value="Nasional" className="bg-[#0a0f1e]">Nasional</option>
+                                                <option value="Akademik" className="bg-[#0a0f1e]">Akademik</option>
+                                                <option value="Robotik" className="bg-[#0a0f1e]">Robotik</option>
+                                                <option value="Olimpiade" className="bg-[#0a0f1e]">Olimpiade</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                                                Tahun
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.year}
+                                                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                                                placeholder="2025"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                                                Penyelenggara
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.organizer}
+                                                onChange={(e) => setFormData({ ...formData, organizer: e.target.value })}
+                                                placeholder="Festival Sains & Budaya Nasional"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                                                Peringkat / Rank
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.rank}
+                                                onChange={(e) => setFormData({ ...formData, rank: e.target.value })}
+                                                placeholder="Juara 1 / Gold Medal"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
@@ -1127,6 +1354,7 @@ export default function Admin() {
                                         </select>
                                     </div>
                                 </div>
+                                )}
 
                                 {/* UPLOAD GAMBAR SAN FILE SECTION */}
                                 <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-2xl space-y-4">
@@ -1180,7 +1408,7 @@ export default function Admin() {
                                                     <CheckCircle size={14} /> Gambar Terpasang
                                                     <button 
                                                         type="button" 
-                                                        onClick={() => setFormData({...formData, image: 'project-assets/images/0001_0.png'})}
+                                                        onClick={() => setFormData({...formData, image: activeTab === 'achievements' ? '' : 'project-assets/images/0001_0.png'})}
                                                         className="ml-2 p-1 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 rounded-md transition-all border border-transparent hover:border-red-400"
                                                         title="Hapus Gambar"
                                                     >
@@ -1206,7 +1434,8 @@ export default function Admin() {
                                     ) : null}
                                 </div>
 
-                                {/* LINK DRIVE & LINK VIDEO SECTION */}
+                                {/* LINK DRIVE & LINK VIDEO SECTION — hidden for achievements */}
+                                {activeTab !== 'achievements' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white/3 border border-white/10 rounded-2xl">
                                     <div>
                                         <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1 flex items-center gap-1.5">
@@ -1236,6 +1465,7 @@ export default function Admin() {
                                         <p className="text-[10px] text-white/30 mt-1">Paste link YouTube atau video praktikum</p>
                                     </div>
                                 </div>
+                                )}
 
                                 {activeTab === 'school' && (
                                     <div>
@@ -1254,17 +1484,18 @@ export default function Admin() {
 
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
-                                        Deskripsi Singkat Proyek
+                                        {activeTab === 'achievements' ? 'Deskripsi Achievement' : 'Deskripsi Singkat Proyek'}
                                     </label>
                                     <textarea
                                         rows={2}
                                         value={formData.desc}
                                         onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
-                                        placeholder="Ringkasan penjelasan proyek..."
+                                        placeholder={activeTab === 'achievements' ? "Ceritakan tentang kejuaraan / sertifikat ini..." : "Ringkasan penjelasan proyek..."}
                                         className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"
                                     />
                                 </div>
 
+                                {activeTab !== 'achievements' && (
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
                                         Tech Stack (Pisahkan dengan Koma)
@@ -1277,6 +1508,7 @@ export default function Admin() {
                                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
                                     />
                                 </div>
+                                )}
 
                                 {activeTab === 'school' && (
                                     <div>
