@@ -9,6 +9,7 @@ import Services from './pages/Services';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
 import SchoolProjects from './pages/SchoolProjects';
+import ProjectDetail from './pages/ProjectDetail';
 import Achievements from './pages/Achievements';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
@@ -314,6 +315,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/school-projects" element={<SchoolProjects />} />
+            <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />

@@ -559,8 +559,6 @@ export default function Home() {
       <div ref={stackRef} id="sticky-stack" className="relative">
         {/* HERO — sticky overlay via CSS (dikunci putih, ditutupi Experiences seperti tirai) */}
         <section ref={heroRef} id="home" className="sticky top-0 z-10 min-h-[100dvh] bg-[#e8e8e5] overflow-hidden flex flex-col">
-        {/* Dot pattern background */}
-        <div className="absolute inset-0 dot-pattern pointer-events-none" style={{ opacity: 1 }} />
         {/* subtle top vignette */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(0,0,0,0.02), transparent 60%)' }} />
 
