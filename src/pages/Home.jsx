@@ -200,35 +200,35 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
         {/* Track that GSAP translates horizontally */}
         <div
           ref={trackRef}
-          className="flex gap-6 will-change-transform pl-6 md:pl-10 lg:pl-12 pr-6 md:pr-10 lg:pr-12 pb-8"
+          className="flex gap-4 md:gap-6 will-change-transform pl-6 md:pl-10 lg:pl-12 pr-6 md:pr-10 lg:pr-12 pb-4 md:pb-8"
           style={{ width: 'max-content' }}
         >
           {experiences.map((exp) => (
             <div
               key={exp.id}
               data-card
-              className="min-w-[92vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-auto md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+              className="min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
             >
-              <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
-                <div className="flex items-center gap-2 mono text-[9.5px] tracking-[0.18em] uppercase text-black/40">
+              <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-5 md:p-10 lg:p-12 flex flex-col flex-1 min-h-0">
+                <div className="flex items-center gap-2 mono text-[9px] md:text-[9.5px] tracking-[0.18em] uppercase text-black/40">
                   <span>Professional Experience</span>
-                  <span className="px-2.5 py-1 rounded-full border border-black/10 bg-white text-[8.5px] tracking-[0.14em] font-medium">WORK</span>
+                  <span className="px-2.5 py-1 rounded-full border border-black/10 bg-white text-[8px] md:text-[8.5px] tracking-[0.14em] font-medium">WORK</span>
                 </div>
-                <h3 className="mt-6 md:mt-7 font-black tracking-[-0.045em] leading-[0.85] text-black text-[32px] sm:text-[40px] md:text-[42px] lg:text-[48px]">
+                <h3 className="mt-4 md:mt-7 font-black tracking-[-0.045em] leading-[0.9] text-black text-[26px] sm:text-[32px] md:text-[42px] lg:text-[48px]">
                   {exp.role.split(' ').map((w, i) => (
                     <span key={i} className="inline-block mr-[0.2em]">{w}</span>
                   ))}
                 </h3>
-                <p className="mono text-[11px] md:text-[12px] font-semibold tracking-[0.08em] uppercase text-black mt-3">{exp.company}</p>
-                <p className="mt-7 md:mt-10 text-[13px] md:text-[14px] leading-[1.75] text-black/55 max-w-[440px]">{exp.desc}</p>
-                <div className="mt-auto pt-10 md:pt-8">
-                  <p className="mono text-[10px] tracking-[0.2em] uppercase text-black/35 mb-3">Highlights</p>
+                <p className="mono text-[10px] md:text-[12px] font-semibold tracking-[0.08em] uppercase text-black mt-2 md:mt-3">{exp.company}</p>
+                <p className="mt-4 md:mt-10 text-[12px] md:text-[14px] leading-[1.6] md:leading-[1.75] text-black/55 max-w-[440px] line-clamp-3 md:line-clamp-none">{exp.desc}</p>
+                <div className="mt-auto pt-4 md:pt-8">
+                  <p className="mono text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-black/35 mb-2 md:mb-3">Highlights</p>
                   <div className="border-t border-black/10">
                     <div className="grid grid-cols-2">
                       {exp.highlights.map((h, i) => (
                         <div
                           key={i}
-                          className={`flex gap-2 py-3.5 md:py-4 mono text-[11px] font-semibold tracking-[0.04em] uppercase text-black border-black/10 ${i < 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'border-r pr-3 md:pr-4' : 'pl-3 md:pl-4'}`}
+                          className={`flex gap-2 py-2 md:py-4 mono text-[10px] md:text-[11px] font-semibold tracking-[0.04em] uppercase text-black border-black/10 ${i < 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'border-r pr-3 md:pr-4' : 'pl-3 md:pl-4'}`}
                         >
                           <span className="text-black/25 font-normal mono text-[10px]">0{i + 1}</span>
                           <span className="leading-tight">{String(h).replace(/^\d+\s*/, '').toUpperCase()}</span>
@@ -238,7 +238,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
                   </div>
                 </div>
               </div>
-              <div className="w-full md:w-[48%] xl:w-[44%] relative bg-[#0F0F0F] overflow-hidden aspect-[4/3] md:aspect-auto md:h-full">
+              <div className="w-full md:w-[48%] xl:w-[44%] relative bg-[#0F0F0F] overflow-hidden h-44 sm:h-52 shrink-0 md:shrink md:h-full md:aspect-auto">
                 <img src={exp.image} alt={exp.company} className="w-full h-full object-cover object-top grayscale contrast-[1.08] brightness-[0.92]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">{exp.id}</span>
@@ -276,7 +276,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
           <div
             key={exp.id}
             data-card
-            className="min-w-[92vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-auto md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+            className="min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
           >
             <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
               <div className="flex items-center gap-2 mono text-[9.5px] tracking-[0.18em] uppercase text-black/40">
@@ -307,7 +307,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-[48%] xl:w-[44%] relative bg-[#0F0F0F] overflow-hidden aspect-[4/3] md:aspect-auto md:h-full">
+            <div className="w-full md:w-[48%] xl:w-[44%] relative bg-[#0F0F0F] overflow-hidden h-44 sm:h-52 shrink-0 md:shrink md:h-full md:aspect-auto">
               <img src={exp.image} alt={exp.company} className="w-full h-full object-cover object-top grayscale contrast-[1.08] brightness-[0.92]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">{exp.id}</span>
@@ -671,8 +671,8 @@ export default function Home() {
       </section>
 
       {/* EXPERIENCES — dibawah landing page, persis Image 1, biodata Arro, bg hitam full-bleed — horizontal hijack */}
-      <section ref={expSectionRef} id="experience" className="bg-[#0A0A0A] text-white relative z-20 overflow-hidden w-full md:min-h-[100svh] md:flex md:flex-col md:justify-center">
-        <div className="max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12 pt-10 md:pt-8 pb-4">
+      <section ref={expSectionRef} id="experience" className="bg-[#0A0A0A] text-white relative z-20 overflow-hidden w-full min-h-[100svh] flex flex-col justify-center">
+        <div className="max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12 pt-6 md:pt-8 pb-3 md:pb-4">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/30 mb-3">Career Archive</p>
