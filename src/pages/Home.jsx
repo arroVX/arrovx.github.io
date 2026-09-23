@@ -396,7 +396,7 @@ export default function Home() {
 
       // 1b) Hero curve morph — busur melengkung → lurus (scrub)
       if (heroCurveRef.current) {
-        const straight = "M0 40 Q720 40 1440 40 L1440 40 L0 40 Z";
+        const straight = "M0 100 Q720 100 1440 100 L1440 100 L0 100 Z";
         gsap.to(heroCurveRef.current, {
           attr: { d: straight },
           ease: "none",
@@ -648,7 +648,7 @@ export default function Home() {
         </div>
 
         {/* Scroll down indicator */}
-        <div className="absolute bottom-[64px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+        <div className="absolute bottom-[128px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
           <div className="w-[20px] h-[30px] rounded-full border border-black/15 flex justify-center pt-1.5">
             <span className="w-[3px] h-[6px] bg-black/30 rounded-full block animate-bounce" />
           </div>
@@ -657,11 +657,11 @@ export default function Home() {
         </div>
 
         {/* Curved black bottom divider — SVG morph driven by ScrollTrigger scrub */}
-        <div className="absolute bottom-0 left-0 w-full h-[40px] overflow-hidden pointer-events-none z-20">
-          <svg viewBox="0 0 1440 40" preserveAspectRatio="none" className="w-[120%] md:w-full h-[40px] absolute left-1/2 -translate-x-1/2 bottom-0">
+        <div className="absolute bottom-0 left-0 w-full h-[100px] overflow-hidden pointer-events-none z-20">
+          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-[130%] md:w-[110%] h-[100px] absolute left-1/2 -translate-x-1/2 bottom-0">
             <path
               ref={heroCurveRef}
-              d="M0 30 Q720 -12 1440 30 L1440 40 L0 40 Z"
+              d="M0 88 Q720 -30 1440 88 L1440 100 L0 100 Z"
               fill="#0A0A0A"
             />
           </svg>
