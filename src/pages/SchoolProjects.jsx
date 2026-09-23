@@ -45,6 +45,8 @@ const schoolProjectsData = [
     },
 ];
 
+const pad2 = (n) => String(n).padStart(2, '0');
+
 const getYouTubeEmbedUrl = (url) => {
     if (!url) return null;
     try {
@@ -60,11 +62,11 @@ export default function SchoolProjects() {
     const [copied, setCopied] = useState(false);
     const [firebaseSchoolProjects, setFirebaseSchoolProjects] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedClass, setSelectedClass] = useState("All");
-    const [selectedMapel, setSelectedMapel] = useState("All");
+    const [selectedClass, setSelectedClass] = useState(null);
+    const [selectedMapel, setSelectedMapel] = useState(null);
 
-    const classOptions = ["All", "Kelas X", "Kelas XI", "Kelas XII"];
-    const mapelOptions = ["All", "ASJ", "TJKN", "KJ", "English", "Bahasa Jepang"];
+    const classOptions = ["Kelas X", "Kelas XI", "Kelas XII"];
+    const mapelMaster = ["ASJ", "TJKN", "KJ", "English", "Bahasa Jepang", "Lainnya"];
 
     const getClassGroup = (classLevel = '', title = '', desc = '') => {
         const raw = String(classLevel || '').toUpperCase();
@@ -101,11 +103,40 @@ export default function SchoolProjects() {
     }, [activeProject]);
 
     const source = firebaseSchoolProjects.length ? firebaseSchoolProjects : schoolProjectsData;
-    const filtered = source.filter(item => {
-        if (selectedClass !== "All" && getClassGroup(item.classLevel, item.title, item.desc) !== selectedClass) return false;
-        if (selectedMapel !== "All" && getMapelGroup(item.subject, item.title, item.desc) !== selectedMapel) return false;
+
+    const countInClass = (cls) => source.filter(
+        (item) => getClassGroup(item.classLevel, item.title, item.desc) === cls
+    ).length;
+
+    const mapelsInClass = (cls) => mapelMaster.filter(
+        (m) => source.some((item) =>
+            getClassGroup(item.classLevel, item.title, item.desc) === cls &&
+            getMapelGroup(item.subject, item.title, item.desc) === m
+        )
+    );
+
+    const countInMapel = (cls, mapel) => source.filter((item) =>
+        getClassGroup(item.classLevel, item.title, item.desc) === cls &&
+        getMapelGroup(item.subject, item.title, item.desc) === mapel
+    ).length;
+
+    const step = !selectedClass ? 1 : !selectedMapel ? 2 : 3;
+
+    const filtered = step === 3 ? source.filter(item => {
+        if (getClassGroup(item.classLevel, item.title, item.desc) !== selectedClass) return false;
+        if (getMapelGroup(item.subject, item.title, item.desc) !== selectedMapel) return false;
         return true;
-    });
+    }) : [];
+
+    const pickClass = (cls) => {
+        setSelectedClass(cls);
+        setSelectedMapel(null);
+    };
+
+    const resetAll = () => {
+        setSelectedClass(null);
+        setSelectedMapel(null);
+    };
 
     const handleCopy = (snippet) => {
         navigator.clipboard.writeText(snippet);
@@ -125,36 +156,106 @@ export default function SchoolProjects() {
                     </p>
                 </div>
 
-                {/* Filters */}
-                <div className="border-y border-black/5 py-4 mb-6 space-y-3">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                        <span className="mono text-xs tracking-widest uppercase text-black/40">Filter by class</span>
-                        <div className="flex flex-wrap gap-2">
-                            {classOptions.map(cls => (
-                                <button key={cls} onClick={() => setSelectedClass(cls)} className={`px-4 py-1.5 rounded-full mono text-xs tracking-wide border ${selectedClass===cls ? 'bg-black text-white border-black' : 'bg-white border-black/10 text-black/60 hover:text-black'}`}>{cls}</button>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                        <span className="mono text-xs tracking-widest uppercase text-black/40">Filter by subject</span>
-                        <div className="flex flex-wrap gap-2">
-                            {mapelOptions.map(m => (
-                                <button key={m} onClick={() => setSelectedMapel(m)} className={`px-4 py-1.5 rounded-full mono text-xs tracking-wide border ${selectedMapel===m ? 'bg-black text-white border-black' : 'bg-white border-black/10 text-black/60 hover:text-black'}`}>{m}</button>
-                            ))}
-                        </div>
-                    </div>
+                {/* Step indicator */}
+                <div className="flex items-center gap-2 mono text-[10px] tracking-[0.2em] uppercase text-black/30 mb-8">
+                    <span className={step >= 1 ? 'text-black' : ''}>01 Kelas</span>
+                    <span className="w-6 h-px bg-black/15" />
+                    <span className={step >= 2 ? 'text-black' : ''}>02 Mapel</span>
+                    <span className="w-6 h-px bg-black/15" />
+                    <span className={step >= 3 ? 'text-black' : ''}>03 School Projects</span>
                 </div>
-
-                <div className="mono text-xs tracking-widest uppercase text-black/30 mb-6">Showing {String(filtered.length).padStart(2,'0')} projects · {selectedClass} · {selectedMapel}</div>
 
                 {loading ? (
                     <div className="py-16 text-center mono text-sm text-black/40">Loading LKPD from Firebase…</div>
-                ) : filtered.length === 0 ? (
-                    <div className="py-16 text-center border border-dashed border-black/10 rounded-2xl bg-white">
-                        <FileText size={32} className="mx-auto text-black/20 mb-2" />
-                        <p className="text-black/60 text-sm">Tidak ada LKPD untuk filter ini.</p>
-                    </div>
                 ) : (
+                <>
+                {/* Step 1 — pilih kelas */}
+                <div className="border-y border-black/5 py-6">
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                        <span className="mono text-xs tracking-widest uppercase text-black/40">01 — Pilih kelas</span>
+                        {selectedClass && (
+                            <button onClick={resetAll} className="mono text-[11px] tracking-widest uppercase text-black/40 hover:text-black underline underline-offset-4">Ulangi</button>
+                        )}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {classOptions.map((cls, i) => {
+                            const isActive = selectedClass === cls;
+                            const count = countInClass(cls);
+                            return (
+                                <button
+                                    key={cls}
+                                    onClick={() => pickClass(cls)}
+                                    className={`rounded-2xl border p-5 text-left transition-all ${isActive ? 'bg-black text-white border-black shadow-[0_16px_40px_rgba(0,0,0,0.18)]' : 'bg-white border-black/10 hover:border-black/25 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]'}`}
+                                >
+                                    <div className={`mono text-[10px] tracking-[0.2em] ${isActive ? 'text-white/40' : 'text-black/30'}`}>0{i + 1}</div>
+                                    <div className="text-xl font-bold tracking-tight mt-1">{cls}</div>
+                                    <div className={`mono text-[11px] tracking-widest mt-1 ${isActive ? 'text-white/50' : 'text-black/40'}`}>{pad2(count)} school project{count === 1 ? '' : 's'}</div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Step 2 — pilih mapel (muncul setelah kelas dipilih) */}
+                <AnimatePresence>
+                {step >= 2 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.3 }}
+                        className="border-b border-black/5 py-6"
+                    >
+                        <div className="flex items-center justify-between gap-3 mb-4">
+                            <span className="mono text-xs tracking-widest uppercase text-black/40">02 — Pilih mapel <span className="text-black/25">· {selectedClass}</span></span>
+                            <button onClick={() => pickClass(selectedClass)} className="mono text-[11px] tracking-widest uppercase text-black/40 hover:text-black underline underline-offset-4">← Ganti kelas</button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {mapelsInClass(selectedClass).map((m) => {
+                                const isActive = selectedMapel === m;
+                                return (
+                                    <button
+                                        key={m}
+                                        onClick={() => setSelectedMapel(m)}
+                                        className={`px-4 py-2 rounded-full mono text-xs tracking-wide border transition-colors ${isActive ? 'bg-black text-white border-black' : 'bg-white border-black/10 text-black/60 hover:text-black hover:border-black/25'}`}
+                                    >
+                                        {m} <span className={isActive ? 'text-white/50' : 'text-black/30'}>· {pad2(countInMapel(selectedClass, m))}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
+                )}
+                </AnimatePresence>
+
+                {/* Step 3 — grid school projects (muncul setelah mapel dipilih) */}
+                <AnimatePresence>
+                {step === 3 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.35 }}
+                    >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-8 mb-6">
+                            <div className="mono text-xs tracking-widest uppercase text-black/30">
+                                Showing {String(filtered.length).padStart(2, '0')} school projects · {selectedClass} · {selectedMapel}
+                            </div>
+                            <button onClick={resetAll} className="mono text-[11px] tracking-widest uppercase text-black/40 hover:text-black underline underline-offset-4 text-left sm:text-right">Ubah pilihan →</button>
+                        </div>
+                        {filtered.length === 0 ? (
+                            <div className="py-16 text-center border border-dashed border-black/10 rounded-2xl bg-white mb-6">
+                                <FileText size={32} className="mx-auto text-black/20 mb-2" />
+                                <p className="text-black/60 text-sm">Tidak ada school project untuk pilihan ini.</p>
+                            </div>
+                        ) : null}
+                    </motion.div>
+                )}
+                </AnimatePresence>
+                </>
+                )}
+
+                {loading ? null : step === 3 && filtered.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filtered.map((item, idx) => (
                             <div key={item.id || idx} className="rounded-2xl border border-black/5 bg-white overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-shadow flex flex-col">
@@ -187,7 +288,13 @@ export default function SchoolProjects() {
                             </div>
                         ))}
                     </div>
-                )}
+                ) : step < 3 ? (
+                    <div className="py-14 text-center border border-dashed border-black/10 rounded-2xl bg-white/60">
+                        <p className="mono text-[11px] tracking-[0.2em] uppercase text-black/35">
+                            {step === 1 ? 'Pilih kelas dulu untuk lanjut' : 'Pilih mapel untuk memunculkan school projects'}
+                        </p>
+                    </div>
+                ) : null}
             </div>
 
             {/* Modal */}

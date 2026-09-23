@@ -61,7 +61,7 @@ function Navbar({ setIsCommandOpen }) {
     { label: 'About', href: '/#about', anchor: true },
     { label: 'Experience', href: '/#experience', anchor: true },
     { label: 'Projects', href: '/projects', anchor: false },
-    { label: 'All Projects', href: '/school-projects', anchor: false },
+    { label: 'School Project', href: '/school-projects', anchor: false },
     { label: 'Contact', href: '/#contact', anchor: true },
   ];
 
