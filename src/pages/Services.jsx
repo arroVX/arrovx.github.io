@@ -1,66 +1,33 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Server, Shield, Smartphone, Globe, Code, PenTool } from 'lucide-react';
+import { ArrowLeft, PenTool, Server, Smartphone, Code } from 'lucide-react';
 
 const services = [
-    {
-        icon: <PenTool className="text-blue-400" />,
-        title: "Graphic Design",
-        desc: "High-impact poster designs, branding materials, and visual assets tailored for your needs."
-    },
-    {
-        icon: <Server className="text-purple-400" />,
-        title: "Network Infrastructure",
-        desc: "Designing and configuring secure server architectures and corporate network systems."
-    },
-    {
-        icon: <Smartphone className="text-pink-400" />,
-        title: "UI/UX Design",
-        desc: "Creating intuitive and modern digital interfaces with focus on user experience."
-    },
-    {
-        icon: <Code className="text-emerald-400" />,
-        title: "Web Development",
-        desc: "Building responsive and performant websites using modern technologies like React."
-    }
+    { icon: <PenTool size={20} />, title: "Graphic Design", desc: "Poster high-impact, branding, dan aset visual sesuai kebutuhan." },
+    { icon: <Server size={20} />, title: "Network Infrastructure", desc: "Desain dan konfigurasi arsitektur server & jaringan korporat yang aman." },
+    { icon: <Smartphone size={20} />, title: "UI/UX Design", desc: "Antarmuka digital intuitif dan modern dengan fokus user experience." },
+    { icon: <Code size={20} />, title: "Web Development", desc: "Website responsif dan performant dengan React, Tailwind, Firebase." },
 ];
 
 export default function Services() {
     return (
-        <main className="relative z-10 pt-32 pb-20 min-h-screen">
-            <div className="max-w-4xl mx-auto px-4 md:px-6">
-                <Link to="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-12 group">
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
+        <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 pb-20">
+            <div className="max-w-5xl mx-auto px-6">
+                <Link to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
+                    <ArrowLeft size={14} /> Back to Home
                 </Link>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-20"
-                >
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">Expertise <span className="text-linear">& Services.</span></h1>
-                    <p className="text-xl text-white/50 leading-relaxed">
-                        Combining technical networking skills with creative design to provide comprehensive digital solutions.
-                    </p>
-                </motion.div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {services.map((s, i) => (
-                        <motion.div
-                            key={s.title}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: i * 0.1 }}
-                            className="glass-card p-10 group hover:bg-white/5 transition-colors border-white/5"
-                        >
-                            <div className="mb-6 w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                {s.icon}
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4">{s.title}</h3>
-                            <p className="text-white/40 leading-relaxed">{s.desc}</p>
-                        </motion.div>
+                <div className="mb-12">
+                    <p className="mono text-xs tracking-[0.2em] uppercase text-black/40">Services</p>
+                    <h1 className="headline-serif text-5xl md:text-6xl mt-2">Expertise &<br />Services.</h1>
+                    <p className="text-black/50 leading-relaxed mt-4 max-w-2xl">Menggabungkan skill networking dengan desain kreatif untuk solusi digital menyeluruh.</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                    {services.map(s => (
+                        <div key={s.title} className="rounded-2xl border border-black/5 bg-white p-8 hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-shadow group">
+                            <div className="w-12 h-12 rounded-xl bg-black text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">{s.icon}</div>
+                            <h3 className="text-xl font-bold tracking-tight">{s.title}</h3>
+                            <p className="text-sm text-black/50 leading-relaxed mt-2">{s.desc}</p>
+                        </div>
                     ))}
                 </div>
             </div>

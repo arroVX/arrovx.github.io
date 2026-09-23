@@ -6,9 +6,7 @@ import { CheckCircle2, XCircle, X } from 'lucide-react';
 export default function Toast({ message, type = 'success', isOpen, onClose }) {
     useEffect(() => {
         if (isOpen) {
-            const timer = setTimeout(() => {
-                onClose();
-            }, 5000);
+            const timer = setTimeout(() => onClose(), 4000);
             return () => clearTimeout(timer);
         }
     }, [isOpen, onClose]);
@@ -17,40 +15,24 @@ export default function Toast({ message, type = 'success', isOpen, onClose }) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    initial={{ opacity: 0, y: 20, scale: 0.9, filter: 'blur(10px)' }}
-                    animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: 20, scale: 0.9, filter: 'blur(10px)' }}
-                    className="fixed bottom-8 left-1/2 -translate-x-1/2 md:left-auto md:right-12 md:bottom-12 md:translate-x-0 z-1000000 pointer-events-none px-4 w-full max-w-sm flex justify-center md:block"
+                    initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 12, scale: 0.98 }}
+                    transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                    className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-[1000000] w-[90%] max-w-sm"
                 >
-                    <div className="glass-card p-4 pr-12 border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center gap-4 pointer-events-auto w-full md:min-w-[350px] relative overflow-hidden group">
-                        {/* Progress Bar */}
-                        <motion.div
-                            initial={{ width: '100%' }}
-                            animate={{ width: '0%' }}
-                            transition={{ duration: 5, ease: 'linear' }}
-                            className={`absolute bottom-0 left-0 h-0.5 ${type === 'success' ? 'bg-blue-500' : 'bg-red-500'}`}
-                        />
-
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${type === 'success' ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'
-                            }`}>
-                            {type === 'success' ? <CheckCircle2 size={20} /> : <XCircle size={20} />}
+                    <div className="bg-white border border-black/10 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.12)] p-4 pr-10 flex items-center gap-3 relative overflow-hidden">
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${type === 'success' ? 'bg-black text-white' : 'bg-red-500 text-white'}`}>
+                            {type === 'success' ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
                         </div>
-
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-0.5">
-                                {type === 'success' ? 'System Notification' : 'System Error'}
-                            </p>
-                            <p className="text-sm font-bold text-white/90 leading-tight">
-                                {message}
-                            </p>
+                            <div className="mono text-[10px] tracking-widest uppercase text-black/40">{type === 'success' ? 'Success' : 'Error'}</div>
+                            <div className="text-sm font-medium leading-tight text-black">{message}</div>
                         </div>
-
-                        <button
-                            onClick={onClose}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/5 rounded-lg transition-all border-none"
-                        >
-                            <X size={16} />
+                        <button onClick={onClose} className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full hover:bg-black/5 flex items-center justify-center text-black/30">
+                            <X size={14} />
                         </button>
+                        <motion.div initial={{ width: '100%' }} animate={{ width: '0%' }} transition={{ duration: 4, ease: 'linear' }} className={`absolute bottom-0 left-0 h-0.5 ${type === 'success' ? 'bg-black' : 'bg-red-500'}`} />
                     </div>
                 </motion.div>
             )}

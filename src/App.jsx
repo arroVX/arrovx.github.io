@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Github, Instagram, Mail } from 'lucide-react';
+import { X, ArrowUpRight } from 'lucide-react';
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
@@ -13,267 +13,175 @@ import Achievements from './pages/Achievements';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import CommandCenter from './components/CommandCenter';
-import { Terminal as TerminalIcon, Search } from 'lucide-react';
-import { useMagnetic } from './utils/animations';
-import { useRef } from 'react';
+import { Terminal as TerminalIcon } from 'lucide-react';
 import Preloader from './components/Preloader';
-import LogoAnimation from './components/LogoAnimation';
+import useLenis from './hooks/useLenis';
 
-function BackgroundSystem() {
-  return (
-    <>
-      <div className="fixed inset-0 grid-pattern pointer-events-none opacity-30" />
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="blob w-[600px] h-[600px] bg-indigo-600/30 top-[-20%] left-[-10%]" />
-        <div className="blob w-[500px] h-[500px] bg-purple-600/20 top-[40%] right-[-10%]" />
-        <div className="blob w-[600px] h-[600px] bg-blue-600/20 bottom-[-20%] left-[-5%]" />
-      </div>
-    </>
-  );
-}
-
-
-function LiveTime() {
-  const [time, setTime] = useState('');
-
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    const updateTime = () => {
-      const jeparaTime = new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Asia/Jakarta',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      }).format(new Date());
-      setTime(jeparaTime);
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="hidden sm:flex items-center gap-2 px-3 py-1 glass-card border-none bg-white/5 text-[10px] font-black tracking-widest uppercase text-white/40">
-      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-      Jepara {time}
-    </div>
-  );
+    if (hash) {
+      const el = document.querySelector(hash);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+  return null;
 }
-
-const MagneticButton = ({ children, className }) => {
-  const ref = useRef(null);
-  const { style, onMouseMove, onMouseLeave } = useMagnetic(ref);
-  return (
-    <div
-      ref={ref}
-      style={style}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-      className="inline-block"
-    >
-      {React.cloneElement(children, { className: `${children.props.className || ''} ${className || ''}` })}
-    </div>
-  );
-};
 
 function Navbar({ setIsCommandOpen }) {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
+  const handleNavClick = (e, href) => {
+    if (href.startsWith('/#')) {
+      e.preventDefault();
+      const id = href.replace('/#', '');
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      }
+      setMobileMenuOpen(false);
+    } else {
+      setMobileMenuOpen(false);
+    }
+  };
+
+  const menuLinks = [
+    { label: 'Home', href: '/', anchor: false },
+    { label: 'About', href: '/#about', anchor: true },
+    { label: 'Experience', href: '/#experience', anchor: true },
+    { label: 'Projects', href: '/projects', anchor: false },
+    { label: 'All Projects', href: '/school-projects', anchor: false },
+    { label: 'Contact', href: '/#contact', anchor: true },
+  ];
+
+  // Kunci scroll saat menu overlay terbuka
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const lenis = (typeof window !== 'undefined') ? window.__LENIS__ : null;
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
+    } else {
+      document.body.style.overflow = '';
+      if (lenis) lenis.start();
+    }
+    return () => {
+      document.body.style.overflow = '';
+      if (lenis) lenis.start();
     };
+  }, [mobileMenuOpen]);
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = ['Beranda', 'Work', 'School Work', 'Achievements', 'Contact'];
+  const isDark = location.pathname === '/experience';
 
   return (
     <>
-      <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-500 overflow-x-hidden ${scrolled ? 'py-2 md:py-4' : 'py-4 md:py-8'
-          }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className={`glass-card py-2 md:py-3 px-4 md:px-6 flex items-center justify-between border-white/5 transition-all duration-500 ${scrolled ? 'bg-black/40 backdrop-blur-3xl border-white/10 shadow-2xl' : ''
-            }`}>
-            <div className="flex items-center gap-3">
-              <Link to="/" className="flex items-center group border-none">
-                <LogoAnimation />
-              </Link>
-              <div className="hidden sm:block">
-                <LiveTime />
-              </div>
-            </div>
+      <nav className="absolute inset-x-0 top-0 z-[100] border-b border-transparent bg-transparent" style={{ transform: 'none', willChange: 'auto' }}>
+        <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-center justify-between h-[72px]">
+          {/* Left - exact replica of image: black circle A + pill */}
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <span className={`w-[34px] h-[34px] rounded-full flex items-center justify-center font-serif italic text-[16px] leading-none ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`} style={{ fontFamily: "'Instrument Serif', serif" }}>A</span>
+            <span className={`mono hidden sm:inline-flex items-center text-[10px] tracking-[0.16em] font-medium border px-3.5 py-[6px] rounded-full ${isDark ? 'text-white/60 border-white/10 bg-white/[0.06]' : 'text-black/60 border-black/10 bg-white'}`}>
+              ARRO / PORTFOLIO
+            </span>
+          </Link>
 
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((item) => {
-                const linkMap = {
-                  'Beranda': '/',
-                  'Work': '/projects',
-                  'School Work': '/school-projects',
-                  'Achievements': '/achievements',
-                  'Contact': '/contact'
-                };
-                const to = linkMap[item] || '/';
-
-                return (
-                  <Link
-                    key={item}
-                    to={to}
-                    className={`text-sm font-medium transition-all relative group border-none ${location.pathname === to ? 'text-white' : 'text-white/30 hover:text-white/70'
-                      }`}
-                  >
-                    {item}
-                    <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === to ? 'w-full opacity-100' : 'w-0 group-hover:w-full opacity-0 group-hover:opacity-100'
-                      }`} />
-                  </Link>
-                );
-              })}
-              <Link to="/about" className={`text-sm font-medium transition-all relative group border-none ${location.pathname === '/about' ? 'text-white' : 'text-white/30 hover:text-white/70'
-                }`}>
-                About
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-blue-500 transition-all ${location.pathname === '/about' ? 'w-full opacity-100' : 'w-0 group-hover:w-full opacity-0'}`} />
-              </Link>
-              <MagneticButton>
-                <button
-                  onClick={() => setIsCommandOpen(true)}
-                  className="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white bg-white/5 rounded-xl border-none transition-all"
-                  title="Terminal (Ctrl+K)"
-                  style={{ pointerEvents: 'auto' }}
-                >
-                  <TerminalIcon size={18} />
-                </button>
-              </MagneticButton>
-              <MagneticButton>
-                <Link to="/contact" className="glass-button py-1.5! px-5! rounded-xl! text-xs font-bold! border-none hover:bg-white hover:text-black transition-all inline-block text-center">Let's Chat</Link>
-              </MagneticButton>
-            </div>
-
-            <div className="md:hidden flex items-center gap-3">
-              <button
-                onClick={() => setIsCommandOpen(true)}
-                className="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white bg-white/5 rounded-xl border-none active:scale-90 transition-all"
-                title="Terminal"
-              >
-                <TerminalIcon size={18} />
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="w-10 h-10 flex flex-col items-center justify-center gap-1.5 text-white bg-white/5 rounded-xl border-none active:scale-90 transition-all relative overflow-hidden"
-              >
-                <motion.span
-                  animate={mobileMenuOpen ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
-                  className="w-5 h-0.5 bg-white rounded-full"
-                />
-                <motion.span
-                  animate={mobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
-                  className="w-5 h-0.5 bg-white rounded-full"
-                />
-                <motion.span
-                  animate={mobileMenuOpen ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
-                  className="w-5 h-0.5 bg-white rounded-full"
-                />
-              </button>
-            </div>
+          {/* Right - MENU pill exact as image */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsCommandOpen(true)}
+              className={`hidden md:inline-flex w-8 h-8 rounded-full border items-center justify-center transition-colors ${isDark ? 'bg-white/[0.06] border-white/10 text-white/50 hover:text-white hover:border-white/20' : 'bg-white border-black/10 text-black/50 hover:text-black hover:border-black/20'}`}
+              aria-label="Open terminal"
+              title="Terminal (Ctrl+K)"
+            >
+              <TerminalIcon size={14} />
+            </button>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={`inline-flex items-center gap-1.5 mono text-[10px] tracking-[0.14em] font-medium border px-4 py-[9px] rounded-full transition-colors ${isDark ? 'bg-white text-black border-white shadow-[0_2px_10px_rgba(255,255,255,0.08)] hover:bg-white/90' : 'bg-white border-black/[0.08] shadow-[0_2px_10px_rgba(0,0,0,0.06)] hover:border-black/15'}`}
+            >
+              <span>{mobileMenuOpen ? 'CLOSE' : 'MENU'}</span>
+              <span className="text-[14px] leading-none font-light -mt-[1px]">{mobileMenuOpen ? <X size={12} /> : '+'}</span>
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[49] bg-[#030303]/95 backdrop-blur-2xl md:hidden flex flex-col pt-32 px-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[200] bg-[#0E0E0F] text-white flex flex-col px-6 md:px-10 lg:px-12 pt-5 pb-8 overflow-y-auto"
           >
-            <div className="flex flex-col gap-6">
-              {['Beranda', 'Work', 'School Work', 'Achievements', 'About', 'Contact'].map((item, i) => {
-                const linkMap = {
-                  'Beranda': '/',
-                  'Work': '/projects',
-                  'School Work': '/school-projects',
-                  'Achievements': '/achievements',
-                  'About': '/about',
-                  'Contact': '/contact'
-                };
-                const to = linkMap[item] || '/';
+            <div className="max-w-[1440px] w-full mx-auto flex flex-col flex-1 min-h-full">
+              <div className="flex items-center justify-end h-[52px] shrink-0">
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="inline-flex items-center gap-1.5 mono text-[10px] tracking-[0.14em] font-medium bg-[#F5F3EE] text-black px-4 py-[9px] rounded-full hover:bg-white transition-colors"
+                  aria-label="Close menu"
+                >
+                  <span>CLOSE</span>
+                  <X size={12} />
+                </button>
+              </div>
 
-                return (
+              <nav className="flex-1 flex flex-col justify-center py-8">
+                {menuLinks.map((item, i) => (
                   <motion.div
-                    key={item}
-                    initial={{ opacity: 0, x: 20 }}
+                    key={item.label}
+                    initial={{ opacity: 0, x: -24 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + i * 0.05 }}
+                    transition={{ delay: 0.06 * i + 0.1, duration: 0.4, ease: 'easeOut' }}
                   >
-                    <Link
-                      to={to}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`text-5xl font-bold tracking-tighter transition-all border-none flex items-center gap-4 ${location.pathname === to ? 'text-white' : 'text-white/20 hover:text-white'
-                        }`}
-                    >
-                      <span className="text-sm font-black text-blue-500/50 mt-2">0{i + 1}</span>
-                      {item}
-                    </Link>
+                    {item.anchor ? (
+                      <a
+                        href={item.href}
+                        onClick={(e) => handleNavClick(e, item.href)}
+                        className="group flex items-center justify-between gap-4 py-1 md:py-1.5"
+                      >
+                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(38px,10vw,96px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{item.label}</span>
+                        <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
+                      </a>
+                    ) : (
+                      <Link
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="group flex items-center justify-between gap-4 py-1 md:py-1.5"
+                      >
+                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(38px,10vw,96px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">{item.label}</span>
+                        <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
+                      </Link>
+                    )}
                   </motion.div>
-                );
-              })}
+                ))}
+              </nav>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="pt-10 mt-10 border-t border-white/5 space-y-4"
+                transition={{ delay: 0.5, duration: 0.4 }}
+                className="shrink-0"
               >
-                <div className="flex gap-4">
-                  <button
-                    onClick={() => {
-                      setIsCommandOpen(true);
-                      setMobileMenuOpen(false);
-                    }}
-                    className="flex-1 bg-white/5 text-white/50 py-5 rounded-2xl font-bold text-xs border border-white/5 flex items-center justify-center gap-3 active:scale-95 transition-all"
-                  >
-                    <TerminalIcon size={16} /> TERMINAL
-                  </button>
-                  <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex-1">
-                    <button className="w-full bg-white text-black py-5 rounded-2xl font-black text-xs border-none active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)]">
-                      LET'S CHAT
-                    </button>
-                  </Link>
+                <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/30 mb-4">Socials</p>
+                <div className="flex flex-wrap gap-x-6 gap-y-2 mono text-xs tracking-[0.12em] uppercase text-white/55">
+                  <Link to="/#about" onClick={(e) => handleNavClick(e, '/#about')} className="hover:text-white transition-colors">Resume</Link>
+                  <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Github</a>
+                  <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+                  <a href="mailto:arroudhilanfi01@gmail.com" className="hover:text-white transition-colors">Email</a>
                 </div>
               </motion.div>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="mt-auto pb-12 flex items-center justify-between"
-            >
-              <div className="flex gap-6">
-                <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 transition-all border-none">
-                  <Instagram size={20} />
-                </a>
-                <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 transition-all border-none">
-                  <Github size={20} />
-                </a>
-                <a href="mailto:arroudhilanfi01@gmail.com" className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-white/10 transition-all border-none">
-                  <Mail size={20} />
-                </a>
-              </div>
-              <div className="text-[10px] font-black uppercase tracking-widest text-white/10">
-                Menu v2.0
-              </div>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -282,61 +190,90 @@ function Navbar({ setIsCommandOpen }) {
 }
 
 function Footer() {
+  const [time, setTime] = useState('--:--:--');
+
+  useEffect(() => {
+    const update = () => {
+      try {
+        const fmt = new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Asia/Jakarta',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        });
+        setTime(fmt.format(new Date()));
+      } catch {
+        setTime(new Date().toLocaleTimeString());
+      }
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <footer className="py-20 border-t border-white/5 relative z-10 px-6">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-        <div>
-          <div className="text-xl font-bold mb-4 tracking-tighter">ARRO<span className="text-blue-500">.</span></div>
-          <p className="text-white/30 text-sm max-w-xs leading-relaxed">
-            Arroudhil Anfi — TKJ Student & Visionary Designer. Bringing harmony between technology and creative soul.
+    <footer className="relative bg-[#0B0B0C] text-white overflow-hidden">
+      {/* Watermark CONTACT raksasa */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none font-black leading-none tracking-[-0.05em] text-white/[0.045] whitespace-nowrap"
+        style={{ fontSize: 'clamp(140px, 26vw, 460px)' }}
+      >
+        CONTACT
+      </div>
+
+      <div className="relative max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex flex-col min-h-[100svh] py-10 md:py-12">
+        {/* Top */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/40">Get in touch</p>
+          <p className="mono text-[10px] tracking-[0.22em] uppercase text-white/40">Jepara, ID / {time} WIB</p>
+        </div>
+
+        {/* Middle */}
+        <div className="flex-1 flex flex-col items-center justify-center text-center py-16">
+          <h2 className="font-black leading-[0.92] tracking-[-0.03em] text-white text-[clamp(52px,10vw,148px)]">
+            LET'S WORK<br />TOGETHER
+          </h2>
+          <a
+            href="mailto:arroudhilanfi01@gmail.com"
+            className="mt-10 text-white/75 hover:text-white transition-colors text-[15px] md:text-[22px] font-light tracking-tight inline-flex items-center gap-2 break-all"
+          >
+            arroudhilanfi01@gmail.com <ArrowUpRight size={18} className="shrink-0" />
+          </a>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mono text-[10px] tracking-[0.2em] uppercase text-white/45">
+            <Link to="/#about" className="hover:text-white transition-colors">Resume</Link>
+            <a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Github</a>
+            <a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+            <a href="mailto:arroudhilanfi01@gmail.com" className="hover:text-white transition-colors">Email</a>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="flex flex-col items-center gap-4">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden className="opacity-70">
+            <rect x="8" y="7" width="14" height="12" fill="#C9C9C9" />
+            <rect x="5" y="4" width="3" height="3" fill="#C9C9C9" />
+            <rect x="22" y="4" width="3" height="3" fill="#C9C9C9" />
+            <rect x="11" y="11" width="3" height="4" fill="#0B0B0C" />
+            <rect x="16" y="11" width="3" height="4" fill="#0B0B0C" />
+            <rect x="8" y="21" width="4" height="5" fill="#C9C9C9" />
+            <rect x="18" y="21" width="4" height="5" fill="#C9C9C9" />
+          </svg>
+          <p className="mono text-[9px] tracking-[0.24em] uppercase text-white/30">
+            © {new Date().getFullYear()} Arroudhil Anfi. All rights reserved.
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-24">
-          <div>
-            <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Explore</p>
-            <ul className="space-y-4 text-sm font-medium text-white/50">
-              <li><Link to="/services" className="hover:text-white transition-colors border-none">Services</Link></li>
-              <li><Link to="/experience" className="hover:text-white transition-colors border-none">Experience</Link></li>
-              <li><Link to="/projects" className="hover:text-white transition-colors border-none">Work</Link></li>
-              <li><Link to="/school-projects" className="hover:text-white transition-colors border-none">School Work / LKPD</Link></li>
-              <li><Link to="/achievements" className="hover:text-white transition-colors border-none">Achievements</Link></li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Socials</p>
-            <ul className="space-y-4 text-sm font-medium text-white/50">
-              <li><a href="https://www.instagram.com/jingroo_" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors border-none">Instagram</a></li>
-              <li><a href="https://github.com/arroVX" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors border-none">GitHub</a></li>
-            </ul>
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            <p className="text-xs font-bold text-white/20 uppercase tracking-widest mb-6">Status</p>
-            <div className="flex items-center gap-2 text-sm font-medium text-green-400 mb-4">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              Available for Projects
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="max-w-7xl mx-auto mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-[10px] font-bold text-white/20 uppercase tracking-widest gap-4">
-        <div>© {new Date().getFullYear()} ARROUDHIL ANFI — ALL RIGHTS RESERVED</div>
-        <div>BUILT WITH PRECISION BY YOURS TRULY</div>
       </div>
     </footer>
   );
 }
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-}
-
 export default function App() {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  useLenis(!isLoading);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -345,9 +282,7 @@ export default function App() {
         setIsCommandOpen(prev => !prev);
       }
     };
-
     const handleOpenCommand = () => setIsCommandOpen(true);
-
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('open-command-center', handleOpenCommand);
     return () => {
@@ -365,26 +300,24 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <BackgroundSystem />
-
       {!isLoading && <Navbar setIsCommandOpen={setIsCommandOpen} />}
 
       <motion.main
         initial={{ opacity: 0 }}
         animate={!isLoading ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative z-10 w-full overflow-x-hidden"
+        className="relative w-full overflow-x-hidden bg-[#e8e8e5] text-[#0a0a0a]"
       >
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/experience" element={<Experience />} />
             <Route path="/school-projects" element={<SchoolProjects />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/experience" element={<Experience />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

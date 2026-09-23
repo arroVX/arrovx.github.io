@@ -1,171 +1,67 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import {
-    User, Heart, Coffee, Music, Camera,
-    MapPin, Rocket, Star, ArrowLeft,
-    Mail, Instagram, Github
-} from 'lucide-react';
+import { ArrowLeft, Music, Camera, Coffee, Star } from 'lucide-react';
 
 export default function About() {
     return (
-        <main className="relative z-10 pt-32 pb-20">
-            <div className="max-w-4xl mx-auto px-4 md:px-6">
-                {/* Back Button */}
-                <Link to="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-12 group">
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
+        <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 pb-20">
+            <div className="max-w-4xl mx-auto px-6">
+                <Link to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
+                    <ArrowLeft size={14} /> Back to Home
                 </Link>
 
-                {/* Header */}
-                <div className="flex flex-col md:flex-row items-center gap-12 mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="w-48 h-48 md:w-64 md:h-64 rounded-3xl overflow-hidden glass-card p-2 relative group"
-                    >
-                        <div className="w-full h-full rounded-2xl overflow-hidden bg-zinc-900 flex items-center justify-center">
-                            <img
-                                src="/profile.webp"
-                                alt="Arroudhil Anfi"
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                            />
-                        </div>
-                    </motion.div>
-
-                    <div className="flex-1 text-center md:text-left">
-                        <motion.h1
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="text-5xl md:text-7xl font-bold tracking-tighter mb-4"
-                        >
-                            The Mind Behind <br /> <span className="text-linear">Arro.</span>
-                        </motion.h1>
-
+                <div className="flex flex-col md:flex-row gap-8 items-center mb-16">
+                    <div className="w-56 h-56 rounded-2xl overflow-hidden border border-black/5 bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-1.5 shrink-0">
+                        <img src="/profile.webp" alt="Arroudhil Anfi" className="w-full h-full object-cover rounded-xl" />
+                    </div>
+                    <div>
+                        <p className="mono text-xs tracking-[0.2em] uppercase text-black/40 mb-3">About</p>
+                        <h1 className="headline-serif text-5xl md:text-6xl leading-none">The Mind Behind<br /><span className="italic font-light">Arro.</span></h1>
                     </div>
                 </div>
 
-                {/* Narrative */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20"
-                >
-                    <div className="md:col-span-2 space-y-6 text-lg text-white/70 leading-relaxed">
-                        Hi, I'm <span className="text-white font-bold">Arroudhil Anfi</span>, but you can call me <span className="text-blue-400 font-bold">Arro</span>. I'm a student at <span className="text-white font-bold">SMK Negeri 3 Jepara</span> specializing in Computer and Network Engineering (TKJ) who doesn't believe in boundaries between technology and creativity.
-                        <p>
-                            My journey started with a curiosity for how computers talk to each other, but it quickly evolved into how humans express themselves through digital media. Whether it's the logic of a maze-solving robot or the emotion in a cinematic edit, I'm always looking for that "perfect harmony".
-                        </p>
-                        <p>
-                            When I'm not configuring servers or writing algorthims, you'll probably find me with my guitar, lost in a melody, or behind a camera lens capturing the hidden beauty of the world.
-                        </p>
+                <div className="grid md:grid-cols-3 gap-10 mb-16">
+                    <div className="md:col-span-2 space-y-4 text-black/70 leading-relaxed">
+                        <p>Hi, I'm <span className="font-bold text-black">Arroudhil Anfi</span> — call me <span className="font-bold text-black">Arro</span>. Siswa <span className="font-bold text-black">SMKN 3 Jepara (TKJ)</span> yang percaya batas antara teknologi dan kreativitas itu tipis.</p>
+                        <p>Perjalanan dimulai dari rasa penasaran bagaimana komputer saling berkomunikasi, lalu berkembang ke bagaimana manusia mengekspresikan diri lewat media digital — dari robot maze-solving hingga edit sinematik.</p>
+                        <p>Saat tidak mengutak-atik server atau nulis algoritma, aku main gitar, eksplor math rock, atau hunting foto dengan kamera.</p>
                     </div>
-                    <div className="space-y-6">
-                        <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white/30">Personal Stats</h3>
-                        <div className="space-y-4">
-                            {[
-                                { label: "Code Satisfaction", value: "100%" },
-                                { label: "Music Playtime", value: "Infinity" },
-                                { label: "Caffeine Level", value: "Midnight" },
-                                { label: "Success Rate", value: "99.9%" }
-                            ].map((stat, i) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.3 + i * 0.1 }}
-                                >
-                                    <StatItem label={stat.label} value={stat.value} />
-                                </motion.div>
-                            ))}
-                        </div>
+                    <div className="space-y-3">
+                        <p className="mono text-xs tracking-widest uppercase text-black/30">Personal Stats</p>
+                        {[
+                            { label: "Code Satisfaction", value: "100%" },
+                            { label: "Music Playtime", value: "Infinity" },
+                            { label: "Caffeine Level", value: "Midnight" },
+                            { label: "Success Rate", value: "99.9%" }
+                        ].map(s => (
+                            <div key={s.label} className="flex items-center justify-between p-3 rounded-xl border border-black/5 bg-white">
+                                <span className="mono text-xs tracking-widest uppercase text-black/40">{s.label}</span>
+                                <span className="text-sm font-bold">{s.value}</span>
+                            </div>
+                        ))}
                     </div>
-                </motion.div>
-
-                {/* Hobbies / Interests */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                        <InterestCard
-                            icon={<Music className="text-orange-400" />}
-                            title="Math Rock & Guitar"
-                            desc="Deeply inspired by Murphy Radio. I love exploring complex math rock melodies, twinkly guitar riffs, and composing own tracks."
-                        />
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-                        <InterestCard
-                            icon={<Camera className="text-blue-400" />}
-                            title="Visual Storytelling"
-                            desc="Photography and videography aren't just hobbies; they're how I document my perspective."
-                        />
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                        <InterestCard
-                            icon={<Coffee className="text-yellow-600" />}
-                            title="Minimalist Design"
-                            desc="I'm obsessed with clean interfaces, glassmorphism, and smooth animations."
-                        />
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="md:col-span-2 mt-12 mb-12"
-                    >
-                        <h2 className="text-4xl md:text-5xl font-bold mb-8">Crafting Digital <span className="text-blue-500">Excellence.</span></h2>
-                        <p className="text-white/60 mb-8 leading-relaxed">
-                            As a TKJ student, I've always been fascinated by how technology can be a canvas for creativity. My journey is a blend of technical precision in networking and visual storytelling through <span className="text-white font-bold">Graphic Design</span>.
-                        </p>
-                        <p className="text-white/60 mb-8 leading-relaxed">
-                            Whether I'm configuring a server or designing a high-impact poster, I focus on the harmony between functionality and aesthetics. Minimalism and bold visual language are the core of my design philosophy.
-                        </p>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                        <InterestCard
-                            icon={<Star className="text-purple-400" />}
-                            title="Competitive Programming"
-                            desc="Solving complex problems with efficient logic is my kind of sport."
-                        />
-                    </motion.div>
                 </div>
 
-                {/* Quote */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="glass-card p-12 text-center relative overflow-hidden mb-20"
-                >
-                    <div className="text-4xl md:text-5xl font-bold tracking-tight mb-4 italic opacity-80">
-                        "Technology is the инструмент, <br /> Creativity is the soul."
-                    </div>
-                    <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-500/10 blur-[80px]" />
-                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/10 blur-[80px]" />
-                </motion.div>
+                <div className="grid md:grid-cols-2 gap-4 mb-16">
+                    {[
+                        { icon: <Music size={20} />, title: "Math Rock & Guitar", desc: "Terinspirasi Murphy Radio — eksplorasi riff kompleks dan composing." },
+                        { icon: <Camera size={20} />, title: "Visual Storytelling", desc: "Fotografi & videografi sebagai cara dokumentasi perspektif." },
+                        { icon: <Coffee size={20} />, title: "Minimalist Design", desc: "Obsesi pada interface bersih, border halus, dan animasi halus." },
+                        { icon: <Star size={20} />, title: "Competitive Programming", desc: "Memecahkan masalah kompleks dengan logic efisien adalah olahraga." },
+                    ].map((c, i) => (
+                        <div key={i} className="rounded-2xl border border-black/5 bg-white p-6 hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-shadow">
+                            <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center mb-3">{c.icon}</div>
+                            <h3 className="font-bold tracking-tight">{c.title}</h3>
+                            <p className="text-sm text-black/50 leading-relaxed mt-1">{c.desc}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="rounded-2xl border border-black/5 bg-white p-8 md:p-12 text-center">
+                    <div className="headline-serif text-3xl md:text-4xl italic">“Technology is the instrument,<br />Creativity is the soul.”</div>
+                </div>
             </div>
         </main>
-    );
-}
-
-function StatItem({ label, value }) {
-    return (
-        <div className="flex items-center justify-between p-4 glass-card border-white/5">
-            <span className="text-xs font-bold text-white/40 uppercase tracking-widest">{label}</span>
-            <span className="text-sm font-black text-blue-400">{value}</span>
-        </div>
-    );
-}
-
-function InterestCard({ icon, title, desc }) {
-    return (
-        <div className="glass-card p-8 group hover:bg-white/[0.05] transition-all duration-500 border-white/5">
-            <div className="mb-6 p-3 bg-white/5 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-500">
-                {React.cloneElement(icon, { size: 28 })}
-            </div>
-            <h3 className="text-xl font-bold mb-2 tracking-tight">{title}</h3>
-            <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
-        </div>
     );
 }

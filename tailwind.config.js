@@ -7,22 +7,34 @@ export default {
   theme: {
     extend: {
       colors: {
-        glass: {
-          DEFAULT: "rgba(255, 255, 255, 0.05)",
-          border: "rgba(255, 255, 255, 0.1)",
-        }
+        background: "#e8e8e5",
+        foreground: "#0a0a0a",
+        muted: "#F5F5F4",
+        border: "#E5E5E5",
+        subtle: "rgba(10,10,10,0.06)",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        serif: ["Instrument Serif", "Times New Roman", "serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       backdropBlur: {
         xs: "2px",
       },
       animation: {
-        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 6s ease-in-out infinite',
+        'marquee': 'marquee 30s linear infinite',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        }
+      },
+      container: {
+        center: true,
+        padding: "1.5rem",
+        screens: {
+          "2xl": "1280px",
         }
       }
     },
