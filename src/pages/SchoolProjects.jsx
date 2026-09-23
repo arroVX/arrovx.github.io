@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Code2, Terminal, Layers, ExternalLink, Download, Copy, Check, X, FileText, HardDrive, Video, Play } from 'lucide-react';
+import { BookOpen, Code2, Terminal, Layers, ExternalLink, Download, Copy, Check, X, FileText, HardDrive, Video, Play, ArrowUpRight } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Toast from '../components/Toast';
@@ -256,37 +256,39 @@ export default function SchoolProjects() {
                 )}
 
                 {loading ? null : step === 3 && filtered.length > 0 ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filtered.map((item, idx) => (
-                            <div key={item.id || idx} className="rounded-2xl border border-black/5 bg-white overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-shadow flex flex-col">
-                                <div className="h-36 bg-zinc-100 border-b border-black/5 flex items-center justify-center overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+                        {filtered.map((item, idx) => {
+                            const mapel = getMapelGroup(item.subject, item.title, item.desc);
+                            return (
+                            <div key={item.id || idx} className="group cursor-pointer" onClick={() => setActiveProject(item)}>
+                                <div className="relative rounded-2xl overflow-hidden bg-zinc-200 aspect-[16/10]">
                                     {item.image ? (
-                                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" onError={e => e.target.style.display='none'} />
+                                        <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" loading="lazy" onError={e => e.target.style.display='none'} />
                                     ) : (
-                                        <div className="flex flex-col items-center">
-                                            <Code2 size={28} className="text-black/20" />
-                                            <span className="mono text-xs tracking-widest uppercase text-black/30 mt-1">{getMapelGroup(item.subject, item.title, item.desc)}</span>
+                                        <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-100">
+                                            <Code2 size={32} className="text-black/20" />
+                                            <span className="mono text-xs tracking-widest uppercase text-black/30 mt-2">{mapel}</span>
                                         </div>
                                     )}
+                                    <span className="absolute top-4 left-4 px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md text-white mono text-[10px] tracking-[0.14em] uppercase font-medium">
+                                        {mapel}
+                                    </span>
+                                    <span className="absolute bottom-4 right-4 w-11 h-11 rounded-full bg-white flex items-center justify-center text-black group-hover:bg-black group-hover:text-white transition-colors">
+                                        <ArrowUpRight size={16} />
+                                    </span>
                                 </div>
-                                <div className="p-5 flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="px-2 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-xs">{getClassGroup(item.classLevel, item.title, item.desc)}</span>
-                                        <span className="px-2 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-xs">{getMapelGroup(item.subject, item.title, item.desc)}</span>
-                                    </div>
-                                    <h3 className="font-bold leading-snug line-clamp-2">{item.title}</h3>
-                                    <p className="mono text-xs text-black/40 mt-1 flex items-center gap-1"><BookOpen size={12} /> {item.subject || 'TKJ'}</p>
-                                    <p className="text-sm text-black/60 leading-relaxed mt-2 line-clamp-2">{item.desc}</p>
-                                </div>
-                                <div className="p-4 border-t border-black/5 flex items-center justify-between">
-                                    <button onClick={() => setActiveProject(item)} className="text-xs font-medium hover:underline">Lihat Detail →</button>
-                                    <div className="flex gap-1">
-                                        {item.driveUrl && <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center"><HardDrive size={12} /></span>}
-                                        {item.videoUrl && <span className="w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center"><Video size={12} /></span>}
-                                    </div>
+                                <div className="border-t border-black/10 mt-6 pt-5">
+                                    <p className="mono text-[10px] tracking-[0.2em] uppercase text-black/40">
+                                        {String(idx + 1).padStart(2, '0')} / {mapel}
+                                    </p>
+                                    <h3 className="text-[24px] md:text-[26px] font-bold tracking-[-0.02em] leading-tight mt-2 group-hover:underline decoration-black/20 underline-offset-4">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-[15px] text-black/50 leading-relaxed mt-2 line-clamp-3">{item.desc}</p>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : step < 3 ? (
                     <div className="py-14 text-center border border-dashed border-black/10 rounded-2xl bg-white/60">
