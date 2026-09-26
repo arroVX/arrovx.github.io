@@ -155,8 +155,19 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
   const active = onActiveChange ? undefined : activeLocal;
   const setActive = onActiveChange || setActiveLocal;
 
-  // Dots -> loncat ke posisi scroll pin yang tepat (via ScrollTrigger, bukan offsetTop)
+  // Dots -> loncat ke posisi scroll pin yang tepat (via ScrollTrigger, bukan offsetTop).
+  // Mode native (reduced-motion, trackRef null): geser track horizontal langsung.
   const scrollTo = (idx) => {
+    if (!trackRef) {
+      const el = scrollRef.current;
+      if (!el) return;
+      const cards = el.querySelectorAll('[data-card]');
+      if (cards[idx]) {
+        cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        setActive(idx);
+      }
+      return;
+    }
     if (onDotClick) {
       onDotClick(idx);
       return;
@@ -336,6 +347,8 @@ export default function Home() {
   const [firebaseProjects, setFirebaseProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
 
+  const [prefersReduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
   const stackRef = useRef(null);
   const heroRef = useRef(null);
   const expSectionRef = useRef(null);
@@ -372,6 +385,12 @@ export default function Home() {
     else document.body.style.overflow = '';
     return () => { document.body.style.overflow = ''; };
   }, [selectedProject]);
+
+  // Ukur ulang pin/reveal saat data Firebase tiba (tinggi section berubah)
+  useEffect(() => {
+    const t = setTimeout(() => ScrollTrigger.refresh(), 150);
+    return () => clearTimeout(t);
+  }, [firebaseProjects]);
 
   const displayProjects = firebaseProjects.length ? firebaseProjects : [];
 
@@ -656,10 +675,9 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.98, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.12, ease: "easeOut" }}
-              data-hero-portrait
-              className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end will-change-transform"
+              className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end"
             >
-              <div className="relative w-[320px] sm:w-[360px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10">
+              <div data-hero-portrait className="relative w-[320px] sm:w-[360px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform">
                 {/* Top subtle line */}
                 <div className="absolute top-[18px] left-5 right-5 h-[1px] bg-white/[0.06] z-10" />
                 {/* Code icons decoration */}
@@ -733,7 +751,8 @@ export default function Home() {
           <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px)`, backgroundSize: `24px 24px` }} />
 
           {/* slider — hijack vertikal ke horizontal, lamban dramatis, tetap aktif mobile */}
-          <HomeExperienceSlider experiences={experiences} trackRef={expTrackRef} onDotClick={scrollToCard} />
+          {/* reduced-motion: pakai scroll horizontal native (fallback branch) */}
+          <HomeExperienceSlider experiences={experiences} trackRef={prefersReduced ? null : expTrackRef} onDotClick={scrollToCard} />
         </div>
 
         <div className="max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12">

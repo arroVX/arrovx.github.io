@@ -307,7 +307,7 @@ export default function App() {
         initial={{ opacity: 0 }}
         animate={!isLoading ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative w-full overflow-x-hidden bg-[#e8e8e5] text-[#0a0a0a]"
+        className="relative w-full overflow-x-clip bg-[#e8e8e5] text-[#0a0a0a]"
       >
         <AnimatePresence mode="wait">
           <Routes>
