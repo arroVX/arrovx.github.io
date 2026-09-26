@@ -394,7 +394,7 @@ export default function Home() {
       // bentrok dengan pin horizontal Experiences (nested pin = gap/strip putih + kartu kepotong).
       // Hero: sticky top-0 z-10, Experiences: relative z-20 menutupi seperti tirai.
 
-      // 1b) Hero curve morph — busur melengkung → lurus (scrub)
+      // 1b) Hero full animate — curve morph + parallax teks/foto + hint fade (semua scrub)
       if (heroCurveRef.current) {
         const straight = "M0 100 Q720 100 1440 100 L1440 100 L0 100 Z";
         gsap.to(heroCurveRef.current, {
@@ -405,6 +405,51 @@ export default function Home() {
             start: "top top",
             end: "bottom top",
             scrub: 1.1,
+          }
+        });
+      }
+
+      const heroText = hero.querySelector('[data-hero-text]');
+      if (heroText) {
+        gsap.to(heroText, {
+          yPercent: -14,
+          opacity: 0.15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom 30%',
+            scrub: 1.1,
+          }
+        });
+      }
+
+      const heroPortrait = hero.querySelector('[data-hero-portrait]');
+      if (heroPortrait) {
+        gsap.to(heroPortrait, {
+          yPercent: 10,
+          scale: 1.05,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.1,
+          }
+        });
+      }
+
+      const heroHint = hero.querySelector('[data-hero-scrollhint]');
+      if (heroHint) {
+        gsap.to(heroHint, {
+          opacity: 0,
+          y: 10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: '18% top',
+            scrub: true,
           }
         });
       }
@@ -569,7 +614,8 @@ export default function Home() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="lg:col-span-7 xl:col-span-7"
+              data-hero-text
+              className="lg:col-span-7 xl:col-span-7 will-change-transform"
             >
               {/* Social icons row */}
               <div className="flex items-center gap-[14px] mb-7">
@@ -610,7 +656,8 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.98, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.12, ease: "easeOut" }}
-              className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end"
+              data-hero-portrait
+              className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end will-change-transform"
             >
               <div className="relative w-[320px] sm:w-[360px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10">
                 {/* Top subtle line */}
@@ -648,7 +695,7 @@ export default function Home() {
         </div>
 
         {/* Scroll down indicator */}
-        <div className="absolute bottom-[128px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+        <div data-hero-scrollhint className="absolute bottom-[128px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
           <div className="w-[20px] h-[30px] rounded-full border border-black/15 flex justify-center pt-1.5">
             <span className="w-[3px] h-[6px] bg-black/30 rounded-full block animate-bounce" />
           </div>
