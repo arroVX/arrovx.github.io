@@ -11,18 +11,18 @@ export const fallbackProjects = [
         id: 'liga-korupsi-indonesia',
         title: "Liga Korupsi Indonesia",
         category: "Poster Design",
-        image: "project-assets/images/0001_0.png",
+        image: "/project-assets/images/0001_0.png",
         desc: "A bold social commentary poster detailing major corruption cases in Indonesia (2024-2025).",
         longDesc: "Program visual ini dirancang untuk mempermudah masyarakat dalam memahami skala kasus korupsi di Indonesia. Menggabungkan jurnalisme data dengan desain poster investigatif.",
         tech: ["Photoshop", "Typography", "Data Journalism"],
         features: ["Visualisasi data kasus korupsi", "Tipografi investigatif", "Layout infografis padat"],
-        links: { live: "#", github: "#" }
+        links: { live: "", github: "" }
     },
     {
         id: 'visual-flow-02',
         title: "Visual Flow 02",
         category: "Experimental",
-        image: "project-assets/images/0001_0(1).png",
+        image: "/project-assets/images/0001_0(1).png",
         desc: "An experimental exploration of depth and texture, part of the 'Visual Flow' series.",
         tech: ["Photoshop"]
     },
@@ -30,7 +30,7 @@ export const fallbackProjects = [
         id: 'visual-flow-03',
         title: "Visual Flow 03",
         category: "Experimental",
-        image: "project-assets/images/0001_0(1)_1.png",
+        image: "/project-assets/images/0001_0(1)_1.png",
         desc: "Continuing the abstract series with a focus on vibrant color contrasts.",
         tech: ["Photoshop"]
     },
@@ -38,7 +38,7 @@ export const fallbackProjects = [
         id: 'visual-flow-04',
         title: "Visual Flow 04",
         category: "Experimental",
-        image: "project-assets/images/0001_0(2).png",
+        image: "/project-assets/images/0001_0(2).png",
         desc: "A darker, more atmospheric entry in the Visual Flow series.",
         tech: ["Photoshop"]
     },
@@ -46,7 +46,7 @@ export const fallbackProjects = [
         id: 'modern-event-flyer',
         title: "Modern Event Flyer",
         category: "Graphic Design",
-        image: "project-assets/images/0002_40.png",
+        image: "/project-assets/images/0002_40.png",
         desc: "A sleek, modern flyer designed for high-end events.",
         tech: ["Illustrator"]
     },
@@ -54,7 +54,7 @@ export const fallbackProjects = [
         id: 'abstract-composition',
         title: "Abstract Composition",
         category: "Digital Art",
-        image: "project-assets/images/0003_20.png",
+        image: "/project-assets/images/0003_20.png",
         desc: "A fusion of geometric shapes and fluid gradients.",
         tech: ["Digital Art"]
     },
@@ -62,7 +62,7 @@ export const fallbackProjects = [
         id: 'geometric-study-05',
         title: "Geometric Study 05",
         category: "Graphic Design",
-        image: "project-assets/images/0005_20.png",
+        image: "/project-assets/images/0005_20.png",
         desc: "Part of a minimalist series exploring bold shapes.",
         tech: ["Graphic Design"]
     },
@@ -70,7 +70,7 @@ export const fallbackProjects = [
         id: 'branding-concept-01',
         title: "Branding Concept 01",
         category: "Branding",
-        image: "project-assets/images/0006_20.png",
+        image: "/project-assets/images/0006_20.png",
         desc: "Investigating modern brand marks through geometric construction.",
         tech: ["Branding"]
     },
@@ -78,7 +78,7 @@ export const fallbackProjects = [
         id: 'cinematic-mood-poster',
         title: "Cinematic Mood Poster",
         category: "Poster Design",
-        image: "project-assets/images/0007_20.png",
+        image: "/project-assets/images/0007_20.png",
         desc: "Capturing the essence of cinematic storytelling.",
         tech: ["Photo Manipulation"]
     },
@@ -86,7 +86,7 @@ export const fallbackProjects = [
         id: 'moment-capture-01',
         title: "Moment Capture 01",
         category: "Photography",
-        image: "project-assets/images/20250619_180706.png",
+        image: "/project-assets/images/20250619_180706.png",
         desc: "Street photography focusing on quiet moments.",
         tech: ["Photography"]
     },
@@ -94,7 +94,7 @@ export const fallbackProjects = [
         id: 'mobile-interface-study',
         title: "Mobile Interface Study",
         category: "UI Design",
-        image: "project-assets/images/IMG_20251101_085224.png",
+        image: "/project-assets/images/IMG_20251101_085224.png",
         desc: "A practical study on mobile user experience.",
         tech: ["Figma"]
     },

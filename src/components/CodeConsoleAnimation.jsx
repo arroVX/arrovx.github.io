@@ -29,6 +29,7 @@ export default function CodeConsoleAnimation() {
 
     useEffect(() => {
         let isMounted = true;
+        const timeouts = [];
         const currentItem = COMMAND_SEQUENCE[cmdIndex];
         let charIndex = 0;
 
@@ -43,10 +44,11 @@ export default function CodeConsoleAnimation() {
                 charIndex++;
             } else {
                 clearInterval(typeInterval);
+                if (!isMounted) return;
                 setIsTyping(false);
 
                 // Wait 600ms then execute and push to history
-                setTimeout(() => {
+                const t1 = setTimeout(() => {
                     if (!isMounted) return;
                     setHistory((prev) => [
                         ...prev.slice(-3), // keep last 3 commands visible to avoid overflow
@@ -55,17 +57,20 @@ export default function CodeConsoleAnimation() {
                     setCurrentInput('');
 
                     // Wait 2500ms before next command
-                    setTimeout(() => {
+                    const t2 = setTimeout(() => {
                         if (!isMounted) return;
                         setCmdIndex((prev) => (prev + 1) % COMMAND_SEQUENCE.length);
                     }, 2500);
+                    timeouts.push(t2);
                 }, 600);
+                timeouts.push(t1);
             }
         }, 80);
 
         return () => {
             isMounted = false;
             clearInterval(typeInterval);
+            timeouts.forEach(clearTimeout);
         };
     }, [cmdIndex]);
 
@@ -89,8 +94,10 @@ export default function CodeConsoleAnimation() {
                     </div>
 
                     <button
+                        aria-label="Tutup konsol"
+                        title="Tutup konsol"
+                        onClick={(e) => e.stopPropagation()}
                         className="w-8 h-8 rounded-full hover:bg-white/5 flex items-center justify-center text-white/30 hover:text-white transition-all"
-                        title="Close Console"
                     >
                         <X size={18} />
                     </button>

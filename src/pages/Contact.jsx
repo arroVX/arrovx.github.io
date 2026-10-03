@@ -12,9 +12,40 @@ export default function Contact() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const name = formState.name.trim();
+        const email = formState.email.trim();
+        const subject = formState.subject.trim();
+        const message = formState.message.trim();
+
+        if (name.length < 2 || name.length > 100) {
+            setToast({ isOpen: true, message: "Nama harus 2–100 karakter.", type: 'error' });
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) {
+            setToast({ isOpen: true, message: "Format email tidak valid.", type: 'error' });
+            return;
+        }
+        if (subject.length < 3 || subject.length > 150) {
+            setToast({ isOpen: true, message: "Subjek harus 3–150 karakter.", type: 'error' });
+            return;
+        }
+        if (message.length < 10 || message.length > 5000) {
+            setToast({ isOpen: true, message: "Pesan harus 10–5000 karakter.", type: 'error' });
+            return;
+        }
+        // Rate-limit sederhana: 1 pesan / 60 detik per browser
+        const lastSent = Number(localStorage.getItem('arro_last_contact') || 0);
+        if (Date.now() - lastSent < 60 * 1000) {
+            setToast({ isOpen: true, message: "Tunggu sebentar sebelum mengirim lagi.", type: 'error' });
+            return;
+        }
         setIsSubmitting(true);
         try {
-            await addDoc(collection(db, 'contacts'), { ...formState, timestamp: serverTimestamp() });
+            await addDoc(collection(db, 'contacts'), {
+                name, email, subject, message,
+                timestamp: serverTimestamp()
+            });
+            localStorage.setItem('arro_last_contact', String(Date.now()));
             setToast({ isOpen: true, message: "Pesan terkirim! Bakal segera aku cek.", type: 'success' });
             setFormState({ name: '', email: '', subject: '', message: '' });
         } catch (err) {

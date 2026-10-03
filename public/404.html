@@ -5,17 +5,30 @@
     <meta charset="utf-8">
     <title>Arroudhil Anfi - Portofolio</title>
     <script type="text/javascript">
-        // Single Page Apps for GitHub Pages
-        // https://github.com/rafgraph/spa-github-pages
-        // This script takes the non-hash URL and converts it to a hashbang URL
-        // so that the HashRouter can pick it up.
-        var path = window.location.pathname;
-        var search = window.location.search;
-        var hash = window.location.hash;
-
-        // Redirect to the root with the path as a hash
-        // Example: arrovx.github.io/projects -> arrovx.github.io/#/projects
-        window.location.replace(window.location.origin + '/' + '#' + path + search + hash);
+        // SPA fallback untuk HashRouter di GitHub Pages.
+        // Mendukung user site (arrovx.github.io/...) dan project site (...github.io/repo/...).
+        (function () {
+            var pathname = window.location.pathname;
+            var search = window.location.search;
+            var hash = window.location.hash;
+            // Buang trailing /404.html atau /404 agar base tetap benar
+            var cleanPath = pathname.replace(/\/(404\.html|404)\/?$/, '') || '/';
+            var segments = cleanPath.split('/').filter(Boolean);
+            var base = '/';
+            // Jika di *.github.io dan ada segmen repo (project site), pertahankan segmen pertama sebagai base
+            if (window.location.hostname.endsWith('.github.io') && segments.length > 0 && window.location.hostname !== segments[0] + '.github.io') {
+                // Heuristik: user site punya 0-1 segmen path route; project site punya prefix repo.
+                // Kita anggap segmen pertama adalah nama repo bila path tidak diawali route yang dikenal.
+                var knownRoutes = ['about', 'projects', 'services', 'experience', 'school-projects', 'achievements', 'contact', 'admin'];
+                if (knownRoutes.indexOf(segments[0]) === -1 && segments.length >= 1) {
+                    base = '/' + segments[0] + '/';
+                    cleanPath = '/' + segments.slice(1).join('/');
+                    if (cleanPath === '/') cleanPath = '';
+                }
+            }
+            var target = base + '#' + (cleanPath.charAt(0) === '/' ? cleanPath : '/' + cleanPath) + search + hash;
+            window.location.replace(target);
+        })();
     </script>
 </head>
 

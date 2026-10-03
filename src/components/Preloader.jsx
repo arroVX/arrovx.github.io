@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 export default function Preloader({ onComplete }) {
     const [counter, setCounter] = useState(0);
+    const completeTimeoutRef = useRef(null);
+    const completedRef = useRef(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -11,14 +13,25 @@ export default function Preloader({ onComplete }) {
                     const diff = Math.random() * 10 + 6;
                     return Math.min(prev + diff, 100);
                 }
-                clearInterval(interval);
-                setTimeout(onComplete, 600);
-                return 100;
+                return prev;
             });
         }, 80);
-        return () => clearInterval(interval);
-    }, [onComplete]);
+        return () => {
+            clearInterval(interval);
+            if (completeTimeoutRef.current) clearTimeout(completeTimeoutRef.current);
+        };
+    }, []);
 
+    // Panggil onComplete sekali saat counter mencapai 100 (di luar updater, guard StrictMode)
+    useEffect(() => {
+        if (counter >= 100 && !completedRef.current) {
+            completedRef.current = true;
+            completeTimeoutRef.current = setTimeout(onComplete, 600);
+            return () => {
+                if (completeTimeoutRef.current) clearTimeout(completeTimeoutRef.current);
+            };
+        }
+    }, [counter, onComplete]);
     return (
         <motion.div
             initial={{ opacity: 1 }}

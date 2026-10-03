@@ -35,15 +35,21 @@ export default function LogoAnimation() {
             }
             iteration += 1;
         }, 30);
+        return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
+        let scrambleCleanup;
         const interval = setInterval(() => {
             const nextIndex = (index + 1) % variants.length;
             setIndex(nextIndex);
-            scramble(variants[nextIndex]);
+            if (scrambleCleanup) scrambleCleanup();
+            scrambleCleanup = scramble(variants[nextIndex]);
         }, 4000);
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            if (scrambleCleanup) scrambleCleanup();
+        };
     }, [index, scramble]);
 
     return (

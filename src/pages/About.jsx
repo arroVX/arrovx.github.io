@@ -13,7 +13,7 @@ export default function About() {
 
                 <div className="flex flex-col md:flex-row gap-8 items-center mb-16">
                     <div className="w-56 h-56 rounded-2xl overflow-hidden border border-black/5 bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-1.5 shrink-0">
-                        <img src="/profile.webp" alt="Arroudhil Anfi" className="w-full h-full object-cover rounded-xl" />
+                        <img src="/profile.webp" alt="Foto profil Arroudhil Anfi" width="512" height="512" loading="lazy" className="w-full h-full object-cover rounded-xl" />
                     </div>
                     <div>
                         <p className="mono text-xs tracking-[0.2em] uppercase text-black/40 mb-3">About</p>
@@ -41,21 +41,6 @@ export default function About() {
                             </div>
                         ))}
                     </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4 mb-16">
-                    {[
-                        { icon: <Music size={20} />, title: "Math Rock & Guitar", desc: "Terinspirasi Murphy Radio — eksplorasi riff kompleks dan composing." },
-                        { icon: <Camera size={20} />, title: "Visual Storytelling", desc: "Fotografi & videografi sebagai cara dokumentasi perspektif." },
-                        { icon: <Coffee size={20} />, title: "Minimalist Design", desc: "Obsesi pada interface bersih, border halus, dan animasi halus." },
-                        { icon: <Star size={20} />, title: "Competitive Programming", desc: "Memecahkan masalah kompleks dengan logic efisien adalah olahraga." },
-                    ].map((c, i) => (
-                        <div key={i} className="rounded-2xl border border-black/5 bg-white p-6 hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-shadow">
-                            <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center mb-3">{c.icon}</div>
-                            <h3 className="font-bold tracking-tight">{c.title}</h3>
-                            <p className="text-sm text-black/50 leading-relaxed mt-1">{c.desc}</p>
-                        </div>
-                    ))}
                 </div>
 
                 <div className="rounded-2xl border border-black/5 bg-white p-8 md:p-12 text-center">

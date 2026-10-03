@@ -9,11 +9,12 @@ import {
     HardDrive, Video, Play, Link as LinkIcon, MessageSquare, Mail, User, Clock, Inbox, Send, Eye,
     Search, Filter, Trophy, Award
 } from 'lucide-react';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import {
     collection, onSnapshot, addDoc, updateDoc, deleteDoc,
     doc
 } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Toast from '../components/Toast';
 import TerminalLoading from '../components/TerminalLoading';
 
@@ -22,32 +23,32 @@ const defaultProjectsSeed = [
     {
         title: "Liga Korupsi Indonesia",
         category: "Poster Design",
-        image: "project-assets/images/0001_0.png",
+        image: "/project-assets/images/0001_0.png",
         desc: "Poster investigatif komparatif korupsi Indonesia 2024-2025.",
         longDesc: "Program visual ini dirancang untuk mempermudah masyarakat dalam memahami skala kasus korupsi di Indonesia melalui desain poster investigatif yang futuristik.",
         tech: ["Photoshop", "Typography", "Infographics"],
-        liveUrl: "#",
-        githubUrl: "#"
+        liveUrl: "",
+        githubUrl: ""
     },
     {
         title: "Visual Flow Series",
         category: "Abstract Art",
-        image: "project-assets/images/0001_0(1).png",
+        image: "/project-assets/images/0001_0(1).png",
         desc: "Eksplorasi eksperimental bentuk dan tekstur seni abstrak digital.",
         longDesc: "Serial eksplorasi visual yang menggabungkan elemen organik dan digital dengan kontras warna yang dinamis.",
         tech: ["Photoshop", "Digital Art"],
-        liveUrl: "#",
-        githubUrl: "#"
+        liveUrl: "",
+        githubUrl: ""
     },
     {
         title: "Modern Event Flyer",
         category: "Graphic Design",
-        image: "project-assets/images/0002_40.png",
+        image: "/project-assets/images/0002_40.png",
         desc: "Desain flyer modern & futuristik untuk acara teknologi & musik.",
         longDesc: "Flyer visual berakurasi tinggi dengan prinsip tata letak tipografi bersih dan modern.",
         tech: ["Illustrator", "Photoshop"],
-        liveUrl: "#",
-        githubUrl: "#"
+        liveUrl: "",
+        githubUrl: ""
     }
 ];
 
@@ -151,7 +152,7 @@ export default function Admin() {
         organizer: '',
         rank: '',
         icon: 'trophy',
-        image: 'project-assets/images/0001_0.png',
+        image: '/project-assets/images/0001_0.png',
         desc: '',
         longDesc: '',
         tech: '',
@@ -180,15 +181,33 @@ export default function Admin() {
         };
     }, [isModalOpen, deleteConfirm?.isOpen]);
 
-    // Handle Auth Login
+    // Handle Auth Login — PIN diambil dari env, bukan hardcoded ganda.
+    // TODO: migrasi ke Firebase Auth (email+password + custom claim) agar benar-benar aman.
+    // PIN client-side hanya penghalang UI, bukan otentikasi.
+    const [loginAttempts, setLoginAttempts] = useState(0);
+    const [lockedUntil, setLockedUntil] = useState(0);
     const handleLogin = (e) => {
         e.preventDefault();
-        if (passcode === 'arro2025' || passcode === '1234' || passcode === 'admin123') {
+        const now = Date.now();
+        if (now < lockedUntil) {
+            setPassError(true);
+            setToast({ isOpen: true, message: "Terlalu banyak percobaan. Coba lagi sebentar.", type: 'error' });
+            return;
+        }
+        const expected = import.meta.env.VITE_ADMIN_PASSCODE || 'arro2025';
+        if (passcode === expected && passcode.length >= 6) {
             setIsAuthenticated(true);
             sessionStorage.setItem('arro_admin_auth', 'true');
             setPassError(false);
+            setLoginAttempts(0);
             setToast({ isOpen: true, message: "Akses Admin Berhasil!", type: 'success' });
         } else {
+            const next = loginAttempts + 1;
+            setLoginAttempts(next);
+            if (next >= 5) {
+                setLockedUntil(now + 60 * 1000);
+                setLoginAttempts(0);
+            }
             setPassError(true);
             setToast({ isOpen: true, message: "PIN Admin Salah!", type: 'error' });
         }
@@ -283,86 +302,100 @@ export default function Admin() {
         return 'Baru Saja';
     };
 
-    // Handle File Upload — Direct FileReader (always works, no Firebase Storage needed)
-    const handleFileUpload = (e, type) => {
+    // Handle File Upload — via Firebase Storage (bukan base64 ke Firestore).
+    // Batas: gambar 5MB (dikompres bila >1MB), PDF 5MB. Hasil berupa download URL.
+    const handleFileUpload = async (e, type) => {
         const file = e.target.files[0];
         if (!file) return;
+        // Reset input agar file yang sama bisa dipilih ulang
+        e.target.value = '';
 
         const isImage = type === 'image';
-        const maxSizeMB = 1; // Max 1MB for Firestore document field
+        const MAX_BYTES = 5 * 1024 * 1024;
 
-        if (isImage) {
-            setUploadingImage(true);
-            setImgProgress(20);
+        if (file.size > MAX_BYTES) {
+            setToast({ isOpen: true, message: `File terlalu besar (maks 5MB): "${file.name}"`, type: 'error' });
+            return;
+        }
+        if (isImage && !file.type.startsWith('image/')) {
+            setToast({ isOpen: true, message: "File harus berupa gambar.", type: 'error' });
+            return;
+        }
+        if (!isImage && file.type !== 'application/pdf') {
+            setToast({ isOpen: true, message: "File harus berupa PDF.", type: 'error' });
+            return;
+        }
 
-            // For images: compress via canvas if too large, then store as data URL
-            if (file.size > maxSizeMB * 1024 * 1024) {
-                // Compress large image
-                const img = new Image();
-                const url = URL.createObjectURL(file);
-                img.onload = () => {
-                    setImgProgress(50);
-                    const canvas = document.createElement('canvas');
-                    const maxDim = 800;
+        const uploadToStorage = async (blob, fileName, contentType) => {
+            const safeName = `${Date.now()}-${fileName.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
+            const folder = isImage ? 'uploads/images' : 'uploads/certificates';
+            const storageRef = ref(storage, `${folder}/${safeName}`);
+            await uploadBytes(storageRef, blob, { contentType });
+            return getDownloadURL(storageRef);
+        };
+
+        const compressImage = (imageFile) => new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(imageFile);
+            const img = new Image();
+            img.onload = () => {
+                try {
+                    const maxDim = 1024;
                     let w = img.width, h = img.height;
                     if (w > maxDim || h > maxDim) {
                         if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
                         else { w = Math.round(w * maxDim / h); h = maxDim; }
                     }
+                    const canvas = document.createElement('canvas');
                     canvas.width = w;
                     canvas.height = h;
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    const compressed = canvas.toDataURL('image/jpeg', 0.7);
-                    setImgProgress(100);
-                    setFormData(prev => ({ ...prev, image: compressed }));
-                    setUploadingImage(false);
                     URL.revokeObjectURL(url);
-                    setToast({ isOpen: true, message: `Gambar "${file.name}" berhasil diunggah & dikompres!`, type: 'success' });
-                };
-                img.onerror = () => {
-                    setUploadingImage(false);
+                    canvas.toBlob((blob) => {
+                        if (blob) resolve(blob);
+                        else reject(new Error('compress-failed'));
+                    }, 'image/jpeg', 0.8);
+                } catch (err) {
                     URL.revokeObjectURL(url);
-                    setToast({ isOpen: true, message: "Gagal membaca file gambar.", type: 'error' });
-                };
-                img.src = url;
-            } else {
-                // Small image — read directly
-                const reader = new FileReader();
-                reader.onprogress = (evt) => {
-                    if (evt.lengthComputable) setImgProgress(Math.round((evt.loaded / evt.total) * 100));
-                };
-                reader.onloadend = () => {
-                    setImgProgress(100);
-                    setFormData(prev => ({ ...prev, image: reader.result }));
-                    setUploadingImage(false);
-                    setToast({ isOpen: true, message: `Gambar "${file.name}" berhasil diunggah!`, type: 'success' });
-                };
-                reader.onerror = () => {
-                    setUploadingImage(false);
-                    setToast({ isOpen: true, message: "Gagal membaca file gambar.", type: 'error' });
-                };
-                reader.readAsDataURL(file);
+                    reject(err);
+                }
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error('read-failed'));
+            };
+            img.src = url;
+        });
+
+        if (isImage) {
+            setUploadingImage(true);
+            setImgProgress(20);
+            try {
+                const blob = file.size > 1024 * 1024 ? await compressImage(file) : file;
+                setImgProgress(60);
+                const downloadUrl = await uploadToStorage(blob, file.name, blob.type || file.type);
+                setImgProgress(100);
+                // Hapus prefix data: bila sebelumnya base64, ganti dengan URL Storage
+                setFormData(prev => ({ ...prev, image: downloadUrl }));
+                setToast({ isOpen: true, message: `Gambar "${file.name}" berhasil diunggah ke Storage!`, type: 'success' });
+            } catch {
+                setToast({ isOpen: true, message: "Gagal mengunggah gambar ke Storage.", type: 'error' });
+            } finally {
+                setUploadingImage(false);
             }
         } else {
-            // PDF / Document
             setUploadingPdf(true);
             setPdfProgress(20);
-
-            const reader = new FileReader();
-            reader.onprogress = (evt) => {
-                if (evt.lengthComputable) setPdfProgress(Math.round((evt.loaded / evt.total) * 100));
-            };
-            reader.onloadend = () => {
+            try {
+                setPdfProgress(60);
+                const downloadUrl = await uploadToStorage(file, file.name, 'application/pdf');
                 setPdfProgress(100);
-                setFormData(prev => ({ ...prev, fileUrl: reader.result, fileName: file.name }));
+                setFormData(prev => ({ ...prev, fileUrl: downloadUrl, fileName: file.name }));
+                setToast({ isOpen: true, message: `File "${file.name}" berhasil diunggah ke Storage!`, type: 'success' });
+            } catch {
+                setToast({ isOpen: true, message: "Gagal mengunggah dokumen ke Storage.", type: 'error' });
+            } finally {
                 setUploadingPdf(false);
-                setToast({ isOpen: true, message: `File "${file.name}" berhasil diunggah!`, type: 'success' });
-            };
-            reader.onerror = () => {
-                setUploadingPdf(false);
-                setToast({ isOpen: true, message: "Gagal membaca file dokumen.", type: 'error' });
-            };
-            reader.readAsDataURL(file);
+            }
         }
     };
 
@@ -382,7 +415,7 @@ export default function Admin() {
                 organizer: item.organizer || '',
                 rank: item.rank || '',
                 icon: item.icon || 'trophy',
-                image: item.image || (activeTab === 'achievements' ? '' : 'project-assets/images/0001_0.png'),
+                image: item.image || (activeTab === 'achievements' ? '' : '/project-assets/images/0001_0.png'),
                 desc: item.desc || '',
                 longDesc: item.longDesc || '',
                 tech: Array.isArray(item.tech) ? item.tech.join(', ') : item.tech || '',
@@ -406,7 +439,7 @@ export default function Admin() {
                 organizer: '',
                 rank: '',
                 icon: 'trophy',
-                image: activeTab === 'achievements' ? '' : 'project-assets/images/0001_0.png',
+                image: activeTab === 'achievements' ? '' : '/project-assets/images/0001_0.png',
                 desc: '',
                 longDesc: '',
                 tech: 'Photoshop, React, Tailwind',
@@ -473,7 +506,7 @@ export default function Admin() {
                 classLevel: formData.classLevel || '',
                 desc: formData.desc,
                 longDesc: formData.longDesc || formData.desc,
-                image: formData.image || 'project-assets/images/0001_0.png',
+                image: formData.image || '/project-assets/images/0001_0.png',
                 tech: formData.tech.split(',').map(t => t.trim()).filter(Boolean),
                 fileUrl: formData.fileUrl || '',
                 fileName: formData.fileName || '',
@@ -483,8 +516,8 @@ export default function Admin() {
             };
 
             if (activeTab === 'projects') {
-                payload.liveUrl = formData.liveUrl || '#';
-                payload.githubUrl = formData.githubUrl || '#';
+                payload.liveUrl = formData.liveUrl || '';
+                payload.githubUrl = formData.githubUrl || '';
             } else {
                 payload.subject = formData.subject || 'TKJ SMKN 3 Jepara';
                 payload.grade = formData.grade || '100 / A+';
@@ -770,13 +803,13 @@ export default function Admin() {
                         <AlertCircle size={18} /> Error Izin Firestore (Permission Denied)
                     </div>
                     <p>
-                        Database Firestore kamu di Firebase Console memblokir akses baca/tulis.
+                        Database Firestore menolak akses. Jangan gunakan mode publik penuh.
+                        Deploy aturan aman dari repo ini:
                     </p>
                     <div className="bg-black/40 p-3 rounded-xl font-mono text-[11px] text-white/80">
-                        1. Buka <b>https://console.firebase.google.com/</b> ➔ Pilih Project <b>rojing-54fcd</b><br />
-                        2. Pilih <b>Firestore Database</b> ➔ Tab <b>Rules</b><br />
-                        3. Ubah aturan menjadi: <code className="text-emerald-400">allow read, write: if true;</code><br />
-                        4. Klik tombol <b>Publish</b>.
+                        1. Pastikan <b>firestore.rules</b> & <b>storage.rules</b> sudah sesuai<br />
+                        2. Jalankan <code className="text-emerald-400">firebase deploy --only firestore:rules,storage</code><br />
+                        3. Untuk tulis data, login via Firebase Auth (lihat TODO di kode Admin).
                     </div>
                 </div>
             )}

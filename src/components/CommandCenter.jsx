@@ -38,7 +38,12 @@ export default function CommandCenter({ isOpen, onClose }) {
             inputRef.current?.focus();
             const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
             window.addEventListener('keydown', handleEsc);
-            return () => window.removeEventListener('keydown', handleEsc);
+            const prevOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                window.removeEventListener('keydown', handleEsc);
+                document.body.style.overflow = prevOverflow;
+            };
         }
     }, [isOpen, onClose]);
 
@@ -94,6 +99,9 @@ export default function CommandCenter({ isOpen, onClose }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="ArroOS Command Center"
                     className="fixed inset-0 z-[10000] flex items-center justify-center p-4 md:p-6 bg-[#0a0a0a]/30 backdrop-blur-sm"
                     onClick={onClose}
                 >
@@ -116,7 +124,7 @@ export default function CommandCenter({ isOpen, onClose }) {
                                     <span className="mono text-[10px] tracking-widest text-black/40">v3.0 — light</span>
                                 </div>
                             </div>
-                            <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-black/5 flex items-center justify-center text-black/40 hover:text-black transition-colors">
+                            <button onClick={onClose} aria-label="Tutup command center" className="w-8 h-8 rounded-full hover:bg-black/5 flex items-center justify-center text-black/40 hover:text-black transition-colors">
                                 <X size={16} />
                             </button>
                         </div>

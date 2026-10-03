@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
@@ -6,6 +6,18 @@ import { ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
 export default function ImageZoomModal({ src, alt, onClose }) {
     const [scale, setScale] = useState(1);
     const [rotation, setRotation] = useState(0);
+
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleEsc);
+        document.body.style.overflow = 'hidden';
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+            document.body.style.overflow = '';
+        };
+    }, [onClose]);
 
     const handleZoomIn = (e) => {
         e?.stopPropagation();
@@ -29,6 +41,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
     };
 
     const handleWheel = (e) => {
+        e.preventDefault();
         if (e.deltaY < 0) {
             setScale(prev => Math.min(prev + 0.25, 4));
         } else {
@@ -47,6 +60,9 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                role="dialog"
+                aria-modal="true"
+                aria-label={alt ? `Pratinjau gambar: ${alt}` : 'Pratinjau gambar'}
                 className="fixed inset-0 z-[3000000] flex flex-col items-center justify-between p-4 md:p-8 bg-black/95 backdrop-blur-3xl select-none"
                 onClick={onClose}
                 onWheel={handleWheel}
@@ -62,6 +78,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                     <div className="flex items-center gap-2 bg-[#0a0f1d]/90 p-2 rounded-2xl border border-white/15 shadow-2xl backdrop-blur-xl">
                         <button
                             onClick={handleZoomIn}
+                            aria-label="Perbesar gambar"
                             title="Zoom In (+)"
                             disabled={scale >= 4}
                             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-blue-600 disabled:opacity-30 disabled:hover:bg-white/5 text-white flex items-center justify-center transition-colors border-none cursor-pointer"
@@ -70,6 +87,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                         </button>
                         <button
                             onClick={handleZoomOut}
+                            aria-label="Perkecil gambar"
                             title="Zoom Out (-)"
                             disabled={scale <= 1}
                             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-blue-600 disabled:opacity-30 disabled:hover:bg-white/5 text-white flex items-center justify-center transition-colors border-none cursor-pointer"
@@ -78,6 +96,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                         </button>
                         <button
                             onClick={handleRotate}
+                            aria-label="Putar gambar 90 derajat"
                             title="Rotate 90°"
                             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-purple-600 text-white flex items-center justify-center transition-colors border-none cursor-pointer"
                         >
@@ -85,6 +104,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                         </button>
                         <button
                             onClick={handleReset}
+                            aria-label="Atur ulang zoom dan rotasi"
                             title="Reset Zoom"
                             className="w-10 h-10 rounded-xl bg-white/5 hover:bg-emerald-600 text-white flex items-center justify-center transition-colors border-none cursor-pointer"
                         >
@@ -95,6 +115,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                     {/* Close Button */}
                     <button
                         onClick={onClose}
+                        aria-label="Tutup pratinjau (ESC)"
                         title="Tutup (ESC)"
                         className="w-11 h-11 rounded-2xl bg-white/10 hover:bg-red-600/80 text-white flex items-center justify-center border border-white/20 cursor-pointer shadow-2xl backdrop-blur-md transition-colors"
                     >
@@ -106,7 +127,8 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                 <div className="flex-1 w-full flex items-center justify-center overflow-hidden relative cursor-grab active:cursor-grabbing">
                     <motion.div
                         drag={scale > 1}
-                        dragConstraints={{ left: -500 * scale, right: 500 * scale, top: -400 * scale, bottom: 400 * scale }}
+                        dragConstraints={{ left: -200, right: 200, top: -200, bottom: 200 }}
+                        dragElastic={0.1}
                         animate={{ scale, rotate: rotation }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                         onClick={handleImageClick}
@@ -114,7 +136,7 @@ export default function ImageZoomModal({ src, alt, onClose }) {
                     >
                         <img
                             src={src}
-                            alt={alt}
+                            alt={alt || 'Pratinjau gambar'}
                             className="max-w-[90vw] max-h-[80vh] object-contain rounded-2xl shadow-[0_0_80px_rgba(37,99,235,0.4)] border border-white/10 pointer-events-auto"
                             draggable={false}
                         />

@@ -100,7 +100,7 @@ function Navbar({ setIsCommandOpen }) {
             <button
               onClick={() => setIsCommandOpen(true)}
               className={`hidden md:inline-flex w-8 h-8 rounded-full border items-center justify-center transition-colors ${isDark ? 'bg-white/[0.06] border-white/10 text-white/50 hover:text-white hover:border-white/20' : 'bg-white border-black/10 text-black/50 hover:text-black hover:border-black/20'}`}
-              aria-label="Open terminal"
+              aria-label="Buka terminal perintah (Ctrl+K)"
               title="Terminal (Ctrl+K)"
             >
               <TerminalIcon size={14} />
@@ -123,6 +123,9 @@ function Navbar({ setIsCommandOpen }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu navigasi"
             className="fixed inset-0 z-[200] bg-[#0E0E0F] text-white flex flex-col px-6 md:px-10 lg:px-12 pt-5 pb-8 overflow-y-auto"
           >
             <div className="max-w-[1440px] w-full mx-auto flex flex-col flex-1 min-h-full">
@@ -294,6 +297,9 @@ export default function App() {
 
   return (
     <Router>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+        Lewati ke konten utama
+      </a>
       <ScrollToTop />
       <AnimatePresence mode="wait">
         {isLoading && (
@@ -304,6 +310,7 @@ export default function App() {
       {!isLoading && <Navbar setIsCommandOpen={setIsCommandOpen} />}
 
       <motion.main
+        id="main-content"
         initial={{ opacity: 0 }}
         animate={!isLoading ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}

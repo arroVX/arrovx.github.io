@@ -4,13 +4,16 @@ import { useState, useEffect, useCallback } from 'react';
 const chars = '!<>-_\\/[]{}—=+*^?#________';
 
 export const useScrambleText = (text, delay = 0) => {
-    const [scrambled, setScrambled] = useState('');
+    const [scrambled, setScrambled] = useState(text);
 
-    const scramble = useCallback(async () => {
-        if (delay) await new Promise(resolve => setTimeout(resolve, delay));
-
+    useEffect(() => {
+        let interval;
+        let timeout;
+        let cancelled = false;
         let iteration = 0;
-        const interval = setInterval(() => {
+
+        const tick = () => {
+            if (cancelled) return;
             setScrambled(
                 text.split("")
                     .map((char, index) => {
@@ -19,15 +22,26 @@ export const useScrambleText = (text, delay = 0) => {
                     })
                     .join("")
             );
-
-            if (iteration >= text.length) clearInterval(interval);
+            if (iteration >= text.length) {
+                clearInterval(interval);
+            }
             iteration += 1 / 3;
-        }, 30);
-    }, [text, delay]);
+        };
 
-    useEffect(() => {
-        scramble();
-    }, [scramble]);
+        if (delay) {
+            timeout = setTimeout(() => {
+                if (!cancelled) interval = setInterval(tick, 30);
+            }, delay);
+        } else {
+            interval = setInterval(tick, 30);
+        }
+
+        return () => {
+            cancelled = true;
+            if (interval) clearInterval(interval);
+            if (timeout) clearTimeout(timeout);
+        };
+    }, [text, delay]);
 
     return scrambled;
 };

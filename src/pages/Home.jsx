@@ -30,7 +30,7 @@ const experiences = [
     period: '2023 — PRESENT · 3 YEARS',
     desc: 'Siswa TKJ SMKN 3 Jepara fokus pada Computer & Network Engineering, Cisco, Mikrotik, dan infrastruktur jaringan. Menggabungkan logic dan kreativitas sambil berkompetisi nasional di informatika.',
     highlights: ['NETWORK INFRASTRUCTURE', 'CISCO & MIKROTIK LABS', 'COMPETITIVE PROGRAMMING', 'DESIGN & MOTION'],
-    image: 'project-assets/images/0001_0.png',
+    image: '/project-assets/images/0001_0.png',
     tag: 'Education'
   },
   {
