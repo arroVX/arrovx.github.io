@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Code2, Terminal, Layers, ExternalLink, Download, Copy, Check, X, FileText, HardDrive, Video, Play, ArrowUpRight } from 'lucide-react';
@@ -6,7 +7,7 @@ import { db } from '../firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Toast from '../components/Toast';
 
-const schoolProjectsData = [
+export const schoolProjectsData = [
     {
         id: "lkpd-01",
         title: "LKPD 01: Konfigurasi VLAN & Inter-VLAN Routing Cisco",
@@ -45,15 +46,35 @@ const schoolProjectsData = [
     },
 ];
 
-const pad2 = (n) => String(n).padStart(2, '0');
+export const pad2 = (n) => String(n).padStart(2, '0');
 
-const getYouTubeEmbedUrl = (url) => {
+export const getYouTubeEmbedUrl = (url) => {
     if (!url) return null;
     try {
         const m = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
         if (m && m[2].length === 11) return `https://www.youtube.com/embed/${m[2]}`;
     } catch {}
     return null;
+};
+
+export const getClassGroup = (classLevel = '', title = '', desc = '') => {
+    const raw = String(classLevel || '').toUpperCase();
+    if (raw.includes('XII') || raw.includes('12')) return 'Kelas XII';
+    if (raw.includes('XI') || raw.includes('11')) return 'Kelas XI';
+    if (raw.includes('X') || raw.includes('10')) return 'Kelas X';
+    const combined = `${title} ${desc}`.toUpperCase();
+    if (combined.includes('XII')) return 'Kelas XII';
+    if (combined.includes('XI')) return 'Kelas XI';
+    return 'Kelas X';
+};
+export const getMapelGroup = (subject = '', title = '', desc = '') => {
+    const t = `${subject} ${title} ${desc}`.toLowerCase();
+    if (t.includes('asj') || t.includes('administrasi sistem jaringan')) return 'ASJ';
+    if (t.includes('tjkn') || t.includes('teknik jaringan')) return 'TJKN';
+    if (t.includes('kj') || t.includes('keamanan')) return 'KJ';
+    if (t.includes('english') || t.includes('inggris')) return 'English';
+    if (t.includes('jepang')) return 'Bahasa Jepang';
+    return 'Lainnya';
 };
 
 export default function SchoolProjects() {
@@ -68,25 +89,6 @@ export default function SchoolProjects() {
     const classOptions = ["Kelas X", "Kelas XI", "Kelas XII"];
     const mapelMaster = ["ASJ", "TJKN", "KJ", "English", "Bahasa Jepang", "Lainnya"];
 
-    const getClassGroup = (classLevel = '', title = '', desc = '') => {
-        const raw = String(classLevel || '').toUpperCase();
-        if (raw.includes('XII') || raw.includes('12')) return 'Kelas XII';
-        if (raw.includes('XI') || raw.includes('11')) return 'Kelas XI';
-        if (raw.includes('X') || raw.includes('10')) return 'Kelas X';
-        const combined = `${title} ${desc}`.toUpperCase();
-        if (combined.includes('XII')) return 'Kelas XII';
-        if (combined.includes('XI')) return 'Kelas XI';
-        return 'Kelas X';
-    };
-    const getMapelGroup = (subject = '', title = '', desc = '') => {
-        const t = `${subject} ${title} ${desc}`.toLowerCase();
-        if (t.includes('asj') || t.includes('administrasi sistem jaringan')) return 'ASJ';
-        if (t.includes('tjkn') || t.includes('teknik jaringan')) return 'TJKN';
-        if (t.includes('kj') || t.includes('keamanan')) return 'KJ';
-        if (t.includes('english') || t.includes('inggris')) return 'English';
-        if (t.includes('jepang')) return 'Bahasa Jepang';
-        return 'Lainnya';
-    };
 
     useEffect(() => {
         const unsub = onSnapshot(collection(db, "school_projects"), (snap) => {
@@ -285,6 +287,16 @@ export default function SchoolProjects() {
                                         {item.title}
                                     </h3>
                                     <p className="text-[15px] text-black/50 leading-relaxed mt-2 line-clamp-3">{item.desc}</p>
+                                    <div className="mt-4 flex items-center gap-3">
+                                        <Link
+                                            to={`/school-projects/${item.id}`}
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="mono text-[10px] tracking-[0.2em] uppercase font-medium inline-flex items-center gap-1.5 border-b border-black/70 pb-1 hover:text-black/60 hover:border-black/30 transition-colors"
+                                        >
+                                            Open detail <ArrowUpRight size={13} />
+                                        </Link>
+                                        <span className="mono text-[10px] tracking-widest uppercase text-black/25">· click card for quick view</span>
+                                    </div>
                                 </div>
                             </div>
                             );

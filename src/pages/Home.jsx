@@ -51,7 +51,7 @@ function ProjectModal({ project, onClose }) {
   if (!project) return null;
   const techs = Array.isArray(project.tech) ? project.tech : (typeof project.tech === 'string' ? project.tech.split(',').map(s => s.trim()) : []);
   const features = project.features || [];
-  const images = [project.image, project.image, project.image].filter(Boolean);
+  const images = [...(Array.isArray(project.images) ? project.images : []), project.image].filter((src, i, arr) => src && arr.indexOf(src) === i);
 
   return createPortal(
     <motion.div
@@ -139,7 +139,7 @@ function ProjectModal({ project, onClose }) {
                   </div>
                 ))}
               </div>
-              <div className="mono text-xs tracking-widest text-black/20 text-center">01 / 03 — Gallery</div>
+              <div className="mono text-xs tracking-widest text-black/20 text-center">{String(Math.min(images.length, 1)).padStart(2, '0')} / {String(images.length || 1).padStart(2, '0')} — Gallery</div>
             </div>
           </div>
         </div>
@@ -808,7 +808,7 @@ export default function Home() {
           ) : (
             <div className="space-y-16">
               {displayProjects.slice(0, 4).map((p, idx) => {
-                const images = [p.image, p.image, p.image].filter(Boolean);
+                const images = [...(Array.isArray(p.images) ? p.images : []), p.image].filter((src, i, arr) => src && arr.indexOf(src) === i);
                 const techs = Array.isArray(p.tech) ? p.tech : (typeof p.tech === 'string' ? p.tech.split(',').map(s => s.trim()) : []);
                 const isEven = idx % 2 === 0;
                 return (
@@ -824,7 +824,7 @@ export default function Home() {
                       <SwiperGallery images={images} title={p.title} />
                       <div className="flex items-center justify-between mt-3 mono text-xs tracking-widest text-black/30">
                         <span>0{idx + 1} / 0{displayProjects.slice(0, 4).length}</span>
-                        <span className="hidden md:inline">swipe — 01 / 03</span>
+                        <span className="hidden md:inline">swipe — {String(1).padStart(2, '0')} / {String(images.length || 1).padStart(2, '0')}</span>
                       </div>
                     </div>
                     <div className="lg:col-span-5">

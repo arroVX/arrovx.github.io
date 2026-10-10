@@ -9,6 +9,7 @@ import Services from './pages/Services';
 import Experience from './pages/Experience';
 import Contact from './pages/Contact';
 import SchoolProjects from './pages/SchoolProjects';
+import SchoolProjectDetail from './pages/SchoolProjectDetail';
 import ProjectDetail from './pages/ProjectDetail';
 import Achievements from './pages/Achievements';
 import Admin from './pages/Admin';
@@ -18,18 +19,62 @@ import { Terminal as TerminalIcon } from 'lucide-react';
 import Preloader from './components/Preloader';
 import useLenis from './hooks/useLenis';
 
+function scrollTopImmediate() {
+  try {
+    const lenis = (typeof window !== 'undefined') ? window.__LENIS__ : null;
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      lenis.scrollTo(0, { immediate: true });
+      return;
+    }
+  } catch { /* fall through to native */ }
+  try {
+    window.scrollTo(0, 0);
+  } catch { /* noop */ }
+  try {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  } catch { /* noop */ }
+}
+
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
   useEffect(() => {
-    if (hash) {
+    if (hash && !hash.startsWith('#/')) {
       const el = document.querySelector(hash);
       if (el) {
-        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        setTimeout(() => {
+          try {
+            const lenis = window.__LENIS__;
+            if (lenis && typeof lenis.scrollTo === 'function') {
+              lenis.scrollTo(el, { offset: 0, immediate: false });
+              return;
+            }
+          } catch { /* noop */ }
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       }
     } else {
-      window.scrollTo(0, 0);
+      scrollTopImmediate();
+      const t = setTimeout(scrollTopImmediate, 80);
+      return () => clearTimeout(t);
     }
   }, [pathname, hash]);
+  return null;
+}
+
+// Handles legacy 404.html hash redirects (/#//projects/...) from GitHub Pages
+// and converts them to real BrowserRouter paths.
+function HashRedirect() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    const h = window.location.hash;
+    if (h && h.startsWith('#/')) {
+      const target = h.slice(1);
+      window.history.replaceState(null, '', target);
+      navigate(target, { replace: true });
+    }
+  }, [navigate, location]);
   return null;
 }
 
@@ -301,6 +346,7 @@ export default function App() {
         Lewati ke konten utama
       </a>
       <ScrollToTop />
+      <HashRedirect />
       <AnimatePresence mode="wait">
         {isLoading && (
           <Preloader onComplete={() => setIsLoading(false)} />
@@ -322,6 +368,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/school-projects" element={<SchoolProjects />} />
+            <Route path="/school-projects/:id" element={<SchoolProjectDetail />} />
             <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/contact" element={<Contact />} />

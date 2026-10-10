@@ -5,20 +5,21 @@
     <meta charset="utf-8">
     <title>Arroudhil Anfi - Portofolio</title>
     <script type="text/javascript">
-        // SPA fallback untuk HashRouter di GitHub Pages.
-        // Mendukung user site (arrovx.github.io/...) dan project site (...github.io/repo/...).
+        // SPA fallback for BrowserRouter on GitHub Pages.
+        // Primary fix: CI copies dist/index.html -> dist/404.html after build,
+        // so Pages serves the app directly on /projects/:id refresh.
+        // This file is the secondary fallback (manual builds without that copy):
+        // redirect to /#/path so App.jsx <HashRedirect/> can restore the route.
         (function () {
             var pathname = window.location.pathname;
             var search = window.location.search;
             var hash = window.location.hash;
-            // Buang trailing /404.html atau /404 agar base tetap benar
+            // Avoid loop when already a hash route
+            if (hash && hash.indexOf('#/') === 0) return;
             var cleanPath = pathname.replace(/\/(404\.html|404)\/?$/, '') || '/';
             var segments = cleanPath.split('/').filter(Boolean);
             var base = '/';
-            // Jika di *.github.io dan ada segmen repo (project site), pertahankan segmen pertama sebagai base
-            if (window.location.hostname.endsWith('.github.io') && segments.length > 0 && window.location.hostname !== segments[0] + '.github.io') {
-                // Heuristik: user site punya 0-1 segmen path route; project site punya prefix repo.
-                // Kita anggap segmen pertama adalah nama repo bila path tidak diawali route yang dikenal.
+            if (window.location.hostname.endsWith('.github.io') && segments.length > 0) {
                 var knownRoutes = ['about', 'projects', 'services', 'experience', 'school-projects', 'achievements', 'contact', 'admin'];
                 if (knownRoutes.indexOf(segments[0]) === -1 && segments.length >= 1) {
                     base = '/' + segments[0] + '/';
@@ -26,7 +27,9 @@
                     if (cleanPath === '/') cleanPath = '';
                 }
             }
-            var target = base + '#' + (cleanPath.charAt(0) === '/' ? cleanPath : '/' + cleanPath) + search + hash;
+            var path = cleanPath.charAt(0) === '/' ? cleanPath : '/' + cleanPath;
+            if (path === '/' && !search) return; // already home, avoid loop
+            var target = base + '#' + path + search;
             window.location.replace(target);
         })();
     </script>

@@ -17,6 +17,34 @@ function techList(project) {
     : (typeof tech === 'string' ? tech.split(',').map((s) => s.trim()).filter(Boolean) : []);
 }
 
+function sortProjectsStable(list) {
+  return [...list].sort((a, b) => {
+    const ca = a?.createdAt || '';
+    const cb = b?.createdAt || '';
+    if (ca && cb && ca !== cb) return String(ca).localeCompare(String(cb));
+    if (ca && !cb) return -1;
+    if (!ca && cb) return 1;
+    return String(a?.title || '').localeCompare(String(b?.title || ''));
+  });
+}
+
+function scrollToTopImmediate() {
+  try {
+    const lenis = typeof window !== 'undefined' ? window.__LENIS__ : null;
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      lenis.scrollTo(0, { immediate: true });
+      return;
+    }
+  } catch { /* fall through */ }
+  try {
+    window.scrollTo(0, 0);
+  } catch { /* noop */ }
+  try {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  } catch { /* noop */ }
+}
+
 export default function ProjectDetail() {
   const { id } = useParams();
   const [firebaseProjects, setFirebaseProjects] = useState([]);
@@ -30,7 +58,18 @@ export default function ProjectDetail() {
     return () => unsub();
   }, []);
 
-  const all = firebaseProjects.length > 0 ? firebaseProjects : fallbackProjects;
+  // Same-component navigation (/projects/a -> /projects/b) keeps state —
+  // force scroll-top via Lenis (window.scrollTo alone is ignored by Lenis).
+  useEffect(() => {
+    scrollToTopImmediate();
+    const t = setTimeout(scrollToTopImmediate, 60);
+    return () => clearTimeout(t);
+  }, [id]);
+
+  const all = useMemo(() => {
+    const raw = firebaseProjects.length > 0 ? firebaseProjects : fallbackProjects;
+    return sortProjectsStable(raw);
+  }, [firebaseProjects]);
   const index = all.findIndex((p) => String(p.id) === String(id));
   const project = index >= 0 ? all[index] : null;
 
@@ -42,8 +81,18 @@ export default function ProjectDetail() {
   const features = project?.features || [];
   const galleryImages = useMemo(() => {
     if (!project) return [];
-    if (Array.isArray(project.images) && project.images.length) return project.images;
-    return [project.image].filter(Boolean);
+    const collect = [];
+    if (Array.isArray(project.images)) collect.push(...project.images);
+    if (project.image) collect.push(project.image);
+    // Dedupe — Admin only writes single `image`, avoid [same x3] fake galleries.
+    const seen = new Set();
+    return collect.filter((src) => {
+      if (!src || typeof src !== 'string') return false;
+      const key = src.trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }, [project]);
 
   const stats = project?.stats?.length === 2 ? project.stats : [
@@ -89,6 +138,7 @@ export default function ProjectDetail() {
         {/* Title + meta */}
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-10">
           <motion.div
+            key={`title-${project.id}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -106,7 +156,7 @@ export default function ProjectDetail() {
             >
               View project archive <ArrowUpRight size={13} />
             </Link>
-            {(project.liveUrl || project.githubUrl || project.fileUrl) && project.liveUrl !== '#' && (
+            {(project.liveUrl || project.githubUrl || project.fileUrl) && (
               <div className="flex flex-wrap gap-2.5 mt-6">
                 {project.liveUrl && project.liveUrl !== '#' && (
                   <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-black text-white rounded-full text-sm font-medium inline-flex items-center gap-2 hover:bg-black/80">
@@ -128,6 +178,7 @@ export default function ProjectDetail() {
           </motion.div>
 
           <motion.aside
+            key={`meta-${project.id}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -162,14 +213,15 @@ export default function ProjectDetail() {
           </motion.aside>
         </div>
 
-        {/* Gallery */}
+        {/* Gallery — key forces remount so counter/arrows reset on Prev/Next */}
         <motion.div
+          key={project.id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-12 md:mt-16"
         >
-          <SwiperGallery images={galleryImages} title={project.title} />
+          <SwiperGallery key={project.id} images={galleryImages} title={project.title} />
         </motion.div>
 
         {/* Project story */}
