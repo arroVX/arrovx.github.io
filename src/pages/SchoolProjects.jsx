@@ -148,23 +148,23 @@ export default function SchoolProjects() {
     };
 
     return (
-        <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 pb-20">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="mb-10">
-                    <div className="mono text-xs tracking-[0.2em] uppercase text-black/40">SMKN 3 JEPARA — TKJ</div>
-                    <h1 className="headline-serif text-5xl md:text-6xl mt-2">School Projects.</h1>
-                    <p className="text-black/60 leading-relaxed max-w-2xl mt-4">
-                        Kumpulan LKPD, praktikum jaringan, dan tugas pembelajaran. <span className="text-black font-medium">{source.length} dokumen</span> — filter by kelas & mapel ala <span className="mono text-xs">iqmal.dev</span>.
+        <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 md:pt-32 pb-20">
+            <div className="max-w-6xl mx-auto px-6">
+                <div className="mb-12">
+                    <div className="mono text-[10px] tracking-[0.24em] uppercase text-black/40">SMKN 3 Jepara — TKJ</div>
+                    <h1 className="font-black tracking-[-0.04em] leading-[0.95] text-[clamp(44px,7vw,88px)] mt-4">School<br />Projects.</h1>
+                    <p className="text-black/50 leading-relaxed max-w-xl mt-5 text-[15px]">
+                        Kumpulan LKPD, praktikum jaringan, dan tugas pembelajaran. <span className="text-black font-semibold">{source.length} dokumen</span> — pilih kelas, lalu mapel untuk melihat school projects.
                     </p>
                 </div>
 
                 {/* Step indicator */}
-                <div className="flex items-center gap-2 mono text-[10px] tracking-[0.2em] uppercase text-black/30 mb-8">
-                    <span className={step >= 1 ? 'text-black' : ''}>01 Kelas</span>
-                    <span className="w-6 h-px bg-black/15" />
-                    <span className={step >= 2 ? 'text-black' : ''}>02 Mapel</span>
-                    <span className="w-6 h-px bg-black/15" />
-                    <span className={step >= 3 ? 'text-black' : ''}>03 School Projects</span>
+                <div className="flex items-center gap-3 mono text-[10px] tracking-[0.2em] uppercase text-black/30 mb-10">
+                    <span className={step >= 1 ? 'text-black font-medium' : ''}>01 Kelas</span>
+                    <span className={`flex-1 h-px ${step >= 2 ? 'bg-black/40' : 'bg-black/10'}`} />
+                    <span className={step >= 2 ? 'text-black font-medium' : ''}>02 Mapel</span>
+                    <span className={`flex-1 h-px ${step >= 3 ? 'bg-black/40' : 'bg-black/10'}`} />
+                    <span className={step >= 3 ? 'text-black font-medium' : ''}>03 School Projects</span>
                 </div>
 
                 {loading ? (
@@ -172,14 +172,14 @@ export default function SchoolProjects() {
                 ) : (
                 <>
                 {/* Step 1 — pilih kelas */}
-                <div className="border-y border-black/5 py-6">
-                    <div className="flex items-center justify-between gap-3 mb-4">
-                        <span className="mono text-xs tracking-widest uppercase text-black/40">01 — Pilih kelas</span>
+                <div className="border-t border-black/10 pt-8">
+                    <div className="flex items-center justify-between gap-3 mb-5">
+                        <span className="mono text-[10px] tracking-[0.24em] uppercase text-black/40">01 — Pilih kelas</span>
                         {selectedClass && (
-                            <button onClick={resetAll} className="mono text-[11px] tracking-widest uppercase text-black/40 hover:text-black underline underline-offset-4">Ulangi</button>
+                            <button onClick={resetAll} className="mono text-[10px] tracking-[0.2em] uppercase text-black/40 hover:text-black underline underline-offset-4">Ulangi</button>
                         )}
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         {classOptions.map((cls, i) => {
                             const isActive = selectedClass === cls;
                             const count = countInClass(cls);
@@ -187,11 +187,16 @@ export default function SchoolProjects() {
                                 <button
                                     key={cls}
                                     onClick={() => pickClass(cls)}
-                                    className={`rounded-2xl border p-5 text-left transition-all ${isActive ? 'bg-black text-white border-black shadow-[0_16px_40px_rgba(0,0,0,0.18)]' : 'bg-white border-black/10 hover:border-black/25 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]'}`}
+                                    className={`group rounded-2xl border p-6 text-left transition-all duration-300 ${isActive ? 'bg-black text-white border-black shadow-[0_20px_48px_rgba(0,0,0,0.22)]' : 'bg-white border-black/10 hover:border-black/30 hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:-translate-y-0.5'}`}
                                 >
-                                    <div className={`mono text-[10px] tracking-[0.2em] ${isActive ? 'text-white/40' : 'text-black/30'}`}>0{i + 1}</div>
-                                    <div className="text-xl font-bold tracking-tight mt-1">{cls}</div>
-                                    <div className={`mono text-[11px] tracking-widest mt-1 ${isActive ? 'text-white/50' : 'text-black/40'}`}>{pad2(count)} school project{count === 1 ? '' : 's'}</div>
+                                    <div className="flex items-start justify-between">
+                                        <span className={`mono text-[10px] tracking-[0.2em] ${isActive ? 'text-white/40' : 'text-black/30'}`}>0{i + 1}</span>
+                                        <span className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${isActive ? 'bg-white text-black' : 'bg-black/[0.04] text-black/30 group-hover:bg-black group-hover:text-white'}`}>
+                                            <ArrowUpRight size={15} />
+                                        </span>
+                                    </div>
+                                    <div className="text-2xl font-bold tracking-[-0.02em] mt-4">{cls}</div>
+                                    <div className={`mono text-[10px] tracking-[0.18em] uppercase mt-1.5 ${isActive ? 'text-white/50' : 'text-black/40'}`}>{pad2(count)} school project{count === 1 ? '' : 's'}</div>
                                 </button>
                             );
                         })}
@@ -206,22 +211,22 @@ export default function SchoolProjects() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.3 }}
-                        className="border-b border-black/5 py-6"
+                        className="py-8"
                     >
-                        <div className="flex items-center justify-between gap-3 mb-4">
-                            <span className="mono text-xs tracking-widest uppercase text-black/40">02 — Pilih mapel <span className="text-black/25">· {selectedClass}</span></span>
-                            <button onClick={() => pickClass(selectedClass)} className="mono text-[11px] tracking-widest uppercase text-black/40 hover:text-black underline underline-offset-4">← Ganti kelas</button>
+                        <div className="flex items-center justify-between gap-3 mb-5">
+                            <span className="mono text-[10px] tracking-[0.24em] uppercase text-black/40">02 — Pilih mapel <span className="text-black/25">· {selectedClass}</span></span>
+                            <button onClick={() => pickClass(selectedClass)} className="mono text-[10px] tracking-[0.2em] uppercase text-black/40 hover:text-black underline underline-offset-4">← Ganti kelas</button>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2.5">
                             {mapelsInClass(selectedClass).map((m) => {
                                 const isActive = selectedMapel === m;
                                 return (
                                     <button
                                         key={m}
                                         onClick={() => setSelectedMapel(m)}
-                                        className={`px-4 py-2 rounded-full mono text-xs tracking-wide border transition-colors ${isActive ? 'bg-black text-white border-black' : 'bg-white border-black/10 text-black/60 hover:text-black hover:border-black/25'}`}
+                                        className={`px-5 py-2.5 rounded-full mono text-[10px] tracking-[0.14em] uppercase font-medium border transition-colors ${isActive ? 'bg-black text-white border-black' : 'bg-white border-black/10 text-black/60 hover:text-black hover:border-black/25'}`}
                                     >
-                                        {m} <span className={isActive ? 'text-white/50' : 'text-black/30'}>· {pad2(countInMapel(selectedClass, m))}</span>
+                                        {m} <span className={isActive ? 'text-white/50' : 'text-black/30'}>{pad2(countInMapel(selectedClass, m))}</span>
                                     </button>
                                 );
                             })}
@@ -239,11 +244,11 @@ export default function SchoolProjects() {
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.35 }}
                     >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-8 mb-6">
-                            <div className="mono text-xs tracking-widest uppercase text-black/30">
+                        <div className="border-t border-black/10 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-2 mb-8">
+                            <div className="mono text-[10px] tracking-[0.2em] uppercase text-black/35">
                                 Showing {String(filtered.length).padStart(2, '0')} school projects · {selectedClass} · {selectedMapel}
                             </div>
-                            <button onClick={resetAll} className="mono text-[11px] tracking-widest uppercase text-black/40 hover:text-black underline underline-offset-4 text-left sm:text-right">Ubah pilihan →</button>
+                            <button onClick={resetAll} className="mono text-[10px] tracking-[0.2em] uppercase text-black/40 hover:text-black underline underline-offset-4 text-left sm:text-right">Ubah pilihan →</button>
                         </div>
                         {filtered.length === 0 ? (
                             <div className="py-16 text-center border border-dashed border-black/10 rounded-2xl bg-white mb-6">
@@ -303,8 +308,8 @@ export default function SchoolProjects() {
                         })}
                     </div>
                 ) : step < 3 ? (
-                    <div className="py-14 text-center border border-dashed border-black/10 rounded-2xl bg-white/60">
-                        <p className="mono text-[11px] tracking-[0.2em] uppercase text-black/35">
+                    <div className="mt-8 py-16 text-center border border-dashed border-black/10 rounded-2xl bg-white/60">
+                        <p className="mono text-[10px] tracking-[0.24em] uppercase text-black/35">
                             {step === 1 ? 'Pilih kelas dulu untuk lanjut' : 'Pilih mapel untuk memunculkan school projects'}
                         </p>
                     </div>
