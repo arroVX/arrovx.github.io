@@ -218,7 +218,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
             <div
               key={exp.id}
               data-card
-              className="min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+              className="group min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
             >
               <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-5 md:p-10 lg:p-12 flex flex-col flex-1 min-h-0">
                 <div className="flex items-center gap-2 mono text-[9px] md:text-[9.5px] tracking-[0.18em] uppercase text-black/40">
@@ -250,7 +250,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
                 </div>
               </div>
               <div className="w-full md:w-[48%] xl:w-[44%] relative bg-[#0F0F0F] overflow-hidden h-44 sm:h-52 shrink-0 md:shrink md:h-full md:aspect-auto">
-                <img src={exp.image} alt={exp.company} className="w-full h-full object-cover object-top grayscale contrast-[1.08] brightness-[0.92]" />
+                <img src={exp.image} alt={exp.company} draggable={false} className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-[1.04] group-hover:grayscale-0 transition-all duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">{exp.id}</span>
                 <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap mono text-[9px] md:text-[10px] tracking-[0.14em] uppercase text-white/90 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">{exp.period}</span>
@@ -287,7 +287,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
           <div
             key={exp.id}
             data-card
-            className="min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+            className="group min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
           >
             <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
               <div className="flex items-center gap-2 mono text-[9.5px] tracking-[0.18em] uppercase text-black/40">
@@ -319,7 +319,7 @@ function HomeExperienceSlider({ experiences, trackRef, onActiveChange, onDotClic
               </div>
             </div>
             <div className="w-full md:w-[48%] xl:w-[44%] relative bg-[#0F0F0F] overflow-hidden h-44 sm:h-52 shrink-0 md:shrink md:h-full md:aspect-auto">
-              <img src={exp.image} alt={exp.company} className="w-full h-full object-cover object-top grayscale contrast-[1.08] brightness-[0.92]" />
+              <img src={exp.image} alt={exp.company} draggable={false} className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-[1.04] group-hover:grayscale-0 transition-all duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">{exp.id}</span>
               <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap mono text-[9px] md:text-[10px] tracking-[0.14em] uppercase text-white/90 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">{exp.period}</span>
@@ -694,7 +694,8 @@ export default function Home() {
                 <img
                   src="/profile.webp"
                   alt="Arroudhil Anfi"
-                  className="absolute inset-0 w-full h-full object-cover object-top"
+                  draggable={false}
+                  className="absolute inset-0 w-full h-full object-cover object-top select-none"
                   style={{
                     filter: 'contrast(1.05) brightness(1.0) drop-shadow(2px 0 0 rgba(255,255,255,0.92)) drop-shadow(-2px 0 0 rgba(255,255,255,0.92)) drop-shadow(0 2px 0 rgba(255,255,255,0.92)) drop-shadow(0 -1px 0 rgba(255,255,255,0.92))',
                   }}

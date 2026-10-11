@@ -67,7 +67,7 @@ export default function SwiperGallery({ images = [], title }) {
                 <img
                   src={src}
                   alt={`${title || 'Project'} ${i + 1}`}
-                  className="w-full h-full object-cover will-change-[filter,opacity] transition-[filter,opacity] duration-[650ms] swiper-blur-img"
+                  className="w-full h-full object-cover will-change-[filter,opacity,transform] transition-[filter,opacity,transform] duration-[650ms] swiper-blur-img group-hover:scale-[1.03]"
                   loading="lazy"
                   onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=1200'; }}
                 />

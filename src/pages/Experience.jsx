@@ -101,7 +101,7 @@ export default function Experience() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.08 }}
-                className="min-w-[92vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-auto md:h-[620px] overflow-hidden relative"
+                className="group min-w-[92vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-auto md:h-[620px] overflow-hidden relative"
               >
                 {/* Left */}
                 <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
@@ -142,7 +142,8 @@ export default function Experience() {
                   <img
                     src={exp.image}
                     alt={exp.company}
-                    className="w-full h-full object-cover grayscale contrast-[1.08] brightness-[0.92]"
+                    draggable={false}
+                    className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-[1.04] group-hover:grayscale-0 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                   <div className="absolute inset-0 bg-black/[0.04]" />
