@@ -210,51 +210,107 @@ export default function SchoolProjectDetail() {
           )}
         </motion.div>
 
-        <div className="mt-12 md:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-          {item.snippet && (
-            <div className="rounded-2xl border border-black/10 bg-white p-5 md:p-6">
-              <div className="flex items-center justify-between mb-3">
-                <span className="mono text-xs tracking-widest uppercase text-black/30 flex items-center gap-1.5"><Terminal size={12} /> Snippet</span>
-                <button onClick={() => handleCopy(item.snippet)} className="px-3 py-1.5 rounded-full border border-black/10 mono text-xs flex items-center gap-1.5 hover:bg-black hover:text-white transition-colors">
-                  {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />} {copied ? 'Tersalin' : 'Salin'}
-                </button>
-              </div>
-              <pre className="bg-[#0a0a0a] text-zinc-100 p-4 rounded-xl overflow-x-auto mono text-xs leading-relaxed"><code>{item.snippet}</code></pre>
-            </div>
-          )}
+        {/* Project story — ala halaman project */}
+        <div className="mt-16 md:mt-24">
+          <p className="mono text-[10px] tracking-[0.24em] uppercase text-black/40">Project story</p>
+          <div className="mt-3 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-[-0.03em]">Langkah &amp; lampiran</h2>
+            <p className="text-sm text-black/45 max-w-sm md:text-right leading-relaxed">
+              Dokumentasi pengerjaan dan file pendukung tugas ini.
+            </p>
+          </div>
+          <div className="border-b border-black/10 mt-6" />
 
-          <div className="space-y-4">
-            {item.fileUrl && (
-              <div className="rounded-2xl border border-black/10 bg-zinc-50 p-4 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <FileText size={18} />
-                  <div>
-                    <div className="text-sm font-medium">Lampiran PDF</div>
-                    <div className="mono text-xs text-black/40 truncate max-w-[180px]">{item.fileName || 'Download'}</div>
+          <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            {/* Kiri — bernomor */}
+            <div>
+              <div className="flex items-baseline justify-between">
+                <h3 className="text-xl font-bold tracking-tight">Materi &amp; File</h3>
+                <span className="mono text-[9px] tracking-[0.2em] uppercase text-black/30">{classGroup} · {mapel}</span>
+              </div>
+              <div className="mt-4 border-t border-black/10">
+                {item.snippet && (
+                  <div className="grid grid-cols-[32px_1fr] gap-3 py-5 border-b border-black/10">
+                    <span className="mono text-[10px] text-black/30 pt-1">01</span>
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="mono text-xs tracking-widest uppercase text-black/40 flex items-center gap-1.5"><Terminal size={12} /> Snippet</span>
+                        <button onClick={() => handleCopy(item.snippet)} className="px-3 py-1.5 rounded-full border border-black/10 mono text-xs flex items-center gap-1.5 hover:bg-black hover:text-white transition-colors">
+                          {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />} {copied ? 'Tersalin' : 'Salin'}
+                        </button>
+                      </div>
+                      <pre className="bg-[#0a0a0a] text-zinc-100 p-4 rounded-xl overflow-x-auto mono text-xs leading-relaxed"><code>{item.snippet}</code></pre>
+                    </div>
                   </div>
+                )}
+                {item.fileUrl && (
+                  <div className="grid grid-cols-[32px_1fr] gap-3 py-5 border-b border-black/10">
+                    <span className="mono text-[10px] text-black/30 pt-1">{pad((item.snippet ? 2 : 1))}</span>
+                    <div className="rounded-2xl border border-black/10 bg-zinc-50 p-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <FileText size={18} />
+                        <div>
+                          <div className="text-sm font-medium">Lampiran PDF</div>
+                          <div className="mono text-xs text-black/40 truncate max-w-[180px]">{item.fileName || 'Download'}</div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-white border border-black/10 rounded-full mono text-xs flex items-center gap-1"><ExternalLink size={12} /> Buka</a>
+                        <a href={item.fileUrl} download className="px-3 py-1.5 bg-black text-white rounded-full mono text-xs flex items-center gap-1"><Download size={12} /> Download</a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {item.driveUrl && (
+                  <div className="grid grid-cols-[32px_1fr] gap-3 py-5 border-b border-black/10">
+                    <span className="mono text-[10px] text-black/30 pt-1">{pad([item.snippet, item.fileUrl].filter(Boolean).length + 1)}</span>
+                    <div className="rounded-2xl border border-black/10 bg-white p-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2 mono text-xs"><HardDrive size={14} /> {String(item.driveUrl).slice(0, 36)}…</div>
+                      <a href={item.driveUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-black text-white rounded-full mono text-xs flex items-center gap-1"><ExternalLink size={12} /> Drive</a>
+                    </div>
+                  </div>
+                )}
+                {embedUrl && (
+                  <div className="grid grid-cols-[32px_1fr] gap-3 py-5 border-b border-black/10">
+                    <span className="mono text-[10px] text-black/30 pt-1">{pad([item.snippet, item.fileUrl, item.driveUrl].filter(Boolean).length + 1)}</span>
+                    <div className="rounded-2xl overflow-hidden border border-black/10 bg-black aspect-video">
+                      <iframe src={embedUrl} title="Video" className="w-full h-full border-none" allowFullScreen />
+                    </div>
+                  </div>
+                )}
+                {!item.fileUrl && !item.driveUrl && !embedUrl && !item.snippet && (
+                  <p className="mono text-xs tracking-widest uppercase text-black/30 mt-6">Lampiran menyusul</p>
+                )}
+              </div>
+            </div>
+
+            {/* Kanan — kartu hitam ringkasan */}
+            <div className="bg-[#0B0B0C] text-white rounded-[28px] p-7 md:p-10">
+              <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/35">Ringkasan</p>
+              <p className="text-xl md:text-2xl leading-snug font-medium tracking-tight mt-4">
+                {item.longDesc || item.desc || 'Dokumentasi tugas pembelajaran.'}
+              </p>
+              <div className="grid grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/10">
+                <div>
+                  <div className="text-4xl md:text-5xl font-black tracking-tight">{pad(tools.length)}</div>
+                  <div className="mono text-[9px] tracking-[0.22em] uppercase text-white/40 mt-1.5">Tools</div>
                 </div>
-                <div className="flex gap-2">
-                  <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-white border border-black/10 rounded-full mono text-xs flex items-center gap-1"><ExternalLink size={12} /> Buka</a>
-                  <a href={item.fileUrl} download className="px-3 py-1.5 bg-black text-white rounded-full mono text-xs flex items-center gap-1"><Download size={12} /> Download</a>
+                <div>
+                  <div className="text-4xl md:text-5xl font-black tracking-tight">{pad([item.fileUrl, item.driveUrl, embedUrl, item.snippet].filter(Boolean).length)}</div>
+                  <div className="mono text-[9px] tracking-[0.22em] uppercase text-white/40 mt-1.5">Lampiran</div>
                 </div>
               </div>
-            )}
-            {item.driveUrl && (
-              <div className="rounded-2xl border border-black/10 bg-white p-4 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2 mono text-xs"><HardDrive size={14} /> {String(item.driveUrl).slice(0, 36)}…</div>
-                <a href={item.driveUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-black text-white rounded-full mono text-xs flex items-center gap-1"><ExternalLink size={12} /> Drive</a>
-              </div>
-            )}
-            {embedUrl && (
-              <div className="rounded-2xl overflow-hidden border border-black/10 bg-black aspect-video">
-                <iframe src={embedUrl} title="Video" className="w-full h-full border-none" allowFullScreen />
-              </div>
-            )}
-            {!item.fileUrl && !item.driveUrl && !embedUrl && !item.snippet && (
-              <div className="rounded-2xl border border-dashed border-black/10 bg-white/60 p-6 text-center mono text-xs tracking-widest uppercase text-black/35">
-                Lampiran menyusul
-              </div>
-            )}
+              {tools.length > 0 && (
+                <ul className="mt-8 pt-8 border-t border-white/10 space-y-3">
+                  {tools.map((t) => (
+                    <li key={t} className="flex gap-3 text-sm text-white/65 leading-relaxed">
+                      <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-white/40 shrink-0" />
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
 

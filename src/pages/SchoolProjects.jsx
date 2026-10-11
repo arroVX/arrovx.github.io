@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Code2, Terminal, Layers, ExternalLink, Download, Copy, Check, X, FileText, HardDrive, Video, Play, ArrowUpRight } from 'lucide-react';
+import { Code2, FileText, ArrowUpRight } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
-import Toast from '../components/Toast';
 
 export const schoolProjectsData = [
     {
@@ -78,9 +76,6 @@ export const getMapelGroup = (subject = '', title = '', desc = '') => {
 };
 
 export default function SchoolProjects() {
-    const [activeProject, setActiveProject] = useState(null);
-    const [toast, setToast] = useState({ isOpen: false, message: '', type: 'success' });
-    const [copied, setCopied] = useState(false);
     const [firebaseSchoolProjects, setFirebaseSchoolProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedClass, setSelectedClass] = useState(null);
@@ -97,12 +92,6 @@ export default function SchoolProjects() {
         }, () => setLoading(false));
         return () => unsub();
     }, []);
-
-    useEffect(() => {
-        if (activeProject) document.body.style.overflow = 'hidden';
-        else document.body.style.overflow = '';
-        return () => { document.body.style.overflow = ''; };
-    }, [activeProject]);
 
     const source = firebaseSchoolProjects.length ? firebaseSchoolProjects : schoolProjectsData;
 
@@ -138,13 +127,6 @@ export default function SchoolProjects() {
     const resetAll = () => {
         setSelectedClass(null);
         setSelectedMapel(null);
-    };
-
-    const handleCopy = (snippet) => {
-        navigator.clipboard.writeText(snippet);
-        setCopied(true);
-        setToast({ isOpen: true, message: "Snippet disalin!", type: "success" });
-        setTimeout(() => setCopied(false), 1800);
     };
 
     return (
@@ -267,7 +249,7 @@ export default function SchoolProjects() {
                         {filtered.map((item, idx) => {
                             const mapel = getMapelGroup(item.subject, item.title, item.desc);
                             return (
-                            <div key={item.id || idx} className="group cursor-pointer" onClick={() => setActiveProject(item)}>
+                            <Link key={item.id || idx} to={`/school-projects/${item.id || idx}`} className="group block">
                                 <div className="relative rounded-2xl overflow-hidden bg-zinc-200 aspect-[16/10]">
                                     {item.image ? (
                                         <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" loading="lazy" onError={e => e.target.style.display='none'} />
@@ -292,18 +274,8 @@ export default function SchoolProjects() {
                                         {item.title}
                                     </h3>
                                     <p className="text-[15px] text-black/50 leading-relaxed mt-2 line-clamp-3">{item.desc}</p>
-                                    <div className="mt-4 flex items-center gap-3">
-                                        <Link
-                                            to={`/school-projects/${item.id}`}
-                                            onClick={(e) => e.stopPropagation()}
-                                            className="mono text-[10px] tracking-[0.2em] uppercase font-medium inline-flex items-center gap-1.5 border-b border-black/70 pb-1 hover:text-black/60 hover:border-black/30 transition-colors"
-                                        >
-                                            Open detail <ArrowUpRight size={13} />
-                                        </Link>
-                                        <span className="mono text-[10px] tracking-widest uppercase text-black/25">· click card for quick view</span>
-                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                             );
                         })}
                     </div>
@@ -315,72 +287,6 @@ export default function SchoolProjects() {
                     </div>
                 ) : null}
             </div>
-
-            {/* Modal */}
-            {activeProject && createPortal(
-                <AnimatePresence>
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={()=>setActiveProject(null)}>
-                        <motion.div initial={{ scale: 0.98, y: 12 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.98, y: 12 }} onClick={e=>e.stopPropagation()} className="w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-white rounded-2xl border border-black/10 shadow-2xl p-6 md:p-8">
-                            <div className="flex items-start justify-between gap-4 mb-4">
-                                <div>
-                                    <div className="flex gap-2 mb-2">
-                                        <span className="px-2 py-1 rounded-full bg-black text-white mono text-xs">{getClassGroup(activeProject.classLevel, activeProject.title, activeProject.desc)}</span>
-                                        <span className="px-2 py-1 rounded-full border border-black/10 mono text-xs">{getMapelGroup(activeProject.subject, activeProject.title, activeProject.desc)}</span>
-                                    </div>
-                                    <h2 className="headline-serif text-2xl md:text-3xl">{activeProject.title}</h2>
-                                    <p className="mono text-xs text-black/40 mt-1"><BookOpen size={12} className="inline" /> {activeProject.subject} {activeProject.date ? `· ${activeProject.date}` : ''}</p>
-                                </div>
-                                <button onClick={()=>setActiveProject(null)} className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shrink-0"><X size={16} /></button>
-                            </div>
-                            <p className="text-sm text-black/70 leading-relaxed bg-zinc-50 border border-black/5 rounded-xl p-4">{activeProject.desc}</p>
-                            {activeProject.snippet && (
-                                <div className="mt-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="mono text-xs tracking-widest uppercase text-black/30 flex items-center gap-1"><Terminal size={12} /> Snippet</span>
-                                        <button onClick={()=>handleCopy(activeProject.snippet)} className="px-3 py-1 rounded-full border border-black/10 mono text-xs flex items-center gap-1 hover:bg-black hover:text-white">
-                                            {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />} {copied ? "Tersalin" : "Salin"}
-                                        </button>
-                                    </div>
-                                    <pre className="bg-[#0a0a0a] text-zinc-100 p-4 rounded-xl overflow-x-auto mono text-xs leading-relaxed"><code>{activeProject.snippet}</code></pre>
-                                </div>
-                            )}
-                            {activeProject.fileUrl && (
-                                <div className="mt-6 rounded-xl border border-black/10 bg-zinc-50 p-4 flex items-center justify-between gap-4">
-                                    <div className="flex items-center gap-3">
-                                        <FileText size={18} />
-                                        <div>
-                                            <div className="text-sm font-medium">Lampiran PDF</div>
-                                            <div className="mono text-xs text-black/40 truncate max-w-[180px]">{activeProject.fileName || 'Download'}</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <a href={activeProject.fileUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-white border border-black/10 rounded-full mono text-xs flex items-center gap-1"><ExternalLink size={12} /> Buka</a>
-                                        <a href={activeProject.fileUrl} download className="px-3 py-1.5 bg-black text-white rounded-full mono text-xs flex items-center gap-1"><Download size={12} /> Download</a>
-                                    </div>
-                                </div>
-                            )}
-                            {activeProject.driveUrl && (
-                                <div className="mt-4 rounded-xl border border-black/10 bg-white p-4 flex items-center justify-between gap-4">
-                                    <div className="flex items-center gap-2 mono text-xs"><HardDrive size={14} /> {activeProject.driveUrl.slice(0,36)}…</div>
-                                    <a href={activeProject.driveUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 bg-black text-white rounded-full mono text-xs flex items-center gap-1"><ExternalLink size={12} /> Drive</a>
-                                </div>
-                            )}
-                            {activeProject.videoUrl && getYouTubeEmbedUrl(activeProject.videoUrl) && (
-                                <div className="mt-4 rounded-xl overflow-hidden border border-black/10 bg-black aspect-video">
-                                    <iframe src={getYouTubeEmbedUrl(activeProject.videoUrl)} title="Video" className="w-full h-full border-none" allowFullScreen />
-                                </div>
-                            )}
-                            <div className="flex flex-wrap gap-1.5 mt-6">
-                                {(activeProject.tools || activeProject.tech || []).map((t,i)=> (
-                                    <span key={i} className="px-2.5 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-xs">{typeof t==='string'?t.trim():t}</span>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                </AnimatePresence>,
-                document.body
-            )}
-            <Toast isOpen={toast.isOpen} message={toast.message} type={toast.type} onClose={()=>setToast({...toast,isOpen:false})} />
         </main>
     );
 }
