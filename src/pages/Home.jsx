@@ -431,8 +431,7 @@ export default function Home() {
       const heroText = hero.querySelector('[data-hero-text]');
       if (heroText) {
         gsap.to(heroText, {
-          yPercent: -14,
-          opacity: 0.15,
+          yPercent: -8,
           ease: 'none',
           scrollTrigger: {
             trigger: hero,
