@@ -847,6 +847,50 @@ export default function Home() {
           },
         })
       })
+
+      // 7) Projects: cream card rises out of the dark section
+      const projectsWrap = document.getElementById('projects-wrap')
+      const projectsCard = document.getElementById('projects')
+      if (projectsWrap && projectsCard) {
+        const mm = gsap.matchMedia()
+
+        mm.add('(max-width: 767px)', () => {
+          gsap.fromTo(
+            projectsCard,
+            { y: 120, transformOrigin: 'top center', force3D: true },
+            {
+              y: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: projectsWrap,
+                start: 'top 90%',
+                end: 'top 45%',
+                scrub: 0.8,
+              },
+            },
+          )
+        })
+
+        mm.add('(min-width: 768px)', () => {
+          gsap.fromTo(
+            projectsCard,
+            { y: 200, scale: 0.97, transformOrigin: 'top center', force3D: true },
+            {
+              y: 0,
+              scale: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: projectsWrap,
+                start: 'top 90%',
+                end: 'top 45%',
+                scrub: 0.8,
+              },
+            },
+          )
+        })
+
+        return () => mm.revert()
+      }
     }, stackRef)
 
     const onLoad = () => ScrollTrigger.refresh()
@@ -1149,125 +1193,126 @@ export default function Home() {
       </section>
 
       {/* SELECTED PROJECTS */}
-      <section
-        id="projects"
-        data-reveal
-        className="relative z-30 -mt-8 md:-mt-12 rounded-t-[2rem] md:rounded-t-[3.5rem] bg-[#e8e8e5] pt-20 md:pt-28 pb-16 md:pb-24 shadow-[0_-24px_60px_-24px_rgba(0,0,0,0.45)]"
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <p className="mono text-xs tracking-[0.2em] uppercase text-black/40">
-                Projects
-              </p>
-              <h2 className="headline-serif text-4xl md:text-5xl mt-2">
-                Selected projects
-              </h2>
-              <p className="mono text-xs tracking-widest uppercase text-black/30 mt-2">
-                Portfolio showcase
-              </p>
+      <div id="projects-wrap" className="relative z-30 -mt-8 md:-mt-12 bg-[#0A0A0A]">
+        <section
+          id="projects"
+          className="relative rounded-t-[2rem] md:rounded-t-[3.5rem] bg-[#e8e8e5] pt-20 md:pt-28 pb-16 md:pb-24 shadow-[0_-24px_60px_-24px_rgba(0,0,0,0.45)] will-change-transform"
+        >
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <p className="mono text-xs tracking-[0.2em] uppercase text-black/40">
+                  Projects
+                </p>
+                <h2 className="headline-serif text-4xl md:text-5xl mt-2">
+                  Selected projects
+                </h2>
+                <p className="mono text-xs tracking-widest uppercase text-black/30 mt-2">
+                  Portfolio showcase
+                </p>
+              </div>
+              <Link to="/projects" className="hidden md:inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/50 hover:text-black">
+                View all projects <ArrowUpRight size={14} />
+              </Link>
             </div>
-            <Link to="/projects" className="hidden md:inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/50 hover:text-black">
-              View all projects <ArrowUpRight size={14} />
-            </Link>
-          </div>
 
-          {loadingProjects ? (
-            <div className="py-12 mono text-sm text-black/40">
-              Loading projects...
-            </div>
-          ) : displayProjects.length === 0 ? (
-            <div className="py-16 text-center border border-dashed border-black/10 rounded-2xl bg-[#FCFCF9]">
-              <p className="text-black/60">
-                Belum ada project di database. Tambah via{' '}
-                <Link to="/admin" className="underline">
-                  Admin
-                </Link>
-                .
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-16">
-              {displayProjects.slice(0, 4).map((p, idx) => {
-                const images = [
-                  ...(Array.isArray(p.images) ? p.images : []),
-                  p.image,
-                ].filter((src, i, arr): src is string => Boolean(src) && arr.indexOf(src) === i)
-                const techs = Array.isArray(p.tech)
-                  ? p.tech
-                  : typeof p.tech === 'string'
-                    ? p.tech.split(',').map((s) => s.trim())
-                    : []
-                const isEven = idx % 2 === 0
-                return (
-                  <motion.div
-                    key={p.id || p.title}
-                    data-project-card
-                    initial={{ opacity: 0, y: 36, filter: 'blur(12px)' }}
-                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    className={`grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-start will-change-[opacity,transform,filter] ${!isEven ? 'lg:[&>div:first-child]:order-2' : ''}`}
-                  >
-                    <div className="lg:col-span-7">
-                      <SwiperGallery images={images} title={p.title || ''} />
-                      <div className="flex items-center justify-between mt-3 mono text-xs tracking-widest text-black/30">
-                        <span>0{idx + 1} / 0{displayProjects.slice(0, 4).length}</span>
+            {loadingProjects ? (
+              <div className="py-12 mono text-sm text-black/40">
+                Loading projects...
+              </div>
+            ) : displayProjects.length === 0 ? (
+              <div className="py-16 text-center border border-dashed border-black/10 rounded-2xl bg-[#FCFCF9]">
+                <p className="text-black/60">
+                  Belum ada project di database. Tambah via{' '}
+                  <Link to="/admin" className="underline">
+                    Admin
+                  </Link>
+                  .
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-16">
+                {displayProjects.slice(0, 4).map((p, idx) => {
+                  const images = [
+                    ...(Array.isArray(p.images) ? p.images : []),
+                    p.image,
+                  ].filter((src, i, arr): src is string => Boolean(src) && arr.indexOf(src) === i)
+                  const techs = Array.isArray(p.tech)
+                    ? p.tech
+                    : typeof p.tech === 'string'
+                      ? p.tech.split(',').map((s) => s.trim())
+                      : []
+                  const isEven = idx % 2 === 0
+                  return (
+                    <motion.div
+                      key={p.id || p.title}
+                      data-project-card
+                      initial={{ opacity: 0, y: 36, filter: 'blur(12px)' }}
+                      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      className={`grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-start will-change-[opacity,transform,filter] ${!isEven ? 'lg:[&>div:first-child]:order-2' : ''}`}
+                    >
+                      <div className="lg:col-span-7">
+                        <SwiperGallery images={images} title={p.title || ''} />
+                        <div className="flex items-center justify-between mt-3 mono text-xs tracking-widest text-black/30">
+                          <span>0{idx + 1} / 0{displayProjects.slice(0, 4).length}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="lg:col-span-5">
-                      <div className="mono text-xs tracking-widest uppercase text-black/40 mb-2">
-                        {String(idx + 1).padStart(2, '0')} · {p.category || 'Portfolio'}
-                      </div>
-                      <h3 className="headline-serif text-3xl leading-none mb-3">
-                        {p.title}
-                      </h3>
-                      <p className="text-black/60 leading-relaxed text-sm mb-4 line-clamp-3">
-                        {p.longDesc || p.desc}
-                      </p>
-                      <div className="space-y-1 mb-4 border-l border-black/5 pl-4">
-                        {(p.features || []).slice(0, 3).map((f, i) => (
-                          <div key={i} className="mono text-xs text-black/50 flex gap-2">
-                            <span className="text-black/20">0{i + 1}</span>{' '}
-                            <span className="line-clamp-1">
-                              {typeof f === 'string' ? f : ''}
+                      <div className="lg:col-span-5">
+                        <div className="mono text-xs tracking-widest uppercase text-black/40 mb-2">
+                          {String(idx + 1).padStart(2, '0')} · {p.category || 'Portfolio'}
+                        </div>
+                        <h3 className="headline-serif text-3xl leading-none mb-3">
+                          {p.title}
+                        </h3>
+                        <p className="text-black/60 leading-relaxed text-sm mb-4 line-clamp-3">
+                          {p.longDesc || p.desc}
+                        </p>
+                        <div className="space-y-1 mb-4 border-l border-black/5 pl-4">
+                          {(p.features || []).slice(0, 3).map((f, i) => (
+                            <div key={i} className="mono text-xs text-black/50 flex gap-2">
+                              <span className="text-black/20">0{i + 1}</span>{' '}
+                              <span className="line-clamp-1">
+                                {typeof f === 'string' ? f : ''}
+                              </span>
+                            </div>
+                          ))}
+                          {(!p.features || p.features.length === 0) && (
+                            <div className="mono text-xs text-black/40">
+                              Highlights coming soon
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 mb-6">
+                          {techs.slice(0, 6).map((t) => (
+                            <span key={t} className="px-2.5 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-[11px]">
+                              {t}
                             </span>
-                          </div>
-                        ))}
-                        {(!p.features || p.features.length === 0) && (
-                          <div className="mono text-xs text-black/40">
-                            Highlights coming soon
+                          ))}
+                        </div>
+                        <button onClick={() => setSelectedProject(p)} className="px-5 py-2.5 bg-black text-white rounded-full text-sm font-medium inline-flex items-center gap-2 hover:bg-black/80">
+                          View project <ArrowUpRight size={16} />
+                        </button>
+                        {idx < displayProjects.slice(0, 4).length - 1 && (
+                          <div className="mono text-xs tracking-widest uppercase text-black/20 mt-8 hidden lg:block">
+                            Next project / 0{idx + 2} / 0{displayProjects.slice(0, 4).length}
                           </div>
                         )}
                       </div>
-                      <div className="flex flex-wrap gap-1.5 mb-6">
-                        {techs.slice(0, 6).map((t) => (
-                          <span key={t} className="px-2.5 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-[11px]">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                      <button onClick={() => setSelectedProject(p)} className="px-5 py-2.5 bg-black text-white rounded-full text-sm font-medium inline-flex items-center gap-2 hover:bg-black/80">
-                        View project <ArrowUpRight size={16} />
-                      </button>
-                      {idx < displayProjects.slice(0, 4).length - 1 && (
-                        <div className="mono text-xs tracking-widest uppercase text-black/20 mt-8 hidden lg:block">
-                          Next project / 0{idx + 2} / 0{displayProjects.slice(0, 4).length}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                )
-              })}
+                    </motion.div>
+                  )
+                })}
+              </div>
+            )}
+            <div className="mt-10 md:hidden">
+              <Link to="/projects" className="w-full justify-center inline-flex items-center gap-2 mono text-xs tracking-widest uppercase border border-black/10 rounded-full py-3">
+                View all projects <ArrowUpRight size={14} />
+              </Link>
             </div>
-          )}
-          <div className="mt-10 md:hidden">
-            <Link to="/projects" className="w-full justify-center inline-flex items-center gap-2 mono text-xs tracking-widest uppercase border border-black/10 rounded-full py-3">
-              View all projects <ArrowUpRight size={14} />
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* CONTACT */}
       <section data-reveal className="bg-[#e8e8e5] py-16 md:py-24">
