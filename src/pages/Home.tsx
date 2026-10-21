@@ -757,7 +757,7 @@ export default function Home() {
         if (domePath) {
           gsap.fromTo(
             domePath,
-            { attr: { d: 'M0 150 Q720 -150 1440 150 L1440 150 L0 150 Z' } },
+            { attr: { d: 'M0 150 Q720 0 1440 150 L1440 150 L0 150 Z' } },
             {
               attr: { d: 'M0 0 Q720 0 1440 0 L1440 150 L0 150 Z' },
               ease: 'none',
@@ -1118,13 +1118,13 @@ export default function Home() {
           {/* Dome: abu-abu naik melengkung penuh di atas hero cream */}
           <svg
             aria-hidden
-            className="pointer-events-none absolute left-0 -top-[80px] md:-top-[150px] w-full h-[80px] md:h-[150px]"
+            className="pointer-events-none absolute left-0 -top-[48px] md:-top-[96px] w-full h-[48px] md:h-[96px]"
             viewBox="0 0 1440 150"
             preserveAspectRatio="none"
           >
             <path
               data-dome-path
-              d="M0 150 Q720 -150 1440 150 L1440 150 L0 150 Z"
+              d="M0 150 Q720 0 1440 150 L1440 150 L0 150 Z"
               fill="var(--color-surface-dark)"
             />
           </svg>
