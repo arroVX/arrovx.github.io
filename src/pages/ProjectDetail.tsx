@@ -1,130 +1,159 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, ArrowLeft, ArrowRight, Github, Globe, ExternalLink } from 'lucide-react';
-import { db } from '../firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
-import SwiperGallery from '../components/SwiperGallery';
-import { getDiscipline, disciplineLabel, roleLabel } from '../utils/discipline';
-import { fallbackProjects } from './Projects';
+import React, { useState, useEffect, useMemo } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { ArrowUpRight, ArrowLeft, ArrowRight, Github, Globe, ExternalLink } from 'lucide-react'
+import { db } from '../firebase'
+import { collection, onSnapshot, DocumentData } from 'firebase/firestore'
+import SwiperGallery from '../components/SwiperGallery'
+import { getDiscipline, disciplineLabel, roleLabel } from '../utils/discipline'
+import { fallbackProjects } from './Projects'
 
-const pad = (n) => String(n).padStart(2, '0');
-
-function techList(project) {
-  const tech = project?.tech;
-  return Array.isArray(tech)
-    ? tech
-    : (typeof tech === 'string' ? tech.split(',').map((s) => s.trim()).filter(Boolean) : []);
+type FirebaseProject = DocumentData & {
+  id?: string
+  title?: string
+  category?: string
+  image?: string
+  desc?: string
+  longDesc?: string
+  tech?: string[] | string
+  features?: string[]
+  liveUrl?: string
+  githubUrl?: string
+  fileUrl?: string
+  role?: string
+  company?: string
+  relatedExperience?: string
+  impact?: string
+  impactPoints?: string[]
+  stats?: { value: string; label: string }[]
 }
 
-function sortProjectsStable(list) {
+const pad = (n: number) => String(n).padStart(2, '0')
+
+function techList(project: FirebaseProject | null) {
+  const tech = project?.tech
+  return Array.isArray(tech)
+    ? tech
+    : typeof tech === 'string'
+      ? tech.split(',').map((s) => s.trim()).filter(Boolean)
+      : []
+}
+
+function sortProjectsStable(list: FirebaseProject[]) {
   return [...list].sort((a, b) => {
-    const ca = a?.createdAt || '';
-    const cb = b?.createdAt || '';
-    if (ca && cb && ca !== cb) return String(ca).localeCompare(String(cb));
-    if (ca && !cb) return -1;
-    if (!ca && cb) return 1;
-    return String(a?.title || '').localeCompare(String(b?.title || ''));
-  });
+    const ca = a?.createdAt || ''
+    const cb = b?.createdAt || ''
+    if (ca && cb && ca !== cb) return String(ca).localeCompare(String(cb))
+    if (ca && !cb) return -1
+    if (!ca && cb) return 1
+    return String(a?.title || '').localeCompare(String(b?.title || ''))
+  })
 }
 
 function scrollToTopImmediate() {
   try {
-    const lenis = typeof window !== 'undefined' ? window.__LENIS__ : null;
-    if (lenis && typeof lenis.scrollTo === 'function') {
-      lenis.scrollTo(0, { immediate: true });
-      return;
+    const lenis = typeof window !== 'undefined' ? window.__LENIS__ : null
+    if (lenis && typeof (lenis as { scrollTo?: (y: number, opts?: { immediate?: boolean }) => void }).scrollTo === 'function') {
+      ;(lenis as { scrollTo: (y: number, opts?: { immediate?: boolean }) => void }).scrollTo(0, { immediate: true })
+      return
     }
-  } catch { /* fall through */ }
+  } catch {
+    /* fall through */
+  }
   try {
-    window.scrollTo(0, 0);
-  } catch { /* noop */ }
+    window.scrollTo(0, 0)
+  } catch {
+    /* noop */
+  }
   try {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  } catch { /* noop */ }
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  } catch {
+    /* noop */
+  }
 }
 
 export default function ProjectDetail() {
-  const { id } = useParams();
-  const [firebaseProjects, setFirebaseProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>()
+  const [firebaseProjects, setFirebaseProjects] = useState<FirebaseProject[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'projects'), (snapshot) => {
-      setFirebaseProjects(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setLoading(false);
-    }, () => setLoading(false));
-    return () => unsub();
-  }, []);
+      setFirebaseProjects(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as FirebaseProject)))
+      setLoading(false)
+    }, () => setLoading(false))
+    return () => unsub()
+  }, [])
 
   // Same-component navigation (/projects/a -> /projects/b) keeps state —
   // force scroll-top via Lenis (window.scrollTo alone is ignored by Lenis).
   useEffect(() => {
-    scrollToTopImmediate();
-    const t = setTimeout(scrollToTopImmediate, 60);
-    return () => clearTimeout(t);
-  }, [id]);
+    scrollToTopImmediate()
+    const t = setTimeout(scrollToTopImmediate, 60)
+    return () => clearTimeout(t)
+  }, [id])
 
   const all = useMemo(() => {
-    const raw = firebaseProjects.length > 0 ? firebaseProjects : fallbackProjects;
-    return sortProjectsStable(raw);
-  }, [firebaseProjects]);
-  const index = all.findIndex((p) => String(p.id) === String(id));
-  const project = index >= 0 ? all[index] : null;
+    const raw = firebaseProjects.length > 0 ? firebaseProjects : fallbackProjects
+    return sortProjectsStable(raw)
+  }, [firebaseProjects])
+  const index = all.findIndex((p) => String(p.id) === String(id))
+  const project = index >= 0 ? all[index] : null
 
-  const prev = index > 0 ? all[index - 1] : null;
-  const next = index >= 0 && index < all.length - 1 ? all[index + 1] : null;
+  const prev = index > 0 ? all[index - 1] : null
+  const next = index >= 0 && index < all.length - 1 ? all[index + 1] : null
 
-  const discipline = useMemo(() => (project ? getDiscipline(project) : 'FRONTEND'), [project]);
-  const techs = useMemo(() => (project ? techList(project) : []), [project]);
-  const features = project?.features || [];
+  const discipline = useMemo(() => (project ? getDiscipline(project as unknown as Record<string, unknown>) : 'FRONTEND'), [project])
+  const techs = useMemo(() => techList(project), [project])
+  const features = project?.features || []
   const galleryImages = useMemo(() => {
-    if (!project) return [];
-    const collect = [];
-    if (Array.isArray(project.images)) collect.push(...project.images);
-    if (project.image) collect.push(project.image);
+    if (!project) return []
+    const collect: string[] = []
+    if (Array.isArray(project.images)) collect.push(...project.images)
+    if (project.image) collect.push(project.image)
     // Dedupe — Admin only writes single `image`, avoid [same x3] fake galleries.
-    const seen = new Set();
+    const seen = new Set<string>()
     return collect.filter((src) => {
-      if (!src || typeof src !== 'string') return false;
-      const key = src.trim();
-      if (!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }, [project]);
+      if (!src || typeof src !== 'string') return false
+      const key = src.trim()
+      if (!key || seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+  }, [project])
 
   const stats = project?.stats?.length === 2 ? project.stats : [
     { value: String(techs.length).padStart(2, '0'), label: 'Technologies' },
     { value: String(features.length).padStart(2, '0'), label: 'Highlights' },
-  ];
-  const impactPoints = project?.impactPoints?.length ? project.impactPoints : features;
-  const impactStatement = project?.impact
-    || project?.longDesc
-    || project?.desc
-    || 'Delivered end-to-end — from requirements to production.';
+  ]
+  const impactPoints = project?.impactPoints?.length ? project.impactPoints : features
+  const impactStatement = project?.impact || project?.longDesc || project?.desc || 'Delivered end-to-end — from requirements to production.'
 
   if (loading) {
     return (
       <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-32 pb-20 min-h-[70vh]">
-        <div className="max-w-6xl mx-auto px-6 mono text-sm text-black/40">Loading project…</div>
+        <div className="max-w-6xl mx-auto px-6 mono text-sm text-black/40">
+          Loading project…
+        </div>
       </main>
-    );
+    )
   }
 
   if (!project) {
     return (
       <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-32 pb-20 min-h-[70vh]">
         <div className="max-w-6xl mx-auto px-6 text-center py-16">
-          <p className="mono text-xs tracking-[0.2em] uppercase text-black/40">Project not found</p>
+          <p className="mono text-xs tracking-[0.2em] uppercase text-black/40">
+            Project not found
+          </p>
           <h1 className="text-4xl font-bold tracking-tight mt-3">Tidak ketemu.</h1>
           <Link to="/projects" className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium">
             <ArrowLeft size={16} /> Back to projects
           </Link>
         </div>
       </main>
-    );
+    )
   }
 
   return (
@@ -186,25 +215,39 @@ export default function ProjectDetail() {
           >
             <div className="border-l border-black/10 pl-6 space-y-7 lg:pt-2">
               <div>
-                <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">Role</p>
-                <p className="text-[15px] font-semibold tracking-tight mt-1.5">{project.role || roleLabel(project)}</p>
+                <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">
+                  Role
+                </p>
+                <p className="text-[15px] font-semibold tracking-tight mt-1.5">
+                  {project.role || roleLabel(project as unknown as Record<string, unknown>)}
+                </p>
               </div>
               <div>
-                <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">Discipline</p>
-                <p className="text-[15px] font-semibold tracking-tight mt-1.5">{disciplineLabel(discipline)} Development</p>
+                <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">
+                  Discipline
+                </p>
+                <p className="text-[15px] font-semibold tracking-tight mt-1.5">
+                  {disciplineLabel(discipline)} Development
+                </p>
               </div>
               <div>
-                <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">Related experience</p>
+                <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">
+                  Related experience
+                </p>
                 <Link to="/experience" className="text-[15px] font-semibold tracking-tight mt-1.5 inline-flex items-center gap-1.5 underline decoration-black/20 underline-offset-4 hover:decoration-black">
                   {project.company || project.relatedExperience || 'Experience Archive'} <ArrowUpRight size={14} />
                 </Link>
               </div>
               {techs.length > 0 && (
                 <div>
-                  <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">Stack</p>
+                  <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">
+                    Stack
+                  </p>
                   <div className="flex flex-wrap gap-1.5 mt-2.5">
                     {techs.map((t) => (
-                      <span key={t} className="px-2.5 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-[11px]">{t}</span>
+                      <span key={t} className="px-2.5 py-1 rounded-full bg-black/[0.04] border border-black/5 mono text-[11px]">
+                        {t}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -213,7 +256,7 @@ export default function ProjectDetail() {
           </motion.aside>
         </div>
 
-        {/* Gallery — key forces remount so counter/arrows reset on Prev/Next */}
+        {/* Gallery */}
         <motion.div
           key={project.id}
           initial={{ opacity: 0, y: 20 }}
@@ -221,14 +264,18 @@ export default function ProjectDetail() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-12 md:mt-16"
         >
-          <SwiperGallery key={project.id} images={galleryImages} title={project.title} />
+          <SwiperGallery key={project.id} images={galleryImages} title={project.title || ''} />
         </motion.div>
 
         {/* Project story */}
         <div className="mt-16 md:mt-24">
-          <p className="mono text-[10px] tracking-[0.24em] uppercase text-black/40">Project story</p>
+          <p className="mono text-[10px] tracking-[0.24em] uppercase text-black/40">
+            Project story
+          </p>
           <div className="mt-3 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-[-0.03em]">Contribution &amp; impact</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-[-0.03em]">
+              Contribution &amp; impact
+            </h2>
             <p className="text-sm text-black/45 max-w-sm md:text-right leading-relaxed">
               What I owned throughout delivery and what changed after the platform was introduced.
             </p>
@@ -240,33 +287,45 @@ export default function ProjectDetail() {
             <div>
               <div className="flex items-baseline justify-between">
                 <h3 className="text-xl font-bold tracking-tight">My Contribution</h3>
-                <span className="mono text-[9px] tracking-[0.2em] uppercase text-black/30">End-to-end ownership</span>
+                <span className="mono text-[9px] tracking-[0.2em] uppercase text-black/30">
+                  End-to-end ownership
+                </span>
               </div>
               {features.length > 0 ? (
                 <div className="mt-4 border-t border-black/10">
                   {features.map((f, i) => (
                     <div key={i} className="grid grid-cols-[32px_1fr] gap-3 py-5 border-b border-black/10">
                       <span className="mono text-[10px] text-black/30 pt-1">{pad(i + 1)}</span>
-                      <p className="text-[15px] text-black/60 leading-relaxed">{typeof f === 'string' ? f : JSON.stringify(f)}</p>
+                      <p className="text-[15px] text-black/60 leading-relaxed">
+                        {typeof f === 'string' ? f : JSON.stringify(f)}
+                      </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="mono text-xs tracking-widest uppercase text-black/30 mt-6">Highlights coming soon</p>
+                <p className="mono text-xs tracking-widest uppercase text-black/30 mt-6">
+                  Highlights coming soon
+                </p>
               )}
             </div>
 
             {/* Impact card */}
             <div className="bg-[#0B0B0C] text-white rounded-[28px] p-7 md:p-10">
-              <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/35">Impact</p>
+              <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/35">
+                Impact
+              </p>
               <p className="text-xl md:text-2xl leading-snug font-medium tracking-tight mt-4">
                 {impactStatement}
               </p>
               <div className="grid grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/10">
                 {stats.map((s) => (
                   <div key={s.label}>
-                    <div className="text-4xl md:text-5xl font-black tracking-tight">{s.value}</div>
-                    <div className="mono text-[9px] tracking-[0.22em] uppercase text-white/40 mt-1.5">{s.label}</div>
+                    <div className="text-4xl md:text-5xl font-black tracking-tight">
+                      {s.value}
+                    </div>
+                    <div className="mono text-[9px] tracking-[0.22em] uppercase text-white/40 mt-1.5">
+                      {s.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -305,5 +364,5 @@ export default function ProjectDetail() {
         </div>
       </div>
     </main>
-  );
+  )
 }
