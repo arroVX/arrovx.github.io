@@ -622,7 +622,6 @@ export default function Home() {
     }
   }
 
-  const heroCurveRef = useRef<SVGPathElement | null>(null)
   const aboutRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -665,24 +664,9 @@ export default function Home() {
 
       const mm = gsap.matchMedia()
 
-      // 1b) Hero full animate — curve morph + parallax teks/foto + hint fade
-      if (heroCurveRef.current) {
-        const straight = 'M0 100 Q720 100 1440 100 L1440 100 L0 100 Z'
-        // Morph only on desktop — on mobile the hero is not pinned, so the
-        // curve must stay a clean arc instead of flattening mid-screen.
-        mm.add('(min-width: 768px)', () => {
-          gsap.to(heroCurveRef.current, {
-            attr: { d: straight },
-            ease: 'none',
-            scrollTrigger: {
-              trigger: hero,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: 1.1,
-            },
-          })
-        })
-      }
+      // 1b) Hero parallax teks/foto + hint fade
+      // (Kurva pembatas hero dihapus — transisi hero → About sekarang memakai
+      //  kartu About bersudut melengkung, jadi tidak perlu kurva hitam lagi.)
 
       const heroText = hero.querySelector('[data-hero-text]')
       if (heroText) {
@@ -1103,17 +1087,38 @@ export default function Home() {
             </span>
             <span className="text-black/20 text-[10px] leading-none">↓</span>
           </div>
+        </section>
 
-          {/* Curved black bottom divider */}
-          <div className="absolute bottom-0 left-0 w-full h-[80px] overflow-hidden pointer-events-none z-20 mt-4">
-            <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[80px] absolute left-1/2 -translate-x-1/2 bottom-0">
-              <path
-                ref={heroCurveRef}
-                d="M0 70 Q720 -20 1440 70 L1440 80 L0 80 Z"
-                fill="#0A0A0A"
-              />
-            </svg>
+        {/* ABOUT — first section after the landing page */}
+        <section
+          ref={aboutRef}
+          id="about"
+          data-reveal
+          className="relative z-20 bg-[#0A0A0A] text-white overflow-hidden rounded-t-[2rem] md:rounded-t-[3rem]"
+        >
+          <div className="max-w-5xl mx-auto px-6 pt-24 md:pt-32 pb-16 md:pb-20 text-center">
+            <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 mb-8">
+              About
+            </p>
+            <p className="reveal-text tracking-[-0.02em] leading-[1.18] text-[clamp(26px,4.6vw,54px)] flex flex-wrap justify-center gap-x-[0.24em] gap-y-1">
+              {"I build fullstack web systems with clean user interfaces, reliable backend architecture, and database-driven workflows helping turn complex processes into efficient digital products.".split(' ').map((w, i) => {
+                const isBold = ['fullstack', 'web', 'systems', 'reliable', 'backend', 'architecture,', 'efficient', 'digital', 'products.'].includes(w)
+                return (
+                  <span key={i} className={`${isBold ? 'about-word font-bold' : 'about-word-dim font-normal'} inline-block will-change-[opacity,color]`} style={{ color: 'rgba(255,255,255,0.32)' }}>
+                    {w}
+                  </span>
+                )
+              })}
+            </p>
+            <p className="reveal-text2 mt-10 max-w-2xl mx-auto flex flex-wrap justify-center gap-x-[0.2em] gap-y-1 text-[13px] md:text-sm leading-relaxed">
+              {"Siswa TKJ SMKN 3 Jepara & Gold Medalist Informatika (FSBN & ONSP 2025). Fokus di React, Tailwind, Firebase, dan Network Infrastructure.".split(' ').map((w, i) => (
+                <span key={i} className="about-word2 inline-block will-change-[opacity,color]" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  {w}
+                </span>
+              ))}
+            </p>
           </div>
+          <Marquee items={marqueeItems} dark />
         </section>
 
         {/* EXPERIENCES */}
@@ -1167,34 +1172,8 @@ export default function Home() {
         </section>
       </div>{/* /sticky-stack */}
 
-      {/* ABOUT */}
-      <section ref={aboutRef} id="about" data-reveal className="relative z-10 bg-[#0A0A0A] text-white overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 pt-24 md:pt-32 pb-16 md:pb-20 text-center">
-          <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 mb-8">
-            About
-          </p>
-          <p className="reveal-text tracking-[-0.02em] leading-[1.18] text-[clamp(26px,4.6vw,54px)] flex flex-wrap justify-center gap-x-[0.24em] gap-y-1">
-            {"I build fullstack web systems with clean user interfaces, reliable backend architecture, and database-driven workflows helping turn complex processes into efficient digital products.".split(' ').map((w, i) => {
-              const isBold = ['fullstack', 'web', 'systems', 'reliable', 'backend', 'architecture,', 'efficient', 'digital', 'products.'].includes(w)
-              return (
-                <span key={i} className={`${isBold ? 'about-word font-bold' : 'about-word-dim font-normal'} inline-block will-change-[opacity,color]`} style={{ color: 'rgba(255,255,255,0.32)' }}>
-                  {w}
-                </span>
-              )
-            })}
-          </p>
-          <p className="reveal-text2 mt-10 max-w-2xl mx-auto flex flex-wrap justify-center gap-x-[0.2em] gap-y-1 text-[13px] md:text-sm leading-relaxed">
-            {"Siswa TKJ SMKN 3 Jepara & Gold Medalist Informatika (FSBN & ONSP 2025). Fokus di React, Tailwind, Firebase, dan Network Infrastructure.".split(' ').map((w, i) => (
-              <span key={i} className="about-word2 inline-block will-change-[opacity,color]" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                {w}
-              </span>
-            ))}
-          </p>
-        </div>
-        <Marquee items={marqueeItems} dark />
-        {/* Dark runway for the projects card overlap */}
-        <div aria-hidden className="h-10 md:h-14 bg-[#0A0A0A]" />
-      </section>
+      {/* Dark runway for the projects card overlap */}
+      <div aria-hidden className="h-10 md:h-14 bg-[#0A0A0A]" />
 
       {/* SELECTED PROJECTS */}
       <div id="projects-wrap" className="relative z-30 -mt-8 md:-mt-12 bg-[#0A0A0A]">

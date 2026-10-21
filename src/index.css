@@ -114,17 +114,6 @@ body {
   background-image: radial-gradient(circle, rgba(10,10,10,0.08) 1.1px, transparent 1.1px);
   background-size: 22px 22px;
 }
-.hero-curve {
-  position: absolute;
-  bottom: -1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120%;
-  height: 40px;
-  background: #0a0a0a;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  z-index: 20;
-}
 
 /* Swiper blur→sharp */
 .project-swiper .swiper-slide:not(.swiper-slide-active) .swiper-blur-img {
