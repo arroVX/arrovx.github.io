@@ -88,18 +88,18 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
             <button
               ref={prevRef}
               aria-label="Previous image"
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-75 md:opacity-0 md:group-hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </button>
             <button
               ref={nextRef}
               aria-label="Next image"
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-75 md:opacity-0 md:group-hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 6l6 6-6 6" />
               </svg>
             </button>
@@ -111,15 +111,18 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
           {String(current).padStart(2, '0')} / {String(safeImages.length).padStart(2, '0')}
         </span>
         {hasMultiple && (
-          <div className="flex items-center gap-1.5" aria-hidden>
+          <div className="flex items-center gap-2" aria-hidden>
             {safeImages.slice(0, 8).map((_, i) => (
               <span
                 key={i}
-                className={`h-1 rounded-full transition-all duration-300 ${i + 1 === current ? 'w-5 bg-black' : 'w-1.5 bg-black/20'}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i + 1 === current ? 'w-6 bg-black' : 'w-2 bg-black/20'}`}
               />
             ))}
           </div>
         )}
+        <span className="mono text-[11px] tracking-widest uppercase text-black/40 block sm:hidden">
+          Geser →
+        </span>
         <span className="mono text-[10px] tracking-widest uppercase text-black/30 hidden sm:inline">
           {hasMultiple ? 'Swipe to explore' : 'Project cover'}
         </span>

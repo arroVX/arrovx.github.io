@@ -204,11 +204,11 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`inline-flex items-center gap-1.5 mono text-[10px] tracking-[0.14em] font-medium border px-4 py-[9px] rounded-full transition-colors ${menuBtnClass}`}
+              className={`inline-flex items-center gap-1.5 mono text-[10px] tracking-[0.14em] font-bold border px-5 py-[10px] rounded-full min-w-[100px] transition-colors ${menuBtnClass}`}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
             >
-              <span>{mobileMenuOpen ? 'CLOSE' : 'MENU'}</span>
+              <span>{mobileMenuOpen ? 'TUTUP' : 'MENU'}</span>
               <span className="text-[14px] leading-none font-light -mt-[1px]">{mobileMenuOpen ? <X size={12} /> : '+'}</span>
             </button>
           </div>
@@ -232,11 +232,11 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
               <div className="flex items-center justify-end h-[52px] shrink-0">
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex items-center gap-1.5 mono text-[10px] tracking-[0.14em] font-medium bg-[#F5F3EE] text-black px-4 py-[9px] rounded-full hover:bg-white transition-colors"
+                  className="inline-flex items-center gap-2 mono text-[10px] tracking-[0.14em] font-bold bg-[#F5F3EE] text-black px-5 py-[10px] rounded-full hover:bg-white transition-colors min-w-[100px] justify-center"
                   aria-label="Tutup menu navigasi"
                 >
-                  <span>CLOSE</span>
-                  <X size={12} />
+                  <span>TUTUP</span>
+                  <X size={14} />
                 </button>
               </div>
 
@@ -252,9 +252,9 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                       <a
                         href={item.href}
                         onClick={(e) => handleNavClick(e, item.href)}
-                        className="group flex items-center justify-between gap-4 py-1 md:py-1.5"
+                        className="group flex items-center justify-between gap-4 py-2 md:py-3 min-h-[52px]"
                       >
-                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(38px,10vw,96px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
+                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(28px,8vw,64px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
                           {item.label}
                         </span>
                         <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
@@ -263,9 +263,9 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                       <Link
                         to={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="group flex items-center justify-between gap-4 py-1 md:py-1.5"
+                        className="group flex items-center justify-between gap-4 py-2 md:py-3 min-h-[52px]"
                       >
-                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(38px,10vw,96px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
+                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(28px,8vw,64px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
                           {item.label}
                         </span>
                         <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
@@ -284,7 +284,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                 <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/30 mb-4">
                   Socials
                 </p>
-                <div className="flex flex-wrap gap-x-6 gap-y-2 mono text-xs tracking-[0.12em] uppercase text-white/55">
+                <div className="flex flex-wrap gap-x-8 gap-y-3 mono text-[11px] tracking-[0.12em] uppercase text-white/60">
                   <Link
                     to="/#about"
                     onClick={(e) => handleNavClick(e, '/#about')}
@@ -353,7 +353,7 @@ function Footer() {
       <div
         aria-hidden
         className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none font-black leading-none tracking-[-0.05em] text-white/[0.045] whitespace-nowrap"
-        style={{ fontSize: 'clamp(140px, 26vw, 460px)' }}
+        style={{ fontSize: 'clamp(100px, 20vw, 320px)' }}
       >
         CONTACT
       </div>

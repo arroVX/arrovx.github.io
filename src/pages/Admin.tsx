@@ -644,9 +644,9 @@ export default function Admin() {
   // LOGIN SCREEN
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen pt-36 pb-24 px-6 flex items-center justify-center relative z-10 text-white">
+      <div className="min-h-screen pt-36 pb-24 px-6 flex items-center justify-center relative z-10 text-black">
         {/* Ambient glows */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-black/10 rounded-full blur-[100px] pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.97 }}
@@ -654,18 +654,18 @@ export default function Admin() {
           transition={{ duration: 0.4 }}
           className="w-full max-w-lg"
         >
-          {/* Terminal Window */}
-          <div className="bg-[#070a12]/95 border border-blue-500/20 rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(37,99,235,0.18)] backdrop-blur-2xl font-mono">
+          {/* Admin Login Card */}
+          <div className="bg-white/90 border border-black/10 rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.08)] font-mono">
             {/* Header Bar */}
-            <div className="px-5 py-4 bg-[#0c101c] border-b border-white/5 flex items-center justify-between">
+            <div className="px-5 py-4 bg-[#F5F3EE] border-b border-black/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-blue-400 font-bold text-sm select-none">&gt;_</span>
+                <span className="text-black font-bold text-sm select-none">&gt;_</span>
                 <div>
-                  <div className="text-xs font-bold tracking-wider text-white/90">
-                    ARROOS COMMAND LINE
+                  <div className="text-xs font-bold tracking-wider text-black">
+                    ARRO ADMIN
                   </div>
-                  <div className="text-[9px] font-semibold text-blue-400/80 tracking-widest uppercase">
-                    ADMIN ACCESS — AUTHORIZED ONLY
+                  <div className="text-[9px] font-semibold text-black/60 tracking-widest uppercase">
+                    AUTHENTICATION REQUIRED
                   </div>
                 </div>
               </div>
@@ -675,22 +675,22 @@ export default function Admin() {
             <div className="p-6 space-y-4 text-xs leading-relaxed min-h-[260px]">
               {/* Boot messages */}
               <div className="space-y-1">
-                <div className="text-white/60 font-semibold">ArroOS v2.0.26 [Authorized Access Only]</div>
-                <div className="text-white/40">Secure shell session started. Authentication required.</div>
-                <div className="text-white/40">Type your admin PIN to continue.</div>
+                <div className="text-black/60 font-semibold">Arro Admin Portal v1.0</div>
+                <div className="text-black/40">Secure admin session. Authentication required.</div>
+                <div className="text-black/40">Enter your admin PIN to continue.</div>
               </div>
 
               {/* Divider */}
-              <div className="border-t border-white/5" />
+              <div className="border-t border-black/10" />
 
               {/* Command history — login attempt feedback */}
               {passError && (
                 <motion.div initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} className="space-y-1">
-                  <div className="flex items-center gap-2 text-white/70">
-                    <span className="text-blue-400 font-bold">&gt;</span>
+                  <div className="flex items-center gap-2 text-black/60">
+                    <span className="text-black font-bold">&gt;</span>
                     <span>auth --pin ••••••••</span>
                   </div>
-                  <div className="pl-4 text-red-400/90 flex items-center gap-2">
+                  <div className="pl-4 text-red-500/90 flex items-center gap-2">
                     <span className="text-red-500 font-bold">[DENIED]</span> Incorrect PIN. Access refused. Try again.
                   </div>
                 </motion.div>
@@ -698,44 +698,44 @@ export default function Admin() {
 
               {/* Password Input styled as terminal prompt */}
               <form onSubmit={handleLogin} className="space-y-3">
-                <div className={`flex items-center gap-2 border rounded-xl px-4 py-3 transition-all ${passError ? 'border-red-500/50 bg-red-500/5' : 'border-blue-500/30 bg-white/3 focus-within:border-blue-400/60'}`}>
-                  <span className="text-blue-400 font-bold shrink-0">&gt;</span>
-                  <span className="text-white/40 shrink-0">auth --pin</span>
+                <div className={`flex items-center gap-2 border rounded-xl px-4 py-3 transition-all ${passError ? 'border-red-500/50 bg-red-500/5' : 'border-black/10 bg-white focus-within:border-black'}`}>
+                  <span className="text-black font-bold shrink-0">&gt;</span>
+                  <span className="text-black/40 shrink-0">auth --pin</span>
                   <input
                     type="password"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
                     placeholder="enter passcode..."
-                    className="flex-1 bg-transparent text-white placeholder-white/20 focus:outline-none text-xs font-mono tracking-widest min-w-0"
+                    className="flex-1 bg-transparent text-black placeholder-black/40 focus:outline-none text-xs font-mono tracking-widest min-w-0"
                     autoFocus
                   />
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ repeat: Infinity, duration: 0.7 }}
-                    className="inline-block w-1.5 h-3.5 bg-blue-400 shrink-0 shadow-[0_0_6px_rgba(59,130,246,0.9)]"
+                    className="inline-block w-1.5 h-3.5 bg-black shrink-0 shadow-[0_0_6px_rgba(0,0,0,0.3)]"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-400/60 text-blue-400 font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3 rounded-full bg-black text-white font-bold text-sm tracking-widest uppercase transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-black/90"
                 >
-                  <span className="text-blue-400">&gt;_</span> Execute Auth Command
+                  <span>&gt;_</span> Execute Auth Command
                 </button>
               </form>
             </div>
 
             {/* Footer Bar */}
-            <div className="px-5 py-3 bg-[#0c101c]/90 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40">
+            <div className="px-5 py-3 bg-[#F5F3EE] border-t border-black/5 flex items-center justify-between text-[10px] text-black/50">
               <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1.5 font-bold text-blue-400/90">
-                  <ShieldCheck size={11} className="text-blue-400" /> ENCRYPTED SESSION
+                <span className="flex items-center gap-1.5 font-bold text-black/60">
+                  <ShieldCheck size={11} className="text-black/40" /> SECURE SESSION
                 </span>
-                <span className="font-semibold tracking-wider text-white/30 hidden sm:inline">
-                  USER@ARRO-PC:~$
+                <span className="font-semibold tracking-wider text-black/30 hidden sm:inline">
+                  ADMIN@ARRO:~$
                 </span>
               </div>
-              <div className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/5 text-[9px] font-bold text-white/40 tracking-wider flex items-center gap-1.5">
+              <div className="px-2.5 py-1 rounded-full bg-white border border-black/10 text-[9px] font-bold text-black tracking-wider flex items-center gap-1.5">
                 <Lock size={10} /> ADMIN PORTAL
               </div>
             </div>
@@ -804,13 +804,13 @@ export default function Admin() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen pt-32 pb-24 px-4 md:px-6 relative z-10 text-white max-w-7xl mx-auto"
+      className="min-h-screen pt-32 pb-24 px-4 md:px-6 relative z-10 text-black max-w-7xl mx-auto bg-[#e8e8e5]"
     >
       {/* Header Dashboard */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10 pb-6 border-b border-white/10">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10 pb-6 border-b border-black/5">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-xs font-mono font-bold text-blue-400 mb-3">
-            <ShieldCheck size={14} /> FIREBASE ADMIN DASHBOARD — PROJECT: rojing-54fcd
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/5 border border-black/10 rounded-lg text-xs font-mono font-bold text-black mb-3">
+            <ShieldCheck size={14} /> FIREBASE ADMIN — PROJECT: rojing-54fcd
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
             Manajemen Proyek, LKPD & Achievements
@@ -821,7 +821,7 @@ export default function Admin() {
           {activeTab !== 'messages' && (
             <button
               onClick={() => handleOpenModal()}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 border-none cursor-pointer flex-1 md:flex-initial"
+              className="px-5 py-3 rounded-full bg-black text-white font-bold text-sm flex items-center justify-center gap-2 transition-all border-none cursor-pointer flex-1 md:flex-initial hover:bg-black/90"
             >
               <Plus size={16} /> Tambah{' '}
               {activeTab === 'projects' ? 'Proyek' : activeTab === 'achievements' ? 'Achievement' : 'LKPD'}
@@ -829,7 +829,7 @@ export default function Admin() {
           )}
           <button
             onClick={handleLogout}
-            className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-white/60 hover:text-red-400 font-semibold text-xs transition-all border border-white/10 cursor-pointer flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-full border border-black/10 text-black font-semibold text-sm transition-all flex items-center gap-1.5 hover:bg-black hover:text-white"
             title="Logout"
           >
             <LogOut size={14} /> Logout
@@ -839,17 +839,17 @@ export default function Admin() {
 
       {/* Error Notification Alert for Firestore Rules */}
       {firebaseErrorMsg && (
-        <div className="p-4 mb-8 bg-red-500/10 border border-red-500/30 rounded-2xl text-left text-xs text-red-300 space-y-2">
-          <div className="flex items-center gap-2 font-bold text-sm text-red-400">
+        <div className="p-4 mb-8 bg-red-50/10 border border-red-500/30 rounded-2xl text-left text-xs text-red-600 space-y-2">
+          <div className="flex items-center gap-2 font-bold text-sm text-red-600">
             <AlertCircle size={18} /> Error Izin Firestore (Permission Denied)
           </div>
-          <p>
+          <p className="text-black/60">
             Database Firestore menolak akses. Jangan gunakan mode publik penuh.
             Deploy aturan aman dari repo ini:
           </p>
-          <div className="bg-black/40 p-3 rounded-xl font-mono text-[11px] text-white/80">
+          <div className="bg-black/5 p-3 rounded-xl font-mono text-[11px] text-black/60">
             1. Pastikan <b>firestore.rules</b> & <b>storage.rules</b> sudah sesuai<br />
-            2. Jalankan <code className="text-emerald-400">firebase deploy --only firestore:rules,storage</code><br />
+            2. Jalankan <code className="text-black">firebase deploy --only firestore:rules,storage</code><br />
             3. Untuk tulis data, login via Firebase Auth (lihat TODO di kode Admin).
           </div>
         </div>
@@ -859,36 +859,36 @@ export default function Admin() {
       <div className="flex flex-wrap items-center gap-3 mb-8">
         <button
           onClick={() => setActiveTab('projects')}
-          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'projects'
-            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-            : 'bg-white/5 text-white/40 hover:text-white'
+          className={`px-5 py-3 rounded-full text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'projects'
+            ? 'bg-black text-white shadow-lg shadow-black/20'
+            : 'bg-white border-black/10 text-black/60 hover:bg-black hover:text-black'
           }`}
         >
           <FolderKanban size={16} /> Proyek Utama ({projects.length})
         </button>
         <button
           onClick={() => setActiveTab('school')}
-          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'school'
-            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-            : 'bg-white/5 text-white/40 hover:text-white'
+          className={`px-5 py-3 rounded-full text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'school'
+            ? 'bg-black text-white shadow-lg shadow-black/20'
+            : 'bg-white border-black/10 text-black/60 hover:bg-black hover:text-black'
           }`}
         >
           <BookOpen size={16} /> School Project ({schoolProjects.length})
         </button>
         <button
           onClick={() => setActiveTab('achievements')}
-          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'achievements'
-            ? 'bg-yellow-600 text-white shadow-lg shadow-yellow-500/30'
-            : 'bg-white/5 text-white/40 hover:text-white'
+          className={`px-5 py-3 rounded-full text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'achievements'
+            ? 'bg-black text-white shadow-lg shadow-black/20'
+            : 'bg-white border-black/10 text-black/60 hover:bg-black hover:text-black'
           }`}
         >
           <Trophy size={16} /> Achievements ({achievements.length})
         </button>
         <button
           onClick={() => setActiveTab('messages')}
-          className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'messages'
-            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-            : 'bg-white/5 text-white/40 hover:text-white'
+          className={`px-5 py-3 rounded-full text-xs font-bold transition-all border-none flex items-center gap-2 cursor-pointer ${activeTab === 'messages'
+            ? 'bg-black text-white shadow-lg shadow-black/20'
+            : 'bg-white border-black/10 text-black/60 hover:bg-black hover:text-black'
           }`}
         >
           <MessageSquare size={16} /> Pesan Masuk / Get In Touch ({messages.length})
@@ -899,31 +899,31 @@ export default function Admin() {
       {activeTab !== 'messages' && (
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row items-center gap-3 mb-8">
           <div className="relative w-full md:flex-1">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black/40" />
             <input
               type="text"
               placeholder={`Cari nama ${activeTab === 'projects' ? 'proyek' : activeTab === 'achievements' ? 'achievement' : 'LKPD'}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 focus:border-blue-500/50 rounded-xl py-2.5 pl-11 pr-4 text-xs text-white placeholder-white/30 focus:outline-none transition-all"
+              className="w-full bg-white border border-black/10 focus:border-black rounded-xl py-2.5 pl-11 pr-4 text-xs text-black placeholder-black/30 focus:outline-none transition-all"
             />
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="flex items-center gap-2 px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl w-full md:w-auto">
-              <Filter size={14} className="text-white/40 shrink-0" />
+            <div className="flex items-center gap-2 px-3 py-2.5 bg-white border border-black/10 rounded-xl w-full md:w-auto">
+              <Filter size={14} className="text-black/40 shrink-0" />
 
               {activeTab === 'projects' || activeTab === 'achievements' ? (
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pr-4 w-full"
+                  className="bg-transparent border-none text-xs text-black/70 focus:outline-none cursor-pointer appearance-none outline-none pr-4 w-full"
                 >
-                  <option value="" className="bg-[#0c101c] text-white">
+                  <option value="" className="bg-white text-black">
                     Semua Kategori
                   </option>
                   {(activeTab === 'projects' ? uniqueCategories : uniqueAchCategories).map((cat, i) => (
-                    <option key={i} value={cat} className="bg-[#0c101c] text-white">
+                    <option key={i} value={cat} className="bg-white text-black">
                       {cat}
                     </option>
                   ))}
@@ -933,13 +933,13 @@ export default function Admin() {
                   <select
                     value={filterClass}
                     onChange={(e) => setFilterClass(e.target.value)}
-                    className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pr-2 border-r border-white/10 flex-1"
+                    className="bg-transparent border-none text-xs text-black/70 focus:outline-none cursor-pointer appearance-none outline-none pr-2 border-r border-black/10 flex-1"
                   >
-                    <option value="" className="bg-[#0c101c] text-white">
+                    <option value="" className="bg-white text-black">
                       -- Semua Kelas --
                     </option>
                     {uniqueClasses.map((cls, i) => (
-                      <option key={i} value={cls} className="bg-[#0c101c] text-white">
+                      <option key={i} value={cls} className="bg-white text-black">
                         {cls}
                       </option>
                     ))}
@@ -948,13 +948,13 @@ export default function Admin() {
                   <select
                     value={filterSubject}
                     onChange={(e) => setFilterSubject(e.target.value)}
-                    className="bg-transparent border-none text-xs text-white/70 focus:outline-none cursor-pointer appearance-none outline-none pl-2 flex-1"
+                    className="bg-transparent border-none text-xs text-black/70 focus:outline-none cursor-pointer appearance-none outline-none pl-2 flex-1"
                   >
-                    <option value="" className="bg-[#0c101c] text-white">
+                    <option value="" className="bg-white text-black">
                       -- Semua Mapel --
                     </option>
                     {uniqueSubjects.map((sub, i) => (
-                      <option key={i} value={sub} className="bg-[#0c101c] text-white">
+                      <option key={i} value={sub} className="bg-white text-black">
                         {sub}
                       </option>
                     ))}
@@ -994,16 +994,16 @@ export default function Admin() {
 
       {/* Empty State Banner with Seed Button */}
       {activeTab === 'projects' && projects.length === 0 && !loading && (
-        <div className="glass-card p-8 text-center border-white/10 mb-8 max-w-xl mx-auto">
-          <UploadCloud size={40} className="mx-auto text-blue-400 mb-3" />
+        <div className="border border-black/10 bg-white p-8 text-center mb-8 max-w-xl mx-auto rounded-2xl">
+          <UploadCloud size={40} className="mx-auto text-black/40 mb-3" />
           <h3 className="text-lg font-bold mb-2">Koleksi Firebase Masih Kosong</h3>
-          <p className="text-xs text-white/50 mb-6 leading-relaxed">
+          <p className="text-xs text-black/50 mb-6 leading-relaxed">
             Klik tombol di bawah ini untuk memasukkan proyek bawaan secara otomatis ke Firebase Firestore kamu.
           </p>
           <button
             onClick={handleSeedInitialData}
             disabled={isSubmitting}
-            className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition-all border-none cursor-pointer inline-flex items-center gap-2 shadow-lg shadow-emerald-500/20"
+            className="px-6 py-3 rounded-full bg-black text-white font-bold text-sm transition-all border-none cursor-pointer inline-flex items-center gap-2 hover:bg-black/90"
           >
             {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
             Seed Proyek Bawaan ke Firebase
@@ -1013,16 +1013,16 @@ export default function Admin() {
 
       {/* Empty State Banner for Achievements */}
       {activeTab === 'achievements' && achievements.length === 0 && !loading && (
-        <div className="glass-card p-8 text-center border-white/10 mb-8 max-w-xl mx-auto">
-          <Trophy size={40} className="mx-auto text-yellow-400 mb-3" />
+        <div className="border border-black/10 bg-white p-8 text-center mb-8 max-w-xl mx-auto rounded-2xl">
+          <Trophy size={40} className="mx-auto text-black/40 mb-3" />
           <h3 className="text-lg font-bold mb-2">Belum Ada Achievement di Firebase</h3>
-          <p className="text-xs text-white/50 mb-6 leading-relaxed">
+          <p className="text-xs text-black/50 mb-6 leading-relaxed">
             Seed 4 data bawaan (FSBN 2025, ONSP 2025, Robotic 2022, POSN 2022) ke koleksi <b>achievements</b>.
           </p>
           <button
             onClick={handleSeedAchievements}
             disabled={isSubmitting}
-            className="px-6 py-2.5 bg-yellow-600 hover:bg-yellow-500 text-white font-bold text-xs rounded-xl transition-all border-none cursor-pointer inline-flex items-center gap-2 shadow-lg shadow-yellow-500/20"
+            className="px-6 py-3 rounded-full bg-black text-white font-bold text-sm transition-all border-none cursor-pointer inline-flex items-center gap-2 hover:bg-black/90"
           >
             {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
             Seed 4 Achievements ke Firebase
@@ -1032,7 +1032,17 @@ export default function Admin() {
 
       {/* Loading State */}
       {loading && (
-        <TerminalLoading message="Menghubungkan ke ArroOS Firestore kernel..." />
+        <div className="py-12 flex justify-center w-full">
+          <div className="w-full max-w-lg rounded-2xl border border-black/10 bg-white p-6 flex items-center gap-4 shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+            <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+              <Loader2 size={16} className="animate-spin" />
+            </div>
+            <div>
+              <div className="mono text-xs tracking-widest uppercase text-black/40">Loading</div>
+              <div className="text-sm font-medium text-black/70">Menghubungkan ke Firebase...</div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* List Table / Cards Grid for Projects & School Projects */}
@@ -1044,30 +1054,30 @@ export default function Admin() {
               layout
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass-card p-6 border-white/10 bg-[#070b16]/90 flex flex-col justify-between group hover:border-blue-500/40 transition-all relative text-left"
+              className="border border-black/10 bg-white p-6 flex flex-col justify-between group hover:border-black hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all relative text-left"
             >
               <div>
                 {/* Badges */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider border border-blue-500/20">
+                  <span className="px-2.5 py-1 rounded-lg bg-black/5 text-black/60 text-[10px] font-bold uppercase tracking-wider border border-black/10">
                     {item.category || 'General'}
                   </span>
                 </div>
 
                 {/* Title & Description */}
-                <h3 className="text-lg font-bold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
+                <h3 className="text-lg font-bold mb-2 group-hover:text-black transition-colors leading-snug">
                   {item.title}
                 </h3>
 
                 {(item.organizer || item.rank || item.year) && (
-                  <div className="text-xs text-white/40 mb-3 font-medium space-y-1">
+                  <div className="text-xs text-black/40 mb-3 font-medium space-y-1">
                     {item.organizer && (
                       <p className="flex items-center gap-1.5">
-                        <Award size={12} className="text-yellow-400" /> {item.organizer}
+                        <Award size={12} className="text-black/40" /> {item.organizer}
                       </p>
                     )}
                     {(item.rank || item.year) && (
-                      <p className="font-mono text-[11px] text-yellow-300/80">
+                      <p className="font-mono text-[11px] text-black/40">
                         {[item.rank, item.year].filter(Boolean).join(' • ')}
                       </p>
                     )}
@@ -1075,12 +1085,12 @@ export default function Admin() {
                 )}
 
                 {item.subject && (
-                  <p className="text-xs text-white/40 mb-3 font-medium flex items-center gap-1.5">
-                    <BookOpen size={12} className="text-blue-400" /> {item.subject}
+                  <p className="text-xs text-black/40 mb-3 font-medium flex items-center gap-1.5">
+                    <BookOpen size={12} className="text-black/40" /> {item.subject}
                   </p>
                 )}
 
-                <p className="text-xs text-white/60 leading-relaxed mb-4 line-clamp-3">
+                <p className="text-xs text-black/60 leading-relaxed mb-4 line-clamp-3">
                   {item.desc}
                 </p>
 
@@ -1095,7 +1105,7 @@ export default function Admin() {
                       href={String(item.fileUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-white font-bold text-[10px] underline ml-2 shrink-0"
+                      className="text-black/60 hover:text-black font-bold text-[10px] underline ml-2 shrink-0"
                     >
                       Buka
                     </a>
@@ -1108,23 +1118,23 @@ export default function Admin() {
                 {item.tech && (
                   <div className="flex flex-wrap gap-1.5 mb-6">
                     {(Array.isArray(item.tech) ? item.tech : String(item.tech).split(',')).map((t, idx) => (
-                      <span key={idx} className="px-2 py-0.5 bg-white/5 rounded-md text-[10px] font-mono text-white/50 border border-white/5">
+                      <span key={idx} className="px-2 py-0.5 rounded-md text-[10px] font-mono text-black/40 border border-black/10 bg-black/5">
                         {String(t).trim()}
                       </span>
                     ))}
                   </div>
                 )}
 
-                <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                <div className="flex items-center gap-2 pt-4 border-t border-black/5">
                   <button
                     onClick={() => handleOpenModal(item)}
-                    className="flex-1 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition-all border border-blue-500/30 flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 py-2 rounded-full bg-black text-white text-xs font-bold transition-all border-none cursor-pointer flex items-center justify-center gap-1.5 hover:bg-black/90"
                   >
                     <Edit2 size={13} /> Edit
                   </button>
                   <button
                     onClick={() => handleDelete(String(item.id), String(item.title))}
-                    className="py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold transition-all border border-red-500/20 flex items-center justify-center cursor-pointer"
+                    className="py-2 px-3 rounded-full border border-black/10 text-black font-bold text-xs transition-all flex items-center justify-center cursor-pointer hover:bg-black hover:text-white"
                     title="Hapus"
                   >
                     <Trash2 size={13} />
@@ -1140,10 +1150,10 @@ export default function Admin() {
       {activeTab === 'messages' && (
         <div>
           {messages.length === 0 && !loading ? (
-            <div className="glass-card p-12 text-center border-white/10 max-w-lg mx-auto rounded-3xl">
-              <Mail size={44} className="mx-auto text-blue-400/60 mb-3" />
-              <h3 className="text-lg font-bold text-white mb-2">Belum Ada Pesan Masuk</h3>
-              <p className="text-xs text-white/40 leading-relaxed">
+            <div className="border border-black/10 bg-white p-12 text-center max-w-lg mx-auto rounded-3xl">
+              <Mail size={44} className="mx-auto text-black/40 mb-3" />
+              <h3 className="text-lg font-bold text-black mb-2">Belum Ada Pesan Masuk</h3>
+              <p className="text-xs text-black/50 leading-relaxed">
                 Pesan yang dikirim pengunjung melalui formulir <b>Get In Touch</b> di halaman Contact/Home akan otomatis muncul secara realtime di sini.
               </p>
             </div>
@@ -1155,29 +1165,29 @@ export default function Admin() {
                   layout
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="glass-card p-6 border-white/10 bg-[#070b16]/90 flex flex-col justify-between group hover:border-blue-500/40 transition-all relative text-left"
+                  className="border border-black/10 bg-white p-6 flex flex-col justify-between group hover:border-black hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all relative text-left"
                 >
                   <div>
                     {/* Header info */}
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20 flex items-center gap-1">
+                      <span className="px-2.5 py-1 rounded-lg bg-black/5 text-black/60 text-[10px] font-bold uppercase tracking-wider border border-black/10 flex items-center gap-1">
                         <Mail size={12} /> Pesan Masuk
                       </span>
-                      <span className="text-[10px] font-mono text-white/40 flex items-center gap-1">
+                      <span className="text-[10px] font-mono text-black/40 flex items-center gap-1">
                         <Clock size={11} /> {formatDate(item.timestamp || item.createdAt)}
                       </span>
                     </div>
 
                     {/* Sender Name & Email */}
                     <div className="mb-3">
-                      <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors flex items-center gap-2">
-                        <User size={15} className="text-blue-400 shrink-0" />
+                      <h3 className="text-base font-bold text-black group-hover:text-black/80 transition-colors flex items-center gap-2">
+                        <User size={15} className="text-black/40 shrink-0" />
                         <span className="truncate">{item.name || 'Pengunjung Anonim'}</span>
                       </h3>
                       {item.email && (
                         <a
                           href={`mailto:${item.email}`}
-                          className="text-xs text-blue-400/80 hover:text-blue-300 font-mono underline block mt-0.5 truncate"
+                          className="text-xs text-black/60 hover:text-black font-mono underline block mt-0.5 truncate"
                         >
                           {item.email}
                         </a>
@@ -1186,29 +1196,29 @@ export default function Admin() {
 
                     {/* Subject if exists */}
                     {item.subject && (
-                      <div className="mb-3 px-3 py-1.5 bg-white/5 rounded-xl border border-white/5 text-xs text-white/80 font-semibold truncate">
-                        Subjek: <span className="text-blue-300">{item.subject}</span>
+                      <div className="mb-3 px-3 py-1.5 bg-black/5 rounded-xl border border-black/10 text-xs text-black/60 font-semibold truncate">
+                        Subjek: <span className="text-black/80">{item.subject}</span>
                       </div>
                     )}
 
                     {/* Message Body */}
-                    <p className="text-xs text-white/70 leading-relaxed mb-4 line-clamp-4 bg-black/40 p-3 rounded-xl border border-white/5 whitespace-pre-wrap">
+                    <p className="text-xs text-black/60 leading-relaxed mb-4 line-clamp-4 bg-black/5 p-3 rounded-xl border border-black/10 whitespace-pre-wrap">
                       "{item.message}"
                     </p>
                   </div>
 
                   {/* Card Actions */}
-                  <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2 pt-4 border-t border-black/5">
                     <button
                       onClick={() => setSelectedMessage(item)}
-                      className="flex-1 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-bold transition-all border border-blue-500/30 flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="flex-1 py-2 rounded-full bg-black text-white text-xs font-bold transition-all border-none cursor-pointer flex items-center justify-center gap-1.5 hover:bg-black/90"
                     >
                       <Eye size={13} /> Baca Detail
                     </button>
                     {item.email && (
                       <a
                         href={`mailto:${item.email}?subject=Re: ${encodeURIComponent(String(item.subject || 'Pesan Portofolio'))}`}
-                        className="py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white text-xs font-bold transition-all border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer no-underline"
+                        className="py-2 px-3 rounded-full border border-black/10 text-black font-bold text-xs transition-all flex items-center justify-center gap-1 cursor-pointer no-underline hover:bg-black hover:text-white"
                         title="Balas via Email"
                       >
                         <Send size={13} /> Balas
@@ -1216,7 +1226,7 @@ export default function Admin() {
                     )}
                     <button
                       onClick={() => handleDelete(String(item.id), `Pesan dari ${item.name || 'Pengunjung'}`)}
-                      className="py-2 px-3 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold transition-all border border-red-500/20 flex items-center justify-center cursor-pointer"
+                      className="py-2 px-3 rounded-full border border-black/10 text-black font-bold text-xs transition-all flex items-center justify-center cursor-pointer hover:bg-black hover:text-white"
                       title="Hapus Pesan"
                     >
                       <Trash2 size={13} />

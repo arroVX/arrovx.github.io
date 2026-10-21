@@ -246,6 +246,7 @@ function HomeExperienceSlider({
 }: HomeExperienceSliderProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [activeLocal, setActiveLocal] = useState(0)
+  const [activeTrack, setActiveTrack] = useState(0)
   const active = onActiveChange ? undefined : activeLocal
   const setActive = onActiveChange || setActiveLocal
 
@@ -257,11 +258,13 @@ function HomeExperienceSlider({
       if (cards[idx]) {
         cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
         setActive(idx)
+        setActiveTrack(idx)
       }
       return
     }
     if (onDotClick) {
       onDotClick(idx)
+      setActiveTrack(idx)
       return
     }
     const expSection = document.getElementById('experience')
@@ -274,6 +277,7 @@ function HomeExperienceSlider({
         .__LENIS__ || null
       if (lenis) lenis.scrollTo(targetY, { duration: 1.1 })
       else window.scrollTo({ top: targetY, behavior: 'smooth' })
+      setActiveTrack(idx)
       return
     }
     const el = scrollRef.current
@@ -282,6 +286,7 @@ function HomeExperienceSlider({
     if (cards[idx]) {
       cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
       setActive(idx)
+      setActiveTrack(idx)
     }
   }
 
@@ -294,7 +299,10 @@ function HomeExperienceSlider({
     const w = card ? card.offsetWidth + gap : 1
     const idx = Math.round(scrollLeft / w)
     setActive(Math.min(Math.max(idx, 0), experiences.length - 1))
+    setActiveTrack(Math.min(Math.max(idx, 0), experiences.length - 1))
   }
+
+  const trackActive = trackRef ? activeTrack : activeLocal
 
   if (trackRef) {
     return (
@@ -373,12 +381,31 @@ function HomeExperienceSlider({
             </div>
           ))}
         </div>
+        {/* Navigation arrows - always visible on mobile */}
+        <div className="absolute inset-y-0 flex items-center justify-between w-full px-4 sm:px-6 pointer-events-none">
+          <button
+            onClick={() => scrollTo(Math.max(trackActive - 1, 0))}
+            className="pointer-events-auto absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
+            aria-label="Experience sebelumnya"
+            disabled={trackActive === 0}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button
+            onClick={() => scrollTo(Math.min(trackActive + 1, experiences.length - 1))}
+            className="pointer-events-auto absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
+            aria-label="Experience berikutnya"
+            disabled={trackActive === experiences.length - 1}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6l6 6-6 6" /></svg>
+          </button>
+        </div>
         <div className="flex items-center justify-center gap-2 pb-4">
           {experiences.map((_, i) => (
             <button
               key={i}
               onClick={() => scrollTo(i)}
-              className={`transition-all duration-300 rounded-full ${i === 0 ? 'w-6 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/25 hover:bg-white/40'}`}
+              className={`transition-all duration-300 rounded-full ${trackActive === i ? 'w-6 h-1.5 bg-white' : 'w-2 h-2 bg-white/25 hover:bg-white/40 focus:ring-2 focus:ring-white focus:ring-offset-2'}`}
               data-dot={i}
               aria-label={`Go to ${i + 1}`}
               tabIndex={0}
@@ -397,7 +424,7 @@ function HomeExperienceSlider({
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pl-6 md:pl-10 lg:pl-12 pr-6 md:pr-10 lg:pr-12 pb-8"
+        className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pl-4 sm:pl-6 md:pl-10 lg:pl-12 pr-4 sm:pr-6 md:pr-10 lg:pr-12 pb-8"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         <style>{`.scrollbar-hide::-webkit-scrollbar{display:none}`}</style>
@@ -405,7 +432,7 @@ function HomeExperienceSlider({
           <div
             key={exp.id}
             data-card
-            className="group min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+            className="group min-w-[82vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
           >
             <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
               <div className="flex items-center gap-2 mono text-[9.5px] tracking-[0.18em] uppercase text-black/40">
@@ -470,12 +497,31 @@ function HomeExperienceSlider({
           </div>
         ))}
       </div>
+      {/* Navigation arrows - always visible on mobile */}
+      <div className="absolute inset-y-0 flex items-center justify-between w-full px-4 sm:px-6 pointer-events-none">
+        <button
+          onClick={() => scrollTo(Math.max((activeLocal ?? 0) - 1, 0))}
+          className="pointer-events-auto absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-50 md:opacity-0 hover:opacity-100 transition-all"
+          aria-label="Experience sebelumnya"
+          disabled={(activeLocal ?? 0) === 0}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <button
+          onClick={() => scrollTo(Math.min((activeLocal ?? 0) + 1, experiences.length - 1))}
+          className="pointer-events-auto absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-50 md:opacity-0 hover:opacity-100 transition-all"
+          aria-label="Experience berikutnya"
+          disabled={(activeLocal ?? 0) === experiences.length - 1}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6l6 6-6 6" /></svg>
+        </button>
+      </div>
       <div className="flex items-center justify-center gap-2 pb-6">
         {experiences.map((_, i) => (
           <button
             key={i}
             onClick={() => scrollTo(i)}
-            className={`transition-all duration-300 rounded-full ${active === i ? 'w-6 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/25 hover:bg-white/40'}`}
+            className={`transition-all duration-300 rounded-full ${active === i ? 'w-6 h-1.5 bg-white' : 'w-2 h-2 bg-white/25 hover:bg-white/40 focus:ring-2 focus:ring-white focus:ring-offset-2'}`}
             aria-label={`Go to ${i + 1}`}
             tabIndex={0}
           />
@@ -826,10 +872,10 @@ export default function Home() {
                 </p>
 
                 <h1 className="headline-serif leading-[0.88] tracking-[-0.045em] text-black">
-                  <span className="block text-[52px] sm:text-[68px] lg:text-[84px] xl:text-[92px] font-normal">
+                  <span className="block text-[40px] sm:text-[52px] md:text-[68px] lg:text-[84px] xl:text-[92px] font-normal">
                     Hi, I'm
                   </span>
-                  <span className="block text-[52px] sm:text-[68px] lg:text-[84px] xl:text-[92px] italic font-normal -mt-1">
+                  <span className="block text-[40px] sm:text-[52px] md:text-[68px] lg:text-[84px] xl:text-[92px] italic font-normal -mt-1">
                     Arro.
                   </span>
                 </h1>
@@ -861,7 +907,7 @@ export default function Home() {
               >
                 <div
                   data-hero-portrait
-                  className="relative w-[320px] sm:w-[360px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform"
+                  className="relative w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform mx-auto sm:mx-0"
                 >
                   <div className="absolute top-[18px] left-5 right-5 h-[1px] bg-white/[0.06] z-10" />
                   <div className="absolute top-[28px] left-0 right-0 flex justify-between px-6 pointer-events-none select-none z-10 opacity-[0.07]">
@@ -916,11 +962,11 @@ export default function Home() {
           </div>
 
           {/* Curved black bottom divider */}
-          <div className="absolute bottom-0 left-0 w-full h-[100px] overflow-hidden pointer-events-none z-20">
-            <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-[130%] md:w-[110%] h-[100px] absolute left-1/2 -translate-x-1/2 bottom-0">
+          <div className="absolute bottom-0 left-0 w-full h-[80px] overflow-hidden pointer-events-none z-20 mt-4">
+            <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[80px] absolute left-1/2 -translate-x-1/2 bottom-0">
               <path
                 ref={heroCurveRef}
-                d="M0 88 Q720 -30 1440 88 L1440 100 L0 100 Z"
+                d="M0 70 Q720 -20 1440 70 L1440 80 L0 80 Z"
                 fill="#0A0A0A"
               />
             </svg>

@@ -111,7 +111,7 @@ export default function Experience() {
       <div className="relative overflow-hidden">
         <div
           className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none font-black leading-none tracking-[-0.08em] text-white/[0.035]"
-          style={{ fontSize: 'clamp(200px, 36vw, 560px)' }}
+          style={{ fontSize: 'clamp(140px, 28vw, 400px)' }}
         >
           E
         </div>
@@ -142,7 +142,7 @@ export default function Experience() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.08 }}
-                className="group min-w-[92vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-auto md:h-[620px] overflow-hidden relative"
+                className="group min-w-[88vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-auto md:h-[620px] overflow-hidden relative"
               >
                 {/* Left */}
                 <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
@@ -212,10 +212,10 @@ export default function Experience() {
               </motion.div>
             ))}
 
-            {/* Navigation arrows for better UX */}
+            {/* Navigation arrows - always visible on mobile */}
             <button
               onClick={() => scrollTo(Math.max(active - 1, 0))}
-              className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white hover:text-black transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
               aria-label="Previous experience"
               disabled={active === 0}
             >
@@ -223,7 +223,7 @@ export default function Experience() {
             </button>
             <button
               onClick={() => scrollTo(Math.min(active + 1, experiences.length - 1))}
-              className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white hover:text-black transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
               aria-label="Next experience"
               disabled={active === experiences.length - 1}
             >
@@ -231,13 +231,13 @@ export default function Experience() {
             </button>
           </div>
 
-          {/* Dots / progress */}
-          <div className="flex items-center justify-center gap-2 pb-8">
+          {/* Dots / progress - bigger for mobile touch */}
+          <div className="flex items-center justify-center gap-3 pb-8">
             {experiences.map((_, i) => (
               <button
                 key={i}
                 onClick={() => scrollTo(i)}
-                className={`transition-all duration-300 rounded-full ${active === i ? 'w-6 h-1.5 bg-white' : 'w-2 h-2 bg-white/25 hover:bg-white/40 focus:ring-2 focus:ring-white focus:ring-offset-2 focus-ring-offset-black'}`}
+                className={`transition-all duration-300 rounded-full ${active === i ? 'w-6 h-1.5 bg-white' : 'w-2 h-2 bg-white/25 hover:bg-white/40 focus:ring-2 focus:ring-white focus:ring-offset-2'}`}
                 aria-label={`Go to experience ${i + 1}`}
                 aria-current={active === i ? 'true' : undefined}
                 tabIndex={0}
@@ -246,8 +246,8 @@ export default function Experience() {
           </div>
 
           {/* Hint text mobile */}
-          <p className="mono text-[10px] tracking-[0.18em] uppercase text-white/25 text-center pb-6 md:hidden">
-            Swipe to explore →
+          <p className="mono text-[11px] tracking-[0.2em] uppercase text-white/40 text-center pb-8 md:hidden">
+            Geser ke samping →
           </p>
         </div>
 
