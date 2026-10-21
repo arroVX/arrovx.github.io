@@ -663,18 +663,24 @@ export default function Home() {
       const track = expTrackRef.current
       if (!stack || !hero || !exp || !track) return
 
+      const mm = gsap.matchMedia()
+
       // 1b) Hero full animate — curve morph + parallax teks/foto + hint fade
       if (heroCurveRef.current) {
         const straight = 'M0 100 Q720 100 1440 100 L1440 100 L0 100 Z'
-        gsap.to(heroCurveRef.current, {
-          attr: { d: straight },
-          ease: 'none',
-          scrollTrigger: {
-            trigger: hero,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1.1,
-          },
+        // Morph only on desktop — on mobile the hero is not pinned, so the
+        // curve must stay a clean arc instead of flattening mid-screen.
+        mm.add('(min-width: 768px)', () => {
+          gsap.to(heroCurveRef.current, {
+            attr: { d: straight },
+            ease: 'none',
+            scrollTrigger: {
+              trigger: hero,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1.1,
+            },
+          })
         })
       }
 
@@ -852,8 +858,6 @@ export default function Home() {
       const projectsWrap = document.getElementById('projects-wrap')
       const projectsCard = document.getElementById('projects')
       if (projectsWrap && projectsCard) {
-        const mm = gsap.matchMedia()
-
         mm.add('(max-width: 767px)', () => {
           gsap.fromTo(
             projectsCard,
@@ -888,9 +892,9 @@ export default function Home() {
             },
           )
         })
-
-        return () => mm.revert()
       }
+
+      return () => mm.revert()
     }, stackRef)
 
     const onLoad = () => ScrollTrigger.refresh()
@@ -915,15 +919,15 @@ export default function Home() {
         <section
           ref={heroRef}
           id="home"
-          className="sticky top-0 z-10 min-h-[100dvh] bg-[#e8e8e5] overflow-hidden flex flex-col"
+          className="relative md:sticky md:top-0 z-10 min-h-[100dvh] bg-[#e8e8e5] overflow-hidden flex flex-col"
         >
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(0,0,0,0.02), transparent 60%)' }}
           />
 
-          <div className="relative flex-1 max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12 flex flex-col justify-center pt-[96px] pb-[132px] lg:pt-[104px]">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          <div className="relative flex-1 max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12 flex flex-col justify-center pt-[80px] pb-[100px] lg:pt-[104px]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
               {/* Left — Text */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -1017,7 +1021,7 @@ export default function Home() {
               >
                 <div
                   data-hero-portrait
-                  className="relative w-[320px] sm:w-[360px] md:w-[380px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform cursor-pointer"
+                  className="relative w-[320px] max-w-[86vw] sm:w-[360px] md:w-[380px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform cursor-pointer"
                   onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect()
                     const x = e.clientX - rect.left
@@ -1089,7 +1093,7 @@ export default function Home() {
           {/* Scroll down indicator */}
           <div
             data-hero-scrollhint
-            className="absolute bottom-[128px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+            className="absolute bottom-[128px] left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 pointer-events-none"
           >
             <div className="w-[20px] h-[30px] rounded-full border border-black/15 flex justify-center pt-1.5">
               <span className="w-[3px] h-[6px] bg-black/30 rounded-full block animate-bounce" />
