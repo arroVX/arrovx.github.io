@@ -160,6 +160,11 @@ body {
   pointer-events: none;
 }
 
+/* Restore interaction inside the pinned section (hover, buttons, dots) */
+.pin-spacer > #experience {
+  pointer-events: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   #sticky-stack, #home, #experience {
     transform: none !important;
