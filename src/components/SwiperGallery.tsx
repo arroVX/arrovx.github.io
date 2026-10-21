@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Keyboard, EffectFade } from 'swiper/modules'
+import { Keyboard } from 'swiper/modules'
 import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/effect-fade'
 
 const PLACEHOLDER = `${import.meta.env.BASE_URL}og-image.png`
 
@@ -28,8 +26,6 @@ function dedupeImages(images: string[] | undefined) {
 export default function SwiperGallery({ images = [], title }: SwiperGalleryProps) {
   const [current, setCurrent] = useState(1)
   const swiperRef = useRef<any>(null)
-  const prevRef = useRef<HTMLButtonElement | null>(null)
-  const nextRef = useRef<HTMLButtonElement | null>(null)
 
   const unique = dedupeImages(images)
   const safeImages = unique.length ? unique : [PLACEHOLDER]
@@ -43,25 +39,15 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
       <div className="relative rounded-2xl overflow-hidden border border-black/5 bg-white">
         <Swiper
           key={gallerySig}
-          modules={[Navigation, Keyboard, EffectFade]}
+          modules={[Keyboard]}
           slidesPerView={1}
           spaceBetween={16}
-          effect="fade"
-          fadeEffect={{ crossFade: true }}
           speed={650}
           loop={hasMultiple}
           keyboard={hasMultiple ? { enabled: true } : false}
           allowTouchMove={hasMultiple}
           onSwiper={(swiper) => {
             swiperRef.current = swiper
-            // Refs are set after first render — bind navigation here, not via props.
-            if (hasMultiple && prevRef.current && nextRef.current) {
-              swiper.params.navigation!.prevEl = prevRef.current
-              swiper.params.navigation!.nextEl = nextRef.current
-              swiper.navigation.destroy()
-              swiper.navigation.init()
-              swiper.navigation.update()
-            }
           }}
           onSlideChange={(swiper) => setCurrent(swiper.realIndex + 1)}
           className="project-swiper"
@@ -86,18 +72,20 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
         {hasMultiple && (
           <>
             <button
-              ref={prevRef}
+              type="button"
+              onClick={() => swiperRef.current?.slidePrev()}
               aria-label="Previous image"
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-75 md:opacity-0 md:group-hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </button>
             <button
-              ref={nextRef}
+              type="button"
+              onClick={() => swiperRef.current?.slideNext()}
               aria-label="Next image"
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-75 md:opacity-0 md:group-hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 6l6 6-6 6" />
@@ -111,12 +99,24 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
           {String(current).padStart(2, '0')} / {String(safeImages.length).padStart(2, '0')}
         </span>
         {hasMultiple && (
-          <div className="flex items-center gap-2" aria-hidden>
+          <div className="flex items-center gap-1">
             {safeImages.slice(0, 8).map((_, i) => (
-              <span
+              <button
                 key={i}
-                className={`h-1.5 rounded-full transition-all duration-300 ${i + 1 === current ? 'w-6 bg-black' : 'w-2 bg-black/20'}`}
-              />
+                type="button"
+                aria-label={`Go to image ${i + 1}`}
+                aria-current={i + 1 === current ? 'true' : undefined}
+                onClick={() => swiperRef.current?.slideToLoop(i)}
+                className="group/indicator flex h-5 items-center px-0.5"
+              >
+                <span
+                  className={`block h-[2px] rounded-full transition-all duration-300 ${
+                    i + 1 === current
+                      ? 'w-8 bg-black'
+                      : 'w-4 bg-black/20 group-hover/indicator:bg-black/40'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         )}

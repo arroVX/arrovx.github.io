@@ -847,23 +847,6 @@ export default function Home() {
           },
         })
       })
-
-      // Per-project stagger inside #projects
-      const projItems = document.querySelectorAll<HTMLElement>('#projects [data-project-card]')
-      if (projItems.length) {
-        gsap.from(projItems, {
-          y: 24,
-          opacity: 0,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '#projects',
-            start: 'top 78%',
-            toggleActions: 'play none none reverse',
-          },
-        })
-      }
     }, stackRef)
 
     const onLoad = () => ScrollTrigger.refresh()
@@ -1161,10 +1144,16 @@ export default function Home() {
           </p>
         </div>
         <Marquee items={marqueeItems} dark />
+        {/* Dark runway for the projects card overlap */}
+        <div aria-hidden className="h-10 md:h-14 bg-[#0A0A0A]" />
       </section>
 
       {/* SELECTED PROJECTS */}
-      <section id="projects" data-reveal className="py-16 md:py-24 bg-[#e8e8e5] border-y border-black/5">
+      <section
+        id="projects"
+        data-reveal
+        className="relative z-30 -mt-8 md:-mt-12 rounded-t-[2rem] md:rounded-t-[3.5rem] bg-[#e8e8e5] pt-20 md:pt-28 pb-16 md:pb-24 shadow-[0_-24px_60px_-24px_rgba(0,0,0,0.45)]"
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-10">
             <div>
@@ -1214,18 +1203,16 @@ export default function Home() {
                   <motion.div
                     key={p.id || p.title}
                     data-project-card
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className={`grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-start ${!isEven ? 'lg:[&>div:first-child]:order-2' : ''}`}
+                    initial={{ opacity: 0, y: 36, filter: 'blur(12px)' }}
+                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    className={`grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-start will-change-[opacity,transform,filter] ${!isEven ? 'lg:[&>div:first-child]:order-2' : ''}`}
                   >
                     <div className="lg:col-span-7">
                       <SwiperGallery images={images} title={p.title || ''} />
                       <div className="flex items-center justify-between mt-3 mono text-xs tracking-widest text-black/30">
                         <span>0{idx + 1} / 0{displayProjects.slice(0, 4).length}</span>
-                        <span className="hidden md:inline">
-                          swipe — {String(1).padStart(2, '0')} / {String(images.length || 1).padStart(2, '0')}
-                        </span>
                       </div>
                     </div>
                     <div className="lg:col-span-5">
