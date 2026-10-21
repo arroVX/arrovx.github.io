@@ -751,6 +751,25 @@ export default function Home() {
             scrub: true,
           },
         })
+
+        // 1c) Dome divider — lengkung melurus seiring scroll lalu menutupi layar
+        const domePath = about.querySelector('[data-dome-path]')
+        if (domePath) {
+          gsap.fromTo(
+            domePath,
+            { attr: { d: 'M0 150 Q720 -150 1440 150 L1440 150 L0 150 Z' } },
+            {
+              attr: { d: 'M0 0 Q720 0 1440 0 L1440 150 L0 150 Z' },
+              ease: 'none',
+              scrollTrigger: {
+                trigger: about,
+                start: 'top bottom',
+                end: 'top top',
+                scrub: true,
+              },
+            },
+          )
+        }
       }
 
       // 2) Horizontal Hijack
@@ -1103,7 +1122,11 @@ export default function Home() {
             viewBox="0 0 1440 150"
             preserveAspectRatio="none"
           >
-            <path d="M0 150 A720 150 0 0 1 1440 150 Z" fill="var(--color-surface-dark)" />
+            <path
+              data-dome-path
+              d="M0 150 Q720 -150 1440 150 L1440 150 L0 150 Z"
+              fill="var(--color-surface-dark)"
+            />
           </svg>
           <div className="flex-1 grid grid-rows-[1fr_auto_1fr] max-w-5xl mx-auto w-full px-6 pt-24 md:pt-28 pb-24 md:pb-28 text-center">
             <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 self-end">
