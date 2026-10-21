@@ -280,7 +280,7 @@ function HomeExperienceSlider({
     const expSection = document.getElementById('experience')
     if (expSection && trackRef && trackRef.current) {
       const track = trackRef.current
-      const amount = Math.max(0, track.scrollWidth - window.innerWidth + 48)
+      const amount = Math.max(0, track.scrollWidth - window.innerWidth)
       const progress = idx / Math.max(1, experiences.length - 1)
       const targetY = expSection.offsetTop + progress * amount
       const lenis = (window as { __LENIS__?: { scrollTo: (y: number, opts?: { duration?: number }) => void } })
@@ -326,16 +326,16 @@ function HomeExperienceSlider({
             <div
               key={exp.id}
               data-card
-              className="group min-w-[86vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+              className="group min-w-[86vw] max-w-[86vw] sm:min-w-[560px] sm:max-w-none md:min-w-[820px] md:max-w-none lg:min-w-[1080px] lg:max-w-none xl:min-w-[1120px] xl:max-w-none shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(490px,64vh,640px)] overflow-hidden relative"
             >
-              <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-5 md:p-10 lg:p-12 flex flex-col flex-1 min-h-0">
+              <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-5 md:p-10 lg:p-12 flex flex-col flex-1 min-h-0 min-w-0">
                 <div className="flex items-center gap-2 mono text-[9px] md:text-[9.5px] tracking-[0.18em] uppercase text-black/40">
                   <span>Professional Experience</span>
                   <span className="px-2.5 py-1 rounded-full border border-black/10 bg-white text-[8px] md:text-[8.5px] tracking-[0.14em] font-medium">
                     {(exp.tag || 'Work').toUpperCase()}
                   </span>
                 </div>
-                <h3 className="mt-4 md:mt-7 font-black tracking-[-0.045em] leading-[0.9] text-black text-[26px] sm:text-[32px] md:text-[42px] lg:text-[48px]">
+                <h3 className="mt-4 md:mt-7 flex flex-wrap font-black tracking-[-0.045em] leading-[0.9] text-black text-[22px] sm:text-[32px] md:text-[42px] lg:text-[48px] break-words">
                   {exp.role.split(' ').map((w, i) => (
                     <span key={i} className="inline-block mr-[0.2em]">
                       {w}
@@ -395,7 +395,7 @@ function HomeExperienceSlider({
         <div className="absolute inset-y-0 flex items-center justify-between w-full px-4 sm:px-6 pointer-events-none">
           <button
             onClick={() => scrollTo(Math.max(trackActive - 1, 0))}
-            className="pointer-events-auto absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
+            className="pointer-events-auto absolute left-4 bottom-[62px] md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
             aria-label="Experience sebelumnya"
             disabled={trackActive === 0}
           >
@@ -403,7 +403,7 @@ function HomeExperienceSlider({
           </button>
           <button
             onClick={() => scrollTo(Math.min(trackActive + 1, experiences.length - 1))}
-            className="pointer-events-auto absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
+            className="pointer-events-auto absolute right-4 bottom-[62px] md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
             aria-label="Experience berikutnya"
             disabled={trackActive === experiences.length - 1}
           >
@@ -442,16 +442,16 @@ function HomeExperienceSlider({
           <div
             key={exp.id}
             data-card
-            className="group min-w-[82vw] sm:min-w-[560px] md:min-w-[820px] lg:min-w-[1080px] xl:min-w-[1120px] snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(460px,60vh,620px)] overflow-hidden relative"
+            className="group min-w-[82vw] max-w-[82vw] sm:min-w-[560px] sm:max-w-none md:min-w-[820px] md:max-w-none lg:min-w-[1080px] lg:max-w-none xl:min-w-[1120px] xl:max-w-none snap-start shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(490px,64vh,640px)] overflow-hidden relative"
           >
-            <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col">
+            <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-7 sm:p-8 md:p-10 lg:p-12 flex flex-col min-w-0">
               <div className="flex items-center gap-2 mono text-[9.5px] tracking-[0.18em] uppercase text-black/40">
                 <span>Professional Experience</span>
                 <span className="px-2.5 py-1 rounded-full border border-black/10 bg-white text-[8.5px] tracking-[0.14em] font-medium">
                   {(exp.tag || 'Work').toUpperCase()}
                 </span>
               </div>
-              <h3 className="mt-6 md:mt-7 font-black tracking-[-0.045em] leading-[0.85] text-black text-[32px] sm:text-[40px] md:text-[42px] lg:text-[48px]">
+              <h3 className="mt-6 md:mt-7 flex flex-wrap font-black tracking-[-0.045em] leading-[0.85] text-black text-[24px] sm:text-[40px] md:text-[42px] lg:text-[48px] break-words">
                 {exp.role.split(' ').map((w, i) => (
                   <span key={i} className="inline-block mr-[0.2em]">
                     {w}
@@ -767,7 +767,7 @@ export default function Home() {
       const getAmount = () => {
         const scrollWidth = track.scrollWidth
         const viewport = window.innerWidth
-        return Math.max(0, scrollWidth - viewport + 48)
+        return Math.max(0, scrollWidth - viewport)
       }
 
       const horizTween = gsap.to(track, {
