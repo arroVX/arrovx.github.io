@@ -86,7 +86,7 @@ export default function Experience() {
   }, [active, experiences.length, scrollTo])
 
   return (
-    <main className="bg-[#0A0A0A] text-white min-h-screen overflow-x-hidden">
+    <main className="bg-surface-dark text-white min-h-screen overflow-x-hidden">
       {/* Spacer for fixed navbar */}
       <div className="h-[72px]" />
 

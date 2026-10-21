@@ -28,7 +28,7 @@ export default function Marquee({ items = [], dark = false }: MarqueeProps) {
   }, [])
 
   return (
-    <div className={`relative w-full overflow-hidden border-y py-4 ${dark ? 'border-white/10 bg-[#0A0A0A]' : 'border-black/5 bg-white'}`}>
+    <div className={`relative w-full overflow-hidden border-y py-4 ${dark ? 'border-white/10 bg-surface-dark' : 'border-black/5 bg-white'}`}>
       <div ref={trackRef} className="flex whitespace-nowrap will-change-transform w-max">
         {duplicated.map((item, i) => (
           <span key={i} className={`mono text-sm font-medium tracking-widest uppercase inline-flex items-center ${dark ? 'text-white/55' : 'text-black/70'}`}>

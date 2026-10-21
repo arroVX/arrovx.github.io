@@ -903,7 +903,7 @@ export default function Home() {
         <section
           ref={heroRef}
           id="home"
-          className="relative md:sticky md:top-0 z-10 min-h-[100dvh] bg-[#e8e8e5] overflow-hidden flex flex-col"
+          className="relative z-10 min-h-[100dvh] bg-[#e8e8e5] overflow-hidden flex flex-col"
         >
           <div
             className="absolute inset-0 pointer-events-none"
@@ -1094,7 +1094,7 @@ export default function Home() {
           ref={aboutRef}
           id="about"
           data-reveal
-          className="relative z-20 bg-[#0A0A0A] text-white overflow-hidden rounded-t-[50%_44px] md:rounded-t-[50%_64px]"
+          className="relative z-20 bg-surface-dark text-white overflow-hidden rounded-t-[50%_44px] md:rounded-t-[50%_64px]"
         >
           <div className="max-w-5xl mx-auto px-6 pt-24 md:pt-32 pb-16 md:pb-20 text-center">
             <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 mb-8">
@@ -1125,7 +1125,7 @@ export default function Home() {
         <section
           ref={expSectionRef}
           id="experience"
-          className="bg-[#0A0A0A] text-white relative z-20 overflow-hidden w-full min-h-[100svh] flex flex-col justify-center"
+          className="bg-surface-dark text-white relative z-20 overflow-hidden w-full min-h-[100svh] flex flex-col justify-center"
         >
           <div className="max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12 pt-6 md:pt-8 pb-3 md:pb-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -1173,10 +1173,10 @@ export default function Home() {
       </div>{/* /sticky-stack */}
 
       {/* Dark runway for the projects card overlap */}
-      <div aria-hidden className="h-10 md:h-14 bg-[#0A0A0A]" />
+      <div aria-hidden className="h-10 md:h-14 bg-surface-dark" />
 
       {/* SELECTED PROJECTS */}
-      <div id="projects-wrap" className="relative z-30 -mt-8 md:-mt-12 bg-[#0A0A0A]">
+      <div id="projects-wrap" className="relative z-30 -mt-8 md:-mt-12 bg-surface-dark">
         <section
           id="projects"
           className="relative rounded-t-[2rem] md:rounded-t-[3.5rem] bg-[#e8e8e5] pt-20 md:pt-28 pb-16 md:pb-24 shadow-[0_-24px_60px_-24px_rgba(0,0,0,0.45)] will-change-transform"
