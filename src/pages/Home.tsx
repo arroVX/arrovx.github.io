@@ -534,10 +534,59 @@ function HomeExperienceSlider({
   )
 }
 
+// --- Typewriter Effect Component ---
+function TypewriterText({ texts, className }: { texts: string[]; className?: string }) {
+  const [textIndex, setTextIndex] = useState(0)
+  const [text, setText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [cursorVisible, setCursorVisible] = useState(true)
+
+  const currentText = texts[textIndex]
+  const typeSpeed = isDeleting ? 30 : 80
+  const pauseTime = 2000
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>
+
+    if (isDeleting) {
+      setText(currentText.substring(0, text.length - 1))
+      timeout = setTimeout(() => {}, typeSpeed)
+    } else {
+      setText(currentText.substring(0, text.length + 1))
+      timeout = setTimeout(() => {}, typeSpeed)
+    }
+
+    if (!isDeleting && text === currentText) {
+      timeout = setTimeout(() => setIsDeleting(true), pauseTime)
+    } else if (isDeleting && text === '') {
+      setIsDeleting(false)
+      setTextIndex((prev) => (prev + 1) % texts.length)
+      timeout = setTimeout(() => {}, typeSpeed)
+    }
+
+    return () => clearTimeout(timeout)
+  }, [text, isDeleting, textIndex, currentText, typeSpeed, pauseTime])
+
+  useEffect(() => {
+    const interval = setInterval(() => setCursorVisible((prev) => !prev), 500)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <span className={className} style={{ display: 'inline-block', position: 'relative' }}>
+      {text}
+      <span className="inline-block ml-0.5" style={{ opacity: cursorVisible ? 1 : 0 }}>
+        █
+      </span>
+    </span>
+  )
+}
+
 export default function Home() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
   const [firebaseProjects, setFirebaseProjects] = useState<ProjectData[]>([])
   const [loadingProjects, setLoadingProjects] = useState(true)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
 
   const [prefersReduced] = useState(() =>
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -880,9 +929,13 @@ export default function Home() {
                   </span>
                 </h1>
 
-                <p className="mt-6 text-[20px] sm:text-[24px] lg:text-[28px] font-light tracking-[-0.02em] text-[#0a0a0a]/80 leading-none">
-                  Full-Stack Web Developer
-                </p>
+                {/* Typewriter Effect */}
+                <div className="mt-6 relative inline-block">
+                  <TypewriterText
+                    texts={['Full-Stack Web Developer', 'TKJ Student & Networking', 'Gold Medalist Informatics']}
+                    className="text-[20px] sm:text-[24px] lg:text-[28px] font-light tracking-[-0.02em] text-[#0a0a0a]/80 leading-none"
+                  />
+                </div>
 
                 <div className="mt-8">
                   <a
@@ -907,10 +960,39 @@ export default function Home() {
               >
                 <div
                   data-hero-portrait
-                  className="relative w-[320px] sm:w-[360px] md:w-[380px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform"
+                  className="relative w-[320px] sm:w-[360px] md:w-[380px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform cursor-pointer"
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const x = e.clientX - rect.left
+                    const y = e.clientY - rect.top
+                    const centerX = rect.width / 2
+                    const centerY = rect.height / 2
+                    const rotateX = ((y - centerY) / centerY) * -10
+                    const rotateY = ((x - centerX) / centerX) * 10
+                    setTilt({ x: rotateX, y: rotateY })
+                  }}
+                  onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+                  style={{
+                    transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                    transition: 'transform 0.1s ease-out',
+                  }}
                 >
+                  {/* Glare / Shine Overlay */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: `radial-gradient(circle at ${tilt.x > 0 ? 70 : 30}% ${tilt.y > 0 ? 70 : 30}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
+                      transition: 'background 0.1s ease-out',
+                    }}
+                  />
                   <div className="absolute top-[18px] left-5 right-5 h-[1px] bg-white/[0.06] z-10" />
-                  <div className="absolute top-[28px] left-0 right-0 flex justify-between px-6 pointer-events-none select-none z-10 opacity-[0.07]">
+                  <div
+                    className="absolute top-[28px] left-0 right-0 flex justify-between px-6 pointer-events-none select-none z-10 opacity-[0.07]"
+                    style={{
+                      transform: `translate(${-tilt.y * 0.15}px, ${-tilt.x * 0.15}px)`,
+                      transition: 'transform 0.1s ease-out',
+                    }}
+                  >
                     <span className="mono text-[42px] font-bold text-white rotate-[-12deg]">&lt;/&gt;</span>
                     <span className="mono text-[42px] font-bold text-white rotate-[12deg]">&lt;/&gt;</span>
                   </div>
