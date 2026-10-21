@@ -983,10 +983,10 @@ export default function Admin() {
 
       {/* Empty State for Filter */}
       {activeTab !== 'messages' && currentList.length === 0 && !loading && (searchQuery || filterClass || filterSubject || filterCategory) && (
-        <div className="glass-card p-12 text-center border-white/10 mb-8 max-w-xl mx-auto">
-          <Search size={40} className="mx-auto text-blue-400/50 mb-3" />
-          <h3 className="text-lg font-bold mb-2">Tidak ada data ditemukan</h3>
-          <p className="text-xs text-white/50 mb-0 leading-relaxed">
+        <div className="border border-black/10 bg-white p-12 text-center mb-8 max-w-xl mx-auto rounded-2xl">
+          <Search size={40} className="mx-auto text-black/40 mb-3" />
+          <h3 className="text-lg font-bold text-black mb-2">Tidak ada data ditemukan</h3>
+          <p className="text-xs text-black/50 mb-0 leading-relaxed">
             Coba ubah kata kunci atau hapus beberapa filter untuk melihat lebih banyak data.
           </p>
         </div>
@@ -1096,7 +1096,7 @@ export default function Admin() {
 
                 {/* File Attachment indicator if exists */}
                 {item.fileUrl && (
-                  <div className="mb-4 px-3 py-2 bg-blue-500/10 rounded-xl border border-blue-500/20 flex items-center justify-between text-xs text-blue-300">
+                  <div className="mb-4 px-3 py-2 bg-black/5 rounded-xl border border-black/10 flex items-center justify-between text-xs text-black/60">
                     <span className="flex items-center gap-1.5 truncate">
                       <Paperclip size={14} className="shrink-0" />
                       <span className="truncate">{item.fileName || 'Lampiran File/PDF'}</span>
@@ -1246,7 +1246,7 @@ export default function Admin() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 bg-black/95 backdrop-blur-3xl text-left"
+            className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm text-left"
             onClick={() => setSelectedMessage(null)}
           >
             <motion.div
@@ -1254,26 +1254,26 @@ export default function Admin() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass-card max-w-2xl w-full p-6 md:p-8 rounded-3xl border-white/15 bg-[#070a14] opacity-100 relative shadow-2xl space-y-6"
+              className="max-w-2xl w-full p-6 md:p-8 rounded-2xl border border-black/10 bg-white opacity-100 relative shadow-[0_20px_40px_rgba(0,0,0,0.08)] space-y-6"
             >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedMessage(null)}
-                className="absolute top-6 right-6 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/10 cursor-pointer"
+                className="absolute top-6 right-6 w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-white transition-all border-none cursor-pointer"
               >
                 <X size={18} />
               </button>
 
               <div className="pr-8">
-                <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-2">
+                <div className="flex items-center gap-2 text-xs font-mono text-black/40 mb-2">
                   <Mail size={14} /> PESAN MASUK — GET IN TOUCH
                 </div>
-                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                  <User size={22} className="text-blue-400" /> {selectedMessage.name || 'Pengunjung Anonim'}
+                <h2 className="text-2xl font-bold text-black flex items-center gap-2">
+                  <User size={22} className="text-black/40" /> {selectedMessage.name || 'Pengunjung Anonim'}
                 </h2>
-                <p className="text-xs text-white/40 mt-1 flex items-center gap-3">
+                <p className="text-xs text-black/50 mt-1 flex items-center gap-3">
                   <span>Email: </span>
-                  <a href={`mailto:${selectedMessage.email}`} className="text-blue-400 underline">
+                  <a href={`mailto:${selectedMessage.email}`} className="text-black underline">
                     {selectedMessage.email}
                   </a>
                   <span>•</span>
@@ -1282,38 +1282,38 @@ export default function Admin() {
               </div>
 
               {selectedMessage.subject && (
-                <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-300 font-semibold">
+                <div className="p-3 bg-black/5 border border-black/10 rounded-xl text-xs text-black/60 font-semibold">
                   Subjek: {selectedMessage.subject}
                 </div>
               )}
 
               <div>
-                <h4 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">
+                <h4 className="text-xs font-bold text-black/40 uppercase tracking-widest mb-2">
                   Isi Pesan
                 </h4>
-                <div className="bg-[#040711] p-5 rounded-2xl border border-white/10 text-sm text-white/90 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto custom-scrollbar">
+                <div className="bg-[#F5F3EE] p-5 rounded-xl border border-black/10 text-sm text-black/60 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto custom-scrollbar">
                   {selectedMessage.message}
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+              <div className="pt-4 border-t border-black/5 flex items-center justify-between gap-3">
                 <button
                   onClick={() => handleDelete(String(selectedMessage.id), `Pesan dari ${selectedMessage.name || 'Pengunjung'}`)}
-                  className="px-4 py-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-bold rounded-xl transition-all border border-red-500/20 flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 rounded-full border border-red-500/20 text-red-500 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer hover:bg-red-50 hover:text-red-600"
                 >
                   <Trash2 size={14} /> Hapus Pesan Ini
                 </button>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedMessage(null)}
-                    className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 text-xs font-bold rounded-xl transition-all border-none cursor-pointer"
+                    className="px-4 py-2 rounded-full border border-black/10 text-black font-bold text-xs transition-all flex items-center justify-center hover:bg-black hover:text-white"
                   >
                     Tutup
                   </button>
                   {selectedMessage.email && (
                     <a
                       href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(String(selectedMessage.subject || 'Pesan Portofolio'))}`}
-                      className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-emerald-600/20 border-none cursor-pointer no-underline"
+                      className="px-5 py-2 rounded-full bg-black text-white font-bold text-xs transition-all flex items-center gap-2 hover:bg-black/90"
                     >
                       <Send size={14} /> Balas via Email
                     </a>
@@ -1333,7 +1333,7 @@ export default function Admin() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-3xl overflow-hidden"
+            className="fixed inset-0 z-[1000000] flex items-center justify-center p-4 md:p-6 bg-black/40 backdrop-blur-sm overflow-hidden"
             onClick={() => setIsModalOpen(false)}
           >
             <motion.div
@@ -1341,11 +1341,11 @@ export default function Admin() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl max-h-[80vh] md:max-h-[85vh] overflow-y-auto p-6 md:p-10 border border-white/10 bg-[#070a14] opacity-100 relative rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.9)] custom-scrollbar text-left"
+              className="w-full max-w-2xl max-h-[80vh] md:max-h-[85vh] overflow-y-auto p-6 md:p-10 border border-black/10 bg-white opacity-100 relative rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.08)] custom-scrollbar text-left"
             >
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-6 right-6 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all border border-white/10 cursor-pointer shadow-md"
+                className="absolute top-6 right-6 z-20 w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-white transition-all border-none cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -1354,20 +1354,20 @@ export default function Admin() {
                 {editingItem ? 'Edit Data' : 'Tambah Data Baru'}{' '}
                 ({activeTab === 'projects' ? 'Proyek Utama' : activeTab === 'achievements' ? 'Achievement' : 'LKPD Sekolah'})
               </h2>
-              <p className="text-xs text-white/40 mb-6">
+              <p className="text-xs text-black/50 mb-6">
                 Data & lampiran file akan tersimpan ke Firebase Firestore & Storage secara realtime.
               </p>
 
               {modalError && (
-                <div className="p-3 mb-4 bg-red-500/10 border border-red-500/30 rounded-xl text-xs text-red-300 flex items-center gap-2">
-                  <AlertCircle size={16} className="text-red-400 shrink-0" />
+                <div className="p-3 mb-4 bg-red-50/10 border border-red-500/30 rounded-xl text-xs text-red-600 flex items-center gap-2">
+                  <AlertCircle size={16} className="text-red-600 shrink-0" />
                   <span>{modalError}</span>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                     {activeTab === 'achievements' ? 'Judul Achievement *' : 'Judul Proyek / LKPD *'}
                   </label>
                   <input
@@ -1376,14 +1376,14 @@ export default function Admin() {
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder={activeTab === 'achievements' ? 'Contoh: Medali Emas FSBN 2025' : 'Contoh: Liga Korupsi Indonesia / LKPD 01 Konfigurasi VLAN'}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                   />
                 </div>
 
                 {activeTab === 'achievements' ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                         Kategori
                       </label>
                       <select
@@ -1391,22 +1391,22 @@ export default function Admin() {
                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
                       >
-                        <option value="Nasional" className="bg-[#0a0f1e]">
+                        <option value="Nasional" className="bg-white text-black">
                           Nasional
                         </option>
-                        <option value="Akademik" className="bg-[#0a0f1e]">
+                        <option value="Akademik" className="bg-white text-black">
                           Akademik
                         </option>
-                        <option value="Robotik" className="bg-[#0a0f1e]">
+                        <option value="Robotik" className="bg-white text-black">
                           Robotik
                         </option>
-                        <option value="Olimpiade" className="bg-[#0a0f1e]">
+                        <option value="Olimpiade" className="bg-white text-black">
                           Olimpiade
                         </option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                         Tahun
                       </label>
                       <input
@@ -1414,11 +1414,11 @@ export default function Admin() {
                         value={formData.year}
                         onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                         placeholder="2025"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                        className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                         Penyelenggara
                       </label>
                       <input
@@ -1426,11 +1426,11 @@ export default function Admin() {
                         value={formData.organizer}
                         onChange={(e) => setFormData({ ...formData, organizer: e.target.value })}
                         placeholder="Festival Sains & Budaya Nasional"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                        className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                         Peringkat / Rank
                       </label>
                       <input
@@ -1438,14 +1438,14 @@ export default function Admin() {
                         value={formData.rank}
                         onChange={(e) => setFormData({ ...formData, rank: e.target.value })}
                         placeholder="Juara 1 / Gold Medal"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                        className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                       />
                     </div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                         Kategori
                       </label>
                       <input
@@ -1453,12 +1453,12 @@ export default function Admin() {
                         value={formData.category}
                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         placeholder="Poster Design / LKPD & Jaringan"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                        className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                         Kelas
                       </label>
                       <select
@@ -1466,16 +1466,16 @@ export default function Admin() {
                         onChange={(e) => setFormData({ ...formData, classLevel: e.target.value })}
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
                       >
-                        <option value="" className="bg-[#0a0f1e]">
+                        <option value="" className="bg-white text-black">
                           -- Pilih Kelas --
                         </option>
-                        <option value="Kelas X" className="bg-[#0a0f1e]">
+                        <option value="Kelas X" className="bg-white text-black">
                           Kelas X
                         </option>
-                        <option value="Kelas XI" className="bg-[#0a0f1e]">
+                        <option value="Kelas XI" className="bg-white text-black">
                           Kelas XI
                         </option>
-                        <option value="Kelas XII" className="bg-[#0a0f1e]">
+                        <option value="Kelas XII" className="bg-white text-black">
                           Kelas XII
                         </option>
                       </select>
@@ -1484,25 +1484,25 @@ export default function Admin() {
                 )}
 
                 {/* UPLOAD GAMBAR & FILE SECTION */}
-                <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-2xl space-y-4">
-                  <div className="text-xs font-bold text-blue-400 flex items-center gap-2">
+                <div className="p-4 bg-black/5 border border-black/10 rounded-2xl space-y-4">
+                  <div className="text-xs font-bold text-black/60 flex items-center gap-2">
                     <Upload size={16} /> FITUR UPLOAD GAMBAR & FILE PDF
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Upload Gambar */}
                     <div>
-                      <label className="block text-[11px] font-bold text-white/70 mb-1.5 flex items-center gap-1.5">
-                        <ImageIcon size={13} className="text-blue-400" /> Upload Gambar (PNG/JPG/WEBP)
+                      <label className="block text-[11px] font-bold text-black/70 mb-1.5 flex items-center gap-1.5">
+                        <ImageIcon size={13} className="text-black/40" /> Upload Gambar (PNG/JPG/WEBP)
                       </label>
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleFileUpload(e, 'image')}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white/70 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer"
+                        className="w-full bg-white border border-black/10 rounded-xl p-2 text-xs text-black/70 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-black/80 cursor-pointer"
                       />
                       {uploadingImage && (
-                        <div className="mt-2 text-[10px] text-blue-400 flex items-center gap-2">
+                        <div className="mt-2 text-[10px] text-black/60 flex items-center gap-2">
                           <Loader2 size={12} className="animate-spin" /> Uploading Gambar... {imgProgress}%
                         </div>
                       )}
@@ -1510,17 +1510,17 @@ export default function Admin() {
 
                     {/* Upload Dokumen/PDF */}
                     <div>
-                      <label className="block text-[11px] font-bold text-white/70 mb-1.5 flex items-center gap-1.5">
-                        <FileText size={13} className="text-emerald-400" /> Upload Lampiran (PDF / File)
+                      <label className="block text-[11px] font-bold text-black/70 mb-1.5 flex items-center gap-1.5">
+                        <FileText size={13} className="text-black/40" /> Upload Lampiran (PDF / File)
                       </label>
                       <input
                         type="file"
                         accept=".pdf,.doc,.docx,.zip"
                         onChange={(e) => handleFileUpload(e, 'pdf')}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2 text-xs text-white/70 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer"
+                        className="w-full bg-white border border-black/10 rounded-xl p-2 text-xs text-black/70 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-black/80 cursor-pointer"
                       />
                       {uploadingPdf && (
-                        <div className="mt-2 text-[10px] text-emerald-400 flex items-center gap-2">
+                        <div className="mt-2 text-[10px] text-black/60 flex items-center gap-2">
                           <Loader2 size={12} className="animate-spin" /> Uploading PDF... {pdfProgress}%
                         </div>
                       )}
@@ -1529,9 +1529,9 @@ export default function Admin() {
 
                   {/* Preview Result Status */}
                   {(formData.image && formData.image !== 'project-assets/images/0001_0.png') || formData.fileUrl ? (
-                    <div className="pt-3 border-t border-white/5 flex flex-wrap items-center gap-4 text-xs">
+                    <div className="pt-3 border-t border-black/5 flex flex-wrap items-center gap-4 text-xs">
                       {formData.image && !formData.image.startsWith('project-assets') && (
-                        <div className="flex items-center gap-2 text-emerald-400 font-medium bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+                        <div className="flex items-center gap-2 text-black/60 font-medium bg-black/5 px-3 py-1.5 rounded-lg border border-black/10">
                           <CheckCircle size={14} /> Gambar Terpasang
                           <button
                             type="button"
@@ -1541,7 +1541,7 @@ export default function Admin() {
                                 image: activeTab === 'achievements' ? '' : 'project-assets/images/0001_0.png',
                               })
                             }
-                            className="ml-2 p-1 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 rounded-md transition-all border border-transparent hover:border-red-400"
+                            className="ml-2 p-1 bg-red-50/10 hover:bg-red-50 hover:text-red-600 text-red-500 rounded-md transition-all border border-transparent hover:border-red-400"
                             title="Hapus Gambar"
                           >
                             <Trash2 size={13} />
@@ -1549,13 +1549,13 @@ export default function Admin() {
                         </div>
                       )}
                       {formData.fileUrl && (
-                        <div className="flex items-center gap-2 text-emerald-400 font-medium max-w-xs bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+                        <div className="flex items-center gap-2 text-black/60 font-medium max-w-xs bg-black/5 px-3 py-1.5 rounded-lg border border-black/10">
                           <Paperclip size={14} className="shrink-0" />
                           <span className="truncate">{formData.fileName || 'PDF Terpasang'}</span>
                           <button
                             type="button"
                             onClick={() => setFormData({ ...formData, fileUrl: '', fileName: '' })}
-                            className="ml-2 p-1 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 rounded-md transition-all shrink-0 border border-transparent hover:border-red-400"
+                            className="ml-2 p-1 bg-red-50/10 hover:bg-red-50 hover:text-red-600 text-red-500 rounded-md transition-all shrink-0 border border-transparent hover:border-red-400"
                             title="Hapus Lampiran"
                           >
                             <Trash2 size={13} />
@@ -1568,35 +1568,35 @@ export default function Admin() {
 
                 {/* LINK DRIVE & LINK VIDEO SECTION — hidden for achievements */}
                 {activeTab !== 'achievements' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white/3 border border-white/10 rounded-2xl">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-black/5 border border-black/10 rounded-2xl">
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1 flex items-center gap-1.5">
-                        <HardDrive size={14} className="text-blue-400" /> Link Google Drive (Opsional)
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1 flex items-center gap-1.5">
+                        <HardDrive size={14} className="text-black/40" /> Link Google Drive (Opsional)
                       </label>
                       <input
                         type="url"
                         value={formData.driveUrl}
                         onChange={(e) => setFormData({ ...formData, driveUrl: e.target.value })}
                         placeholder="https://drive.google.com/..."
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                        className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                       />
-                      <p className="text-[10px] text-white/30 mt-1">
+                      <p className="text-[10px] text-black/50 mt-1">
                         Paste link Google Drive file/folder proyek
                       </p>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-1 flex items-center gap-1.5">
-                        <Video size={14} className="text-red-400" /> Link Video / Demo (Opsional)
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1 flex items-center gap-1.5">
+                        <Video size={14} className="text-black/40" /> Link Video / Demo (Opsional)
                       </label>
                       <input
                         type="url"
                         value={formData.videoUrl}
                         onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
                         placeholder="https://youtube.com/watch?v=... atau link video"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                        className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                       />
-                      <p className="text-[10px] text-white/30 mt-1">
+                      <p className="text-[10px] text-black/50 mt-1">
                         Paste link YouTube atau video praktikum
                       </p>
                     </div>
@@ -1605,7 +1605,7 @@ export default function Admin() {
 
                 {activeTab === 'school' && (
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                       Mata Pelajaran (Subject)
                     </label>
                     <input
@@ -1613,13 +1613,13 @@ export default function Admin() {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="Administrasi Infrastruktur Jaringan (AIJ)"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                     {activeTab === 'achievements' ? 'Deskripsi Achievement' : 'Deskripsi Singkat Proyek'}
                   </label>
                   <textarea
@@ -1627,13 +1627,13 @@ export default function Admin() {
                     value={formData.desc}
                     onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
                     placeholder={activeTab === 'achievements' ? 'Ceritakan tentang kejuaraan / sertifikat ini...' : 'Ringkasan penjelasan proyek...'}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-black/10 rounded-xl p-3 text-xs text-black focus:outline-none focus:border-black"
                   />
                 </div>
 
                 {activeTab !== 'achievements' && (
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                       Tech Stack (Pisahkan dengan Koma)
                     </label>
                     <input
@@ -1641,14 +1641,14 @@ export default function Admin() {
                       value={formData.tech}
                       onChange={(e) => setFormData({ ...formData, tech: e.target.value })}
                       placeholder="Photoshop, React, Tailwind CSS, Cisco"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black"
                     />
                   </div>
                 )}
 
                 {activeTab === 'school' && (
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-black/60 mb-1">
                       Kode / Konfigurasi Snippet (Opsional)
                     </label>
                     <textarea
@@ -1661,18 +1661,18 @@ export default function Admin() {
                   </div>
                 )}
 
-                <div className="pt-4 flex items-center justify-end gap-3 border-t border-white/5">
+                <div className="pt-4 flex items-center justify-end gap-3 border-t border-black/5">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-5 py-2.5 rounded-xl bg-white/5 text-white/60 text-xs font-bold hover:bg-white/10 transition-all border-none cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-white border border-black/10 text-black text-xs font-bold transition-all border-none cursor-pointer hover:bg-black hover:text-white"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting || uploadingImage || uploadingPdf}
-                    className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-500/25 border-none cursor-pointer flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-xl bg-black text-white text-xs font-bold transition-all border-none cursor-pointer flex items-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:bg-black/90"
                   >
                     {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
                     Simpan ke Firebase
