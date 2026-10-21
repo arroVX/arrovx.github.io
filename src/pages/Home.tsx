@@ -717,7 +717,6 @@ export default function Home() {
       if (about) {
         const words1 = about.querySelectorAll('.about-word')
         const wordsDim = about.querySelectorAll('.about-word-dim')
-        const words2 = about.querySelectorAll('.about-word2')
         gsap.to(words1, {
           color: 'rgba(255,255,255,0.96)',
           stagger: 0.06,
@@ -737,17 +736,6 @@ export default function Home() {
             trigger: about,
             start: 'top 80%',
             end: 'bottom 45%',
-            scrub: true,
-          },
-        })
-        gsap.to(words2, {
-          color: 'rgba(255,255,255,0.5)',
-          stagger: 0.02,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: about,
-            start: 'top 75%',
-            end: 'bottom 40%',
             scrub: true,
           },
         })
@@ -1128,12 +1116,9 @@ export default function Home() {
               fill="var(--color-surface-dark)"
             />
           </svg>
-          <div className="flex-1 grid grid-rows-[1fr_auto_1fr] max-w-5xl mx-auto w-full px-6 pt-24 md:pt-28 pb-24 md:pb-28 text-center">
-            <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 self-end">
-              About
-            </p>
-            <p className="reveal-text tracking-[-0.02em] leading-[1.18] text-[clamp(26px,4.6vw,54px)] flex flex-wrap justify-center gap-x-[0.24em] gap-y-1">
-              {"I build fullstack web systems with clean user interfaces, reliable backend architecture, and database-driven workflows helping turn complex processes into efficient digital products.".split(' ').map((w, i) => {
+          <div className="flex-1 flex flex-col justify-center pt-20 md:pt-24 pb-16 md:pb-20">
+            <p className="reveal-text tracking-[-0.02em] leading-[1.16] text-[clamp(24px,3.05vw,44px)] flex flex-wrap justify-center gap-x-[0.24em] gap-y-1 max-w-[780px] mx-auto w-full px-6 text-center">
+              {"I build fullstack web systems with clean user interfaces, reliable backend architecture, and database-driven workflows helping teams turn complex processes into efficient digital products.".split(' ').map((w, i) => {
                 const isBold = ['fullstack', 'web', 'systems', 'reliable', 'backend', 'architecture,', 'efficient', 'digital', 'products.'].includes(w)
                 return (
                   <span key={i} className={`${isBold ? 'about-word font-bold' : 'about-word-dim font-normal'} inline-block will-change-[opacity,color]`} style={{ color: 'rgba(255,255,255,0.32)' }}>
@@ -1142,16 +1127,9 @@ export default function Home() {
                 )
               })}
             </p>
-            <p className="reveal-text2 mt-10 max-w-2xl mx-auto flex flex-wrap justify-center gap-x-[0.2em] gap-y-1 text-[13px] md:text-sm leading-relaxed self-start">
-              {"Siswa TKJ SMKN 3 Jepara & Gold Medalist Informatika (FSBN & ONSP 2025). Fokus di React, Tailwind, Firebase, dan Network Infrastructure.".split(' ').map((w, i) => (
-                <span key={i} className="about-word2 inline-block will-change-[opacity,color]" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  {w}
-                </span>
-              ))}
-            </p>
-          </div>
-          <div className="absolute inset-x-0 bottom-0 shrink-0">
-            <Marquee items={marqueeItems} dark />
+            <div className="mt-[8vh] md:mt-[10vh] mx-auto w-full max-w-[920px] px-6">
+              <Marquee items={marqueeItems} dark />
+            </div>
           </div>
         </section>
 

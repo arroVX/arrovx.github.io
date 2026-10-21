@@ -28,11 +28,21 @@ export default function Marquee({ items = [], dark = false }: MarqueeProps) {
   }, [])
 
   return (
-    <div className={`relative w-full overflow-hidden border-y py-4 ${dark ? 'border-white/10 bg-surface-dark' : 'border-black/5 bg-white'}`}>
+    <div
+      className={`relative w-full overflow-hidden border-t py-4 ${dark ? 'border-white/10 bg-surface-dark' : 'border-black/5 bg-white'}`}
+      style={
+        dark
+          ? {
+              maskImage: 'linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)',
+            }
+          : undefined
+      }
+    >
       <div ref={trackRef} className="flex whitespace-nowrap will-change-transform w-max">
         {duplicated.map((item, i) => (
           <span key={i} className={`mono text-sm font-medium tracking-widest uppercase inline-flex items-center ${dark ? 'text-white/55' : 'text-black/70'}`}>
-            <span className="mx-6">{item}</span>
+            <span className="mx-8 md:mx-10">{item}</span>
             <span className={dark ? 'text-white/20' : 'text-black/20'}>{'✦'}</span>
           </span>
         ))}
