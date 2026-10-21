@@ -1094,8 +1094,17 @@ export default function Home() {
           ref={aboutRef}
           id="about"
           data-reveal
-          className="relative z-20 -mt-8 bg-surface-dark text-white overflow-hidden rounded-t-[50%_80px] md:rounded-t-[50%_150px] min-h-[100svh] flex flex-col"
+          className="relative z-20 bg-surface-dark text-white min-h-[100svh] flex flex-col"
         >
+          {/* Dome: abu-abu naik melengkung penuh di atas hero cream */}
+          <svg
+            aria-hidden
+            className="pointer-events-none absolute left-0 -top-[80px] md:-top-[150px] w-full h-[80px] md:h-[150px]"
+            viewBox="0 0 1440 150"
+            preserveAspectRatio="none"
+          >
+            <path d="M0 150 A720 150 0 0 1 1440 150 Z" fill="var(--color-surface-dark)" />
+          </svg>
           <div className="flex-1 grid grid-rows-[1fr_auto_1fr] max-w-5xl mx-auto w-full px-6 pt-24 md:pt-28 pb-24 md:pb-28 text-center">
             <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 self-end">
               About
