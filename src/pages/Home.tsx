@@ -1094,7 +1094,7 @@ export default function Home() {
           ref={aboutRef}
           id="about"
           data-reveal
-          className="relative z-20 bg-[#0A0A0A] text-white overflow-hidden rounded-t-[2rem] md:rounded-t-[3rem]"
+          className="relative z-20 bg-[#0A0A0A] text-white overflow-hidden rounded-t-[50%_44px] md:rounded-t-[50%_64px]"
         >
           <div className="max-w-5xl mx-auto px-6 pt-24 md:pt-32 pb-16 md:pb-20 text-center">
             <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 mb-8">
