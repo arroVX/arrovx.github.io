@@ -897,7 +897,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="bg-[#e8e8e5] text-[#0a0a0a]">
+    <main className="bg-surface-dark text-[#0a0a0a]">
       <div ref={stackRef} id="sticky-stack" className="relative">
         {/* HERO */}
         <section
@@ -1094,10 +1094,10 @@ export default function Home() {
           ref={aboutRef}
           id="about"
           data-reveal
-          className="relative z-20 bg-surface-dark text-white overflow-hidden rounded-t-[50%_44px] md:rounded-t-[50%_64px]"
+          className="relative z-20 -mt-8 bg-surface-dark text-white overflow-hidden rounded-t-[50%_80px] md:rounded-t-[50%_150px] min-h-[100svh] flex flex-col"
         >
-          <div className="max-w-5xl mx-auto px-6 pt-24 md:pt-32 pb-16 md:pb-20 text-center">
-            <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 mb-8">
+          <div className="flex-1 grid grid-rows-[1fr_auto_1fr] max-w-5xl mx-auto w-full px-6 pt-24 md:pt-28 pb-24 md:pb-28 text-center">
+            <p className="mono text-[10px] tracking-[0.28em] uppercase text-white/30 self-end">
               About
             </p>
             <p className="reveal-text tracking-[-0.02em] leading-[1.18] text-[clamp(26px,4.6vw,54px)] flex flex-wrap justify-center gap-x-[0.24em] gap-y-1">
@@ -1110,7 +1110,7 @@ export default function Home() {
                 )
               })}
             </p>
-            <p className="reveal-text2 mt-10 max-w-2xl mx-auto flex flex-wrap justify-center gap-x-[0.2em] gap-y-1 text-[13px] md:text-sm leading-relaxed">
+            <p className="reveal-text2 mt-10 max-w-2xl mx-auto flex flex-wrap justify-center gap-x-[0.2em] gap-y-1 text-[13px] md:text-sm leading-relaxed self-start">
               {"Siswa TKJ SMKN 3 Jepara & Gold Medalist Informatika (FSBN & ONSP 2025). Fokus di React, Tailwind, Firebase, dan Network Infrastructure.".split(' ').map((w, i) => (
                 <span key={i} className="about-word2 inline-block will-change-[opacity,color]" style={{ color: 'rgba(255,255,255,0.35)' }}>
                   {w}
@@ -1118,7 +1118,9 @@ export default function Home() {
               ))}
             </p>
           </div>
-          <Marquee items={marqueeItems} dark />
+          <div className="absolute inset-x-0 bottom-0 shrink-0">
+            <Marquee items={marqueeItems} dark />
+          </div>
         </section>
 
         {/* EXPERIENCES */}
