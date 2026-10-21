@@ -254,7 +254,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                         onClick={(e) => handleNavClick(e, item.href)}
                         className="group flex items-center justify-between gap-4 py-2 md:py-3 min-h-[52px]"
                       >
-                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(28px,8vw,64px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
+                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(38px,10vw,96px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
                           {item.label}
                         </span>
                         <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
@@ -265,7 +265,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                         onClick={() => setMobileMenuOpen(false)}
                         className="group flex items-center justify-between gap-4 py-2 md:py-3 min-h-[52px]"
                       >
-                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(28px,8vw,64px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
+                        <span className="font-black uppercase tracking-[-0.02em] leading-[0.95] text-[clamp(38px,10vw,96px)] text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
                           {item.label}
                         </span>
                         <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>

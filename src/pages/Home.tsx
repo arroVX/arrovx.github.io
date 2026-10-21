@@ -872,10 +872,10 @@ export default function Home() {
                 </p>
 
                 <h1 className="headline-serif leading-[0.88] tracking-[-0.045em] text-black">
-                  <span className="block text-[40px] sm:text-[52px] md:text-[68px] lg:text-[84px] xl:text-[92px] font-normal">
+                  <span className="block text-[52px] sm:text-[68px] lg:text-[84px] xl:text-[92px] font-normal">
                     Hi, I'm
                   </span>
-                  <span className="block text-[40px] sm:text-[52px] md:text-[68px] lg:text-[84px] xl:text-[92px] italic font-normal -mt-1">
+                  <span className="block text-[52px] sm:text-[68px] lg:text-[84px] xl:text-[92px] italic font-normal -mt-1">
                     Arro.
                   </span>
                 </h1>
@@ -907,7 +907,7 @@ export default function Home() {
               >
                 <div
                   data-hero-portrait
-                  className="relative w-[280px] sm:w-[320px] md:w-[360px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform mx-auto sm:mx-0"
+                  className="relative w-[320px] sm:w-[360px] md:w-[380px] lg:w-[380px] xl:w-[410px] aspect-[0.78] rounded-[28px] overflow-hidden bg-[#0B0B0F] shadow-[0_28px_80px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-black/10 will-change-transform"
                 >
                   <div className="absolute top-[18px] left-5 right-5 h-[1px] bg-white/[0.06] z-10" />
                   <div className="absolute top-[28px] left-0 right-0 flex justify-between px-6 pointer-events-none select-none z-10 opacity-[0.07]">
