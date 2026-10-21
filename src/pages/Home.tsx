@@ -87,6 +87,16 @@ const experiences: ExperienceItem[] = [
     image: '/og-image.png',
     tag: 'Achievement',
   },
+  {
+    id: '04',
+    role: 'GRAPHIC DESIGNER & VISUAL CREATOR',
+    company: 'FREELANCE · CREATIVE WORK',
+    period: '2022 — PRESENT · 3 YEARS',
+    desc: 'Designing posters, branding assets, and visual content — combining typography, photo manipulation, and layout design for school events, competitions, and local clients.',
+    highlights: ['POSTER & FLYER DESIGN', 'BRANDING & IDENTITY', 'PHOTO MANIPULATION', 'MOTION & VIDEO EDIT'],
+    image: '/project-assets/images/0001_0.png',
+    tag: 'Creative',
+  },
 ]
 
 const marqueeItems = ['Next.js', 'Laravel', 'React', 'Tailwind CSS', 'Firebase', 'Networking', 'Figma', 'Photoshop', 'Premiere', 'Cisco']
@@ -322,7 +332,7 @@ function HomeExperienceSlider({
                 <div className="flex items-center gap-2 mono text-[9px] md:text-[9.5px] tracking-[0.18em] uppercase text-black/40">
                   <span>Professional Experience</span>
                   <span className="px-2.5 py-1 rounded-full border border-black/10 bg-white text-[8px] md:text-[8.5px] tracking-[0.14em] font-medium">
-                    WORK
+                    {(exp.tag || 'Work').toUpperCase()}
                   </span>
                 </div>
                 <h3 className="mt-4 md:mt-7 font-black tracking-[-0.045em] leading-[0.9] text-black text-[26px] sm:text-[32px] md:text-[42px] lg:text-[48px]">
@@ -368,7 +378,7 @@ function HomeExperienceSlider({
                   draggable={false}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-[1.04] group-hover:grayscale-0 transition-all duration-700"
+                  className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
@@ -438,7 +448,7 @@ function HomeExperienceSlider({
               <div className="flex items-center gap-2 mono text-[9.5px] tracking-[0.18em] uppercase text-black/40">
                 <span>Professional Experience</span>
                 <span className="px-2.5 py-1 rounded-full border border-black/10 bg-white text-[8.5px] tracking-[0.14em] font-medium">
-                  WORK
+                  {(exp.tag || 'Work').toUpperCase()}
                 </span>
               </div>
               <h3 className="mt-6 md:mt-7 font-black tracking-[-0.045em] leading-[0.85] text-black text-[32px] sm:text-[40px] md:text-[42px] lg:text-[48px]">
@@ -484,7 +494,7 @@ function HomeExperienceSlider({
                 draggable={false}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-[1.04] group-hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover object-top select-none grayscale group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
@@ -771,7 +781,7 @@ export default function Home() {
         end: () => `+=${getAmount()}`,
         pin: true,
         pinSpacing: true,
-        scrub: 1.35,
+        scrub: 1,
         anticipatePin: 1,
         animation: horizTween,
         invalidateOnRefresh: true,
@@ -790,17 +800,37 @@ export default function Home() {
       })
       horizSTRef.current = st
 
-      // Optional parallax watermark
-      gsap.to(exp.querySelector('[data-watermark]'), {
-        xPercent: -12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: exp,
-          start: 'top top',
-          end: () => `+=${getAmount()}`,
-          scrub: 1.35,
-        },
-      })
+      // Watermark intro: blur + scale-up -> sharp thin watermark
+      const watermark = exp.querySelector('[data-watermark]')
+      if (watermark) {
+        gsap.fromTo(
+          watermark,
+          { opacity: 0, scale: 1.18, filter: 'blur(16px)' },
+          {
+            opacity: 0.05,
+            scale: 1,
+            filter: 'blur(0px)',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: exp,
+              start: 'top 85%',
+              end: 'top 15%',
+              scrub: true,
+            },
+          },
+        )
+        // Parallax during pinned horizontal scroll
+        gsap.to(watermark, {
+          xPercent: -12,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: exp,
+            start: 'top top',
+            end: () => `+=${getAmount()}`,
+            scrub: 1,
+          },
+        })
+      }
 
       // 6) Generic fade-up reveal
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
@@ -1078,8 +1108,12 @@ export default function Home() {
           </div>
 
           <div className="relative">
-            <div data-watermark className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none font-black leading-none tracking-[-0.08em] text-white/[0.035]" style={{ fontSize: 'clamp(220px, 36vw, 560px)' }}>
-              E
+            <div
+              data-watermark
+              className="absolute inset-0 flex items-center justify-center pointer-events-none select-none whitespace-nowrap font-black leading-none tracking-[-0.04em] text-white will-change-transform"
+              style={{ fontSize: 'clamp(48px, 14.2vw, 320px)', opacity: 0.05 }}
+            >
+              EXPERIENCES
             </div>
             <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px)`, backgroundSize: `24px 24px` }} />
 
