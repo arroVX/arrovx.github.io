@@ -253,9 +253,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
     <>
       <nav
         className={`fixed inset-x-0 top-0 z-[100] border-b border-transparent bg-transparent transition-transform duration-[550ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
-          navVisible
-            ? 'translate-y-0 shadow-[0_12px_30px_-14px_rgba(0,0,0,0.4)]'
-            : '-translate-y-full pointer-events-none'
+          navVisible ? 'translate-y-0' : '-translate-y-full pointer-events-none'
         }`}
       >
         <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-center justify-between h-[72px]">
