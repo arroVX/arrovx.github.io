@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import {
   ArrowUpRight,
@@ -261,6 +261,22 @@ function HomeExperienceSlider({
   const [isMobile] = useState(() =>
     typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   )
+
+  // Entrance: naik dari bawah + blur fade in, bisa diputar ulang tiap masuk viewport
+  const cardVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 48,
+      filter: isMobile ? 'blur(6px)' : 'blur(12px)',
+      transition: { duration: 0.4, ease: 'easeIn' },
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
+    },
+  }
   const active = onActiveChange ? undefined : activeLocal
   const setActive = onActiveChange || setActiveLocal
 
@@ -330,10 +346,10 @@ function HomeExperienceSlider({
             <motion.div
               key={exp.id}
               data-card
-              initial={{ opacity: 0, y: 48, filter: isMobile ? 'blur(6px)' : 'blur(12px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ amount: 0.2 }}
               className="group min-w-[86vw] max-w-[86vw] sm:min-w-[560px] sm:max-w-none md:min-w-[820px] md:max-w-none lg:min-w-[1080px] lg:max-w-none xl:min-w-[1120px] xl:max-w-none shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(490px,64vh,640px)] overflow-hidden relative"
             >
               <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-5 md:p-10 lg:p-12 flex flex-col flex-1 min-h-0 min-w-0">
@@ -614,6 +630,22 @@ export default function Home() {
   const [isMobileViewport] = useState(() =>
     typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   )
+
+  // Judul section Experiences — masuk dari bawah + blur fade in (replay tiap masuk viewport)
+  const expHeadingVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 32,
+      filter: isMobileViewport ? 'blur(6px)' : 'blur(12px)',
+      transition: { duration: 0.4, ease: 'easeIn' },
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
+    },
+  }
 
   const stackRef = useRef<HTMLDivElement | null>(null)
   const heroRef = useRef<HTMLDivElement | null>(null)
@@ -1158,7 +1190,13 @@ export default function Home() {
           className="bg-surface-dark text-white relative z-20 overflow-hidden w-full min-h-[100svh] flex flex-col justify-center"
         >
           <div className="max-w-[1440px] mx-auto w-full px-6 md:px-10 lg:px-12 pt-6 md:pt-8 pb-3 md:pb-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <motion.div
+              variants={expHeadingVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ amount: 0.2 }}
+              className="flex flex-col md:flex-row md:items-end justify-between gap-4"
+            >
               <div>
                 <p className="mono text-[10px] tracking-[0.24em] uppercase text-white/30 mb-3">
                   Career Archive
@@ -1170,7 +1208,7 @@ export default function Home() {
               <p className="mono text-[12px] md:text-[13px] text-white/40">
                 Roles, systems, and the work behind them.
               </p>
-            </div>
+            </motion.div>
           </div>
 
           <div className="relative">
