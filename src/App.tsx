@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   BrowserRouter as Router,
   Routes,
@@ -112,6 +112,10 @@ function HashRedirect() {
 
 function Navbar({ setIsCommandOpen }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [navVisible, setNavVisible] = useState(true)
+  const [overDark, setOverDark] = useState(false)
+  const lastY = useRef(0)
+  const rafRef = useRef(0)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -163,7 +167,58 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
     }
   }, [mobileMenuOpen])
 
-  const isDark = location.pathname === '/experience'
+  // Navbar: sembunyi saat scroll ke bawah, muncul lagi dari atas saat scroll ke atas.
+  // Warna otomatis dibalik mengikuti section di bawahnya (terang/gelap).
+  useEffect(() => {
+    const NAV_H = 72
+
+    const detectBackground = () => {
+      const el = document.elementFromPoint(Math.round(window.innerWidth / 2), NAV_H + 6)
+      let node: Element | null = el
+      let bg = ''
+      while (node) {
+        const isNav = node instanceof HTMLElement && (node.tagName === 'NAV' || !!node.closest('nav'))
+        if (!isNav) {
+          const c = getComputedStyle(node).backgroundColor
+          if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') {
+            bg = c
+            break
+          }
+        }
+        node = node.parentElement
+      }
+      if (!bg) return
+      const m = bg.match(/[\d.]+/g)
+      if (!m || m.length < 3) return
+      const lum = (0.2126 * +m[0] + 0.7152 * +m[1] + 0.0722 * +m[2]) / 255
+      // hysteresis supaya tidak berkedip saat melewati batas terang/gelap
+      setOverDark((prev) => (prev ? lum < 0.58 : lum < 0.42))
+    }
+
+    const onScroll = () => {
+      const y = window.scrollY
+      const delta = y - lastY.current
+      if (Math.abs(delta) >= 4) {
+        lastY.current = y
+        setNavVisible(y < 96 ? true : delta < 0)
+      }
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(() => {
+          rafRef.current = 0
+          detectBackground()
+        })
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
+
+  const isDark = location.pathname === '/experience' || overDark
 
   const logoCircleClass = isDark
     ? 'bg-white text-black'
@@ -180,7 +235,11 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
 
   return (
     <>
-      <nav className="absolute inset-x-0 top-0 z-[100] border-b border-transparent bg-transparent">
+      <nav
+        className={`fixed inset-x-0 top-0 z-[100] border-b border-transparent bg-transparent transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+          navVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-center justify-between h-[72px]">
           {/* Left */}
           <Link to="/" className="flex items-center gap-2.5 group">
