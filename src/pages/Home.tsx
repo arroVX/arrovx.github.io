@@ -257,6 +257,10 @@ function HomeExperienceSlider({
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [activeLocal, setActiveLocal] = useState(0)
   const [activeTrack, setActiveTrack] = useState(0)
+  // Mobile: blur lebih ringan demi FPS
+  const [isMobile] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
+  )
   const active = onActiveChange ? undefined : activeLocal
   const setActive = onActiveChange || setActiveLocal
 
@@ -323,9 +327,13 @@ function HomeExperienceSlider({
           style={{ width: 'max-content' }}
         >
           {experiences.map((exp) => (
-            <div
+            <motion.div
               key={exp.id}
               data-card
+              initial={{ opacity: 0, y: 48, filter: isMobile ? 'blur(6px)' : 'blur(12px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               className="group min-w-[86vw] max-w-[86vw] sm:min-w-[560px] sm:max-w-none md:min-w-[820px] md:max-w-none lg:min-w-[1080px] lg:max-w-none xl:min-w-[1120px] xl:max-w-none shrink-0 bg-[#F5F3EE] border border-white/10 flex flex-col md:flex-row h-[68svh] md:h-[clamp(490px,64vh,640px)] overflow-hidden relative"
             >
               <div className="w-full md:w-[52%] xl:w-[56%] bg-[#F5F3EE] p-5 md:p-10 lg:p-12 flex flex-col flex-1 min-h-0 min-w-0">
@@ -388,7 +396,7 @@ function HomeExperienceSlider({
                   {exp.period}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
         {/* Navigation arrows - always visible on mobile */}
