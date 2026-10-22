@@ -58,7 +58,7 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
                 <img
                   src={src}
                   alt={`${title || 'Project'} ${i + 1}`}
-                  className="w-full h-full object-cover will-change-[filter,opacity,transform] transition-[filter,opacity,transform] duration-[650ms] swiper-blur-img group-hover:scale-[1.03]"
+                  className="w-full h-full object-cover will-change-transform transition-[filter,opacity,transform] duration-[650ms] swiper-blur-img group-hover:scale-[1.03]"
                   loading="lazy"
                   decoding="async"
                   onError={(e) => {
@@ -75,7 +75,7 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
               type="button"
               onClick={() => swiperRef.current?.slidePrev()}
               aria-label="Previous image"
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/95 border border-black/10 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 18l-6-6 6-6" />
@@ -85,7 +85,7 @@ export default function SwiperGallery({ images = [], title }: SwiperGalleryProps
               type="button"
               onClick={() => swiperRef.current?.slideNext()}
               aria-label="Next image"
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur border border-black/10 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/95 border border-black/10 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity text-black/70 hover:text-black hover:bg-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-black"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 6l6 6-6 6" />

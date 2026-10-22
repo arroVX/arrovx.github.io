@@ -384,7 +384,7 @@ function HomeExperienceSlider({
                 <span className="absolute top-4 right-4 md:top-5 md:right-5 mono text-white text-[18px] md:text-[22px] font-black tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
                   {exp.id}
                 </span>
-                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap mono text-[9px] md:text-[10px] tracking-[0.14em] uppercase text-white/90 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap mono text-[9px] md:text-[10px] tracking-[0.14em] uppercase text-white/90 bg-black/60 rounded-full border border-white/10">
                   {exp.period}
                 </span>
               </div>
@@ -395,7 +395,7 @@ function HomeExperienceSlider({
         <div className="absolute inset-y-0 flex items-center justify-between w-full px-4 sm:px-6 pointer-events-none">
           <button
             onClick={() => scrollTo(Math.max(trackActive - 1, 0))}
-            className="pointer-events-auto absolute left-4 bottom-[62px] md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
+            className="pointer-events-auto absolute left-4 bottom-[62px] md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/30 border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
             aria-label="Experience sebelumnya"
             disabled={trackActive === 0}
           >
@@ -403,7 +403,7 @@ function HomeExperienceSlider({
           </button>
           <button
             onClick={() => scrollTo(Math.min(trackActive + 1, experiences.length - 1))}
-            className="pointer-events-auto absolute right-4 bottom-[62px] md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
+            className="pointer-events-auto absolute right-4 bottom-[62px] md:top-1/2 md:bottom-auto md:-translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/30 border border-white/30 text-white flex items-center justify-center opacity-75 md:opacity-0 hover:opacity-100 transition-all"
             aria-label="Experience berikutnya"
             disabled={trackActive === experiences.length - 1}
           >
@@ -602,6 +602,11 @@ export default function Home() {
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
 
+  // Mobile: efek berat (blur/filter) dimatikan demi FPS
+  const [isMobileViewport] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
+  )
+
   const stackRef = useRef<HTMLDivElement | null>(null)
   const heroRef = useRef<HTMLDivElement | null>(null)
   const expSectionRef = useRef<HTMLDivElement | null>(null)
@@ -740,23 +745,26 @@ export default function Home() {
           },
         })
 
-        // 1c) Dome divider — lengkung melurus seiring scroll lalu menutupi layar
+        // 1c) Dome divider — lengkung melurus seiring scroll lalu menutupi layar.
+        // Hanya desktop: morph path SVG tiap frame itu berat di mobile.
         const domePath = about.querySelector('[data-dome-path]')
         if (domePath) {
-          gsap.fromTo(
-            domePath,
-            { attr: { d: 'M0 150 Q720 0 1440 150 L1440 150 L0 150 Z' } },
-            {
-              attr: { d: 'M0 0 Q720 0 1440 0 L1440 150 L0 150 Z' },
-              ease: 'none',
-              scrollTrigger: {
-                trigger: about,
-                start: 'top bottom',
-                end: 'top top',
-                scrub: true,
+          mm.add('(min-width: 768px)', () => {
+            gsap.fromTo(
+              domePath,
+              { attr: { d: 'M0 150 Q720 0 1440 150 L1440 150 L0 150 Z' } },
+              {
+                attr: { d: 'M0 0 Q720 0 1440 0 L1440 150 L0 150 Z' },
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: about,
+                  start: 'top bottom',
+                  end: 'top top',
+                  scrub: true,
+                },
               },
-            },
-          )
+            )
+          })
         }
       }
 
@@ -800,9 +808,10 @@ export default function Home() {
       // Watermark intro: blur + scale-up -> sharp thin watermark
       const watermark = exp.querySelector('[data-watermark]')
       if (watermark) {
+        // Blur 16px pada teks 320px itu mahal di mobile -> mobile cukup opacity + scale
         gsap.fromTo(
           watermark,
-          { opacity: 0, scale: 1.18, filter: 'blur(16px)' },
+          { opacity: 0, scale: 1.18, filter: isMobileViewport ? 'blur(0px)' : 'blur(16px)' },
           {
             opacity: 0.05,
             scale: 1,
@@ -910,7 +919,7 @@ export default function Home() {
         <section
           ref={heroRef}
           id="home"
-          className="relative z-10 min-h-[100dvh] bg-[#e8e8e5] overflow-hidden flex flex-col"
+          className="relative z-10 min-h-[100svh] bg-[#e8e8e5] overflow-hidden flex flex-col"
         >
           <div
             className="absolute inset-0 pointer-events-none"
@@ -1065,7 +1074,7 @@ export default function Home() {
                       filter: 'contrast(1.05) brightness(1.0) drop-shadow(2px 0 0 rgba(255,255,255,0.92)) drop-shadow(-2px 0 0 rgba(255,255,255,0.92)) drop-shadow(0 2px 0 rgba(255,255,255,0.92)) drop-shadow(0 -1px 0 rgba(255,255,255,0.92))',
                     }}
                   />
-                  <div className="absolute bottom-[14px] left-[12px] right-[12px] bg-[#1C1D22]/95 backdrop-blur-xl rounded-[14px] border border-white/[0.07] px-3.5 py-[10px] flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.4)] z-20">
+                  <div className="absolute bottom-[14px] left-[12px] right-[12px] bg-[#1C1D22]/95 rounded-[14px] border border-white/[0.07] px-3.5 py-[10px] flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.4)] z-20">
                     <div>
                       <div className="mono text-[12.5px] font-semibold tracking-tight text-white leading-none">
                         @arroVX
@@ -1121,7 +1130,7 @@ export default function Home() {
               {"I build fullstack web systems with clean user interfaces, reliable backend architecture, and database-driven workflows helping teams turn complex processes into efficient digital products.".split(' ').map((w, i) => {
                 const isBold = ['fullstack', 'web', 'systems', 'reliable', 'backend', 'architecture,', 'efficient', 'digital', 'products.'].includes(w)
                 return (
-                  <span key={i} className={`${isBold ? 'about-word font-bold' : 'about-word-dim font-normal'} inline-block will-change-[opacity,color]`} style={{ color: 'rgba(255,255,255,0.32)' }}>
+                  <span key={i} className={`${isBold ? 'about-word font-bold' : 'about-word-dim font-normal'} inline-block`} style={{ color: 'rgba(255,255,255,0.32)' }}>
                     {w}
                   </span>
                 )
@@ -1242,11 +1251,17 @@ export default function Home() {
                     <motion.div
                       key={p.id || p.title}
                       data-project-card
-                      initial={{ opacity: 0, y: 36, filter: 'blur(12px)' }}
-                      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                      initial={
+                        isMobileViewport
+                          ? { opacity: 0, y: 24 }
+                          : { opacity: 0, y: 36, filter: 'blur(12px)' }
+                      }
+                      whileInView={
+                        isMobileViewport ? { opacity: 1, y: 0 } : { opacity: 1, y: 0, filter: 'blur(0px)' }
+                      }
                       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                       viewport={{ once: true, amount: 0.2 }}
-                      className={`grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-start will-change-[opacity,transform,filter] ${!isEven ? 'lg:[&>div:first-child]:order-2' : ''}`}
+                      className={`grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-start will-change-transform ${!isEven ? 'lg:[&>div:first-child]:order-2' : ''}`}
                     >
                       <div className="lg:col-span-7">
                         <SwiperGallery images={images} title={p.title || ''} />

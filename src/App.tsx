@@ -453,7 +453,12 @@ function Footer() {
 export default function App() {
   const [isCommandOpen, setIsCommandOpen] = useState(false)
 
-  useLenis(true)
+  // Smooth scroll hanya untuk pointer (desktop). Di HP biarkan browser scroll native — jauh lebih mulus.
+  const [isCoarsePointer] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
+  )
+
+  useLenis(!isCoarsePointer)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

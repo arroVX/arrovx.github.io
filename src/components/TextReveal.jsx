@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
  * TextReveal — Split per-kata, scrub opacity/color
  * Props: text, className, wordClass, boldWords[], start, end
  */
-export default function TextReveal({ text, className = '', wordClass = 'inline-block mr-[0.22em] will-change-[opacity,color]', boldWords = [], start = 'top 80%', end = 'bottom 50%', dimColor = 'rgba(10,10,10,0.18)', activeColor = 'rgba(10,10,10,0.92)' }) {
+export default function TextReveal({ text, className = '', wordClass = 'inline-block mr-[0.22em]', boldWords = [], start = 'top 80%', end = 'bottom 50%', dimColor = 'rgba(10,10,10,0.18)', activeColor = 'rgba(10,10,10,0.92)' }) {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
