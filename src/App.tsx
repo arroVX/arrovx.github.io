@@ -113,9 +113,7 @@ function HashRedirect() {
 function Navbar({ setIsCommandOpen }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [navVisible, setNavVisible] = useState(true)
-  const [overGray, setOverGray] = useState(false)
   const lastY = useRef(0)
-  const rafRef = useRef(0)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -168,73 +166,21 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
   }, [mobileMenuOpen])
 
   // Navbar: sembunyi saat scroll ke bawah, muncul lagi dari atas saat scroll ke atas.
-  // Warna dibalik HANYA kalau yang ada di bawah navbar adalah abu-abu surface.
   useEffect(() => {
-    const NAV_H = 72
-
-    const surfaceRgb = () => {
-      const raw = getComputedStyle(document.documentElement)
-        .getPropertyValue('--color-surface-dark')
-        .trim()
-      const hex = raw.replace('#', '')
-      if (hex.length !== 6) return null
-      return [
-        parseInt(hex.slice(0, 2), 16),
-        parseInt(hex.slice(2, 4), 16),
-        parseInt(hex.slice(4, 6), 16),
-      ]
-    }
-
-    const detectBackground = () => {
-      const el = document.elementFromPoint(Math.round(window.innerWidth / 2), NAV_H + 6)
-      let node: Element | null = el
-      let bg = ''
-      while (node) {
-        const isNav = node instanceof HTMLElement && (node.tagName === 'NAV' || !!node.closest('nav'))
-        if (!isNav) {
-          const c = getComputedStyle(node).backgroundColor
-          if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') {
-            bg = c
-            break
-          }
-        }
-        node = node.parentElement
-      }
-      if (!bg) return
-      const m = bg.match(/[\d.]+/g)
-      if (!m || m.length < 3) return
-      const target = surfaceRgb()
-      if (!target) return
-      const rgb = [+m[0], +m[1], +m[2]]
-      // toleransi kecil: hanya dianggap abu-abu surface kalau warnanya memang sama
-      const match = rgb.every((v, i) => Math.abs(v - target[i]) <= 8)
-      setOverGray(match)
-    }
-
     const onScroll = () => {
       const y = window.scrollY
       const delta = y - lastY.current
-      if (Math.abs(delta) >= 4) {
-        lastY.current = y
-        setNavVisible(y < 96 ? true : delta < 0)
-      }
-      if (!rafRef.current) {
-        rafRef.current = requestAnimationFrame(() => {
-          rafRef.current = 0
-          detectBackground()
-        })
-      }
+      if (Math.abs(delta) < 4) return
+      lastY.current = y
+      setNavVisible(y < 96 ? true : delta < 0)
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const isDark = location.pathname === '/experience' || overGray
+  const isDark = location.pathname === '/experience'
 
   const logoCircleClass = isDark
     ? 'bg-white text-black'
