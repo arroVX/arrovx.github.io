@@ -746,24 +746,25 @@ export default function Home() {
         })
 
         // 1c) Dome divider — lengkung melurus seiring scroll lalu menutupi layar.
-        // Hanya desktop: morph path SVG tiap frame itu berat di mobile.
+        // Path di-update per langkah (40 step), bukan tiap frame, supaya tetap murah di mobile.
         const domePath = about.querySelector('[data-dome-path]')
         if (domePath) {
-          mm.add('(min-width: 768px)', () => {
-            gsap.fromTo(
-              domePath,
-              { attr: { d: 'M0 150 Q720 0 1440 150 L1440 150 L0 150 Z' } },
-              {
-                attr: { d: 'M0 0 Q720 0 1440 0 L1440 150 L0 150 Z' },
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: about,
-                  start: 'top bottom',
-                  end: 'top top',
-                  scrub: true,
-                },
-              },
-            )
+          const applyDome = (t: number) => {
+            const y = (150 * (1 - t)).toFixed(2)
+            domePath.setAttribute('d', `M0 ${y} Q720 0 1440 ${y} L1440 150 L0 150 Z`)
+          }
+          let lastStep = -1
+          applyDome(0)
+          ScrollTrigger.create({
+            trigger: about,
+            start: 'top bottom',
+            end: 'top top',
+            onUpdate: (self) => {
+              const step = Math.round(self.progress * 40)
+              if (step === lastStep) return
+              lastStep = step
+              applyDome(step / 40)
+            },
           })
         }
       }
