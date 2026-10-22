@@ -113,7 +113,7 @@ function HashRedirect() {
 function Navbar({ setIsCommandOpen }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [navVisible, setNavVisible] = useState(true)
-  const [overDark, setOverDark] = useState(false)
+  const [overGray, setOverGray] = useState(false)
   const lastY = useRef(0)
   const rafRef = useRef(0)
   const location = useLocation()
@@ -168,9 +168,22 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
   }, [mobileMenuOpen])
 
   // Navbar: sembunyi saat scroll ke bawah, muncul lagi dari atas saat scroll ke atas.
-  // Warna otomatis dibalik mengikuti section di bawahnya (terang/gelap).
+  // Warna dibalik HANYA kalau yang ada di bawah navbar adalah abu-abu surface.
   useEffect(() => {
     const NAV_H = 72
+
+    const surfaceRgb = () => {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue('--color-surface-dark')
+        .trim()
+      const hex = raw.replace('#', '')
+      if (hex.length !== 6) return null
+      return [
+        parseInt(hex.slice(0, 2), 16),
+        parseInt(hex.slice(2, 4), 16),
+        parseInt(hex.slice(4, 6), 16),
+      ]
+    }
 
     const detectBackground = () => {
       const el = document.elementFromPoint(Math.round(window.innerWidth / 2), NAV_H + 6)
@@ -190,9 +203,12 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
       if (!bg) return
       const m = bg.match(/[\d.]+/g)
       if (!m || m.length < 3) return
-      const lum = (0.2126 * +m[0] + 0.7152 * +m[1] + 0.0722 * +m[2]) / 255
-      // hysteresis supaya tidak berkedip saat melewati batas terang/gelap
-      setOverDark((prev) => (prev ? lum < 0.58 : lum < 0.42))
+      const target = surfaceRgb()
+      if (!target) return
+      const rgb = [+m[0], +m[1], +m[2]]
+      // toleransi kecil: hanya dianggap abu-abu surface kalau warnanya memang sama
+      const match = rgb.every((v, i) => Math.abs(v - target[i]) <= 8)
+      setOverGray(match)
     }
 
     const onScroll = () => {
@@ -218,7 +234,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
     }
   }, [])
 
-  const isDark = location.pathname === '/experience' || overDark
+  const isDark = location.pathname === '/experience' || overGray
 
   const logoCircleClass = isDark
     ? 'bg-white text-black'
@@ -236,8 +252,10 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
   return (
     <>
       <nav
-        className={`fixed inset-x-0 top-0 z-[100] border-b border-transparent bg-transparent transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
-          navVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
+        className={`fixed inset-x-0 top-0 z-[100] border-b border-transparent bg-transparent transition-transform duration-[550ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
+          navVisible
+            ? 'translate-y-0 shadow-[0_12px_30px_-14px_rgba(0,0,0,0.4)]'
+            : '-translate-y-full pointer-events-none'
         }`}
       >
         <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-center justify-between h-[72px]">
