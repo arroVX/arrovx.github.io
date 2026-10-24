@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { db } from '../firebase'
 import { collection, onSnapshot, DocumentData } from 'firebase/firestore'
 import TerminalLoading from '../components/TerminalLoading'
@@ -265,9 +265,9 @@ export default function Achievements() {
   return (
     <main className="relative z-10 pt-32 pb-20 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <Link to="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-10 group text-sm font-medium">
+        <TransitionLink to="/" className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-10 group text-sm font-medium">
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
-        </Link>
+        </TransitionLink>
 
         <div className="text-left mb-12">
           <motion.div

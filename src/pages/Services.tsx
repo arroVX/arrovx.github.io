@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { ArrowLeft, PenTool, Server, Smartphone, Code } from 'lucide-react'
 
 type Service = {
@@ -35,9 +35,9 @@ export default function Services() {
   return (
     <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 pb-20">
       <div className="max-w-5xl mx-auto px-6">
-        <Link to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
+        <TransitionLink to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
           <ArrowLeft size={14} /> Back to Home
-        </Link>
+        </TransitionLink>
         <div className="mb-12">
           <p className="mono text-xs tracking-[0.2em] uppercase text-black/40">
             Services

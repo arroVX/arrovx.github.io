@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence, type Variants } from 'framer-motion'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import {
   ArrowUpRight,
   X,
@@ -1232,9 +1233,9 @@ export default function Home() {
             <div className="h-[1px] bg-white/5 w-full" />
             <div className="py-3 flex items-center justify-between mono text-[10px] tracking-[0.18em] uppercase text-white/25">
               <span>0{experiences.length} Experiences</span>
-              <Link to="/experience" className="hidden md:inline-flex items-center gap-1.5 hover:text-white/60 transition-colors">
+              <TransitionLink to="/experience" className="hidden md:inline-flex items-center gap-1.5 hover:text-white/60 transition-colors">
                 View all — Experience page <ArrowUpRight size={12} />
-              </Link>
+              </TransitionLink>
             </div>
           </div>
         </section>
@@ -1262,9 +1263,9 @@ export default function Home() {
                   Portfolio showcase
                 </p>
               </div>
-              <Link to="/projects" className="hidden md:inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/50 hover:text-black">
+              <TransitionLink to="/projects" className="hidden md:inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/50 hover:text-black">
                 View all projects <ArrowUpRight size={14} />
-              </Link>
+              </TransitionLink>
             </div>
 
             {loadingProjects ? (
@@ -1275,9 +1276,9 @@ export default function Home() {
               <div className="py-16 text-center border border-dashed border-black/10 rounded-2xl bg-[#FCFCF9]">
                 <p className="text-black/60">
                   Belum ada project di database. Tambah via{' '}
-                  <Link to="/admin" className="underline">
+                  <TransitionLink to="/admin" className="underline">
                     Admin
-                  </Link>
+                  </TransitionLink>
                   .
                 </p>
               </div>
@@ -1363,9 +1364,9 @@ export default function Home() {
               </div>
             )}
             <div className="mt-10 md:hidden">
-              <Link to="/projects" className="w-full justify-center inline-flex items-center gap-2 mono text-xs tracking-widest uppercase border border-black/10 rounded-full py-3">
+              <TransitionLink to="/projects" className="w-full justify-center inline-flex items-center gap-2 mono text-xs tracking-widest uppercase border border-black/10 rounded-full py-3">
                 View all projects <ArrowUpRight size={14} />
-              </Link>
+              </TransitionLink>
             </div>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useParams } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { ArrowUpRight, ChevronRight } from 'lucide-react'
 import { db } from '../firebase'
 import { collection, onSnapshot, DocumentData } from 'firebase/firestore'
@@ -203,7 +204,7 @@ export default function Projects() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(idx, 5) * 0.05 }}
               >
-                <Link to={`/projects/${project.id || idx}`} className="group block">
+                <TransitionLink to={`/projects/${project.id || idx}`} className="group block">
                   <div className="relative rounded-2xl overflow-hidden bg-zinc-200 aspect-[16/10]">
                     <img
                       src={project.image}
@@ -233,7 +234,7 @@ export default function Projects() {
                       {project.longDesc || project.desc}
                     </p>
                   </div>
-                </Link>
+                </TransitionLink>
               </motion.div>
             ))}
           </div>

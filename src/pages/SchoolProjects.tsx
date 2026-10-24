@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Code2, FileText, ArrowUpRight } from 'lucide-react'
 import { db } from '../firebase'
@@ -306,7 +307,7 @@ export default function SchoolProjects() {
             {filtered.map((item, idx) => {
               const mapel = getMapelGroup(item.subject || '', item.title || '', item.desc || '')
               return (
-                <Link key={item.id || idx} to={`/school-projects/${item.id || idx}`} className="group block">
+                <TransitionLink key={item.id || idx} to={`/school-projects/${item.id || idx}`} className="group block">
                   <div className="relative rounded-2xl overflow-hidden bg-zinc-200 aspect-[16/10]">
                     {item.image ? (
                       <img
@@ -345,7 +346,7 @@ export default function SchoolProjects() {
                       {item.desc}
                     </p>
                   </div>
-                </Link>
+                </TransitionLink>
               )
             })}
           </div>

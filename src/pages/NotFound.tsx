@@ -1,14 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {
   return (
     <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 pb-20 min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-4xl mx-auto px-6 text-center">
-        <Link to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
+        <TransitionLink to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
           <ArrowLeft size={14} /> Kembali ke Beranda
-        </Link>
+        </TransitionLink>
 
         <div className="mb-12">
           <p className="mono text-[10px] tracking-[0.28em] uppercase text-black/40 mb-6">
@@ -23,18 +23,18 @@ export default function NotFound() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
+          <TransitionLink
             to="/"
             className="px-7 py-3.5 bg-black text-white rounded-full text-[15px] font-medium inline-flex items-center gap-2 hover:bg-black/85 transition-colors"
           >
             Kembali ke Beranda <ArrowLeft size={16} />
-          </Link>
-          <a
-            href="/projects"
+          </TransitionLink>
+          <TransitionLink
+            to="/projects"
             className="px-7 py-3.5 border border-black/10 rounded-full text-[15px] font-medium inline-flex items-center gap-2 hover:bg-black hover:text-white transition-colors"
           >
             Lihat Proyek
-          </a>
+          </TransitionLink>
         </div>
       </div>
     </main>

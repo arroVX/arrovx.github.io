@@ -1,15 +1,15 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { ArrowLeft, Music, Camera, Coffee, Star } from 'lucide-react'
 
 export default function About() {
   return (
     <main className="bg-[#e8e8e5] text-[#0a0a0a] pt-28 pb-20">
       <div className="max-w-4xl mx-auto px-6">
-        <Link to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
+        <TransitionLink to="/" className="inline-flex items-center gap-2 mono text-xs tracking-widest uppercase text-black/40 hover:text-black mb-10">
           <ArrowLeft size={14} /> Back to Home
-        </Link>
+        </TransitionLink>
 
         <div className="flex flex-col md:flex-row gap-8 items-center mb-16">
           <div className="w-56 h-56 rounded-2xl overflow-hidden border border-black/5 bg-white shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-1.5 shrink-0">

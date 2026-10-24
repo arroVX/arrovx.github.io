@@ -24,6 +24,8 @@ import Achievements from './pages/Achievements'
 import Admin from './pages/Admin'
 import NotFound from './pages/NotFound'
 import CommandCenter from './components/CommandCenter'
+import { PageTransitionProvider } from './components/PageTransition'
+import TransitionLink from './components/TransitionLink'
 import useLenis from './hooks/useLenis'
 
 type MenuLink = {
@@ -204,14 +206,14 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
       >
         <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 flex items-center justify-between h-[72px]">
           {/* Left */}
-          <Link to="/" className="flex items-center gap-2.5 group">
+          <TransitionLink to="/" className="flex items-center gap-2.5 group">
             <span className={`w-[34px] h-[34px] rounded-full flex items-center justify-center font-serif italic text-[16px] leading-none ${logoCircleClass}`} style={{ fontFamily: "'Instrument Serif', serif" }}>
               A
             </span>
             <span className={`mono hidden sm:inline-flex items-center text-[10px] tracking-[0.16em] font-medium border px-3.5 py-[6px] rounded-full ${logoPillClass}`}>
               ARRO / PORTFOLIO
             </span>
-          </Link>
+          </TransitionLink>
 
           {/* Right */}
           <div className="flex items-center gap-2">
@@ -281,7 +283,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                         <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
                       </a>
                     ) : (
-                      <Link
+                      <TransitionLink
                         to={item.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className="group flex items-center justify-between gap-4 py-2 md:py-3 min-h-[52px]"
@@ -290,7 +292,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
                           {item.label}
                         </span>
                         <span className="mono text-[10px] tracking-widest text-white/30 shrink-0">0{i + 1}</span>
-                      </Link>
+                      </TransitionLink>
                     )}
                   </motion.div>
                 ))}
@@ -344,6 +346,7 @@ function Navbar({ setIsCommandOpen }: NavbarProps) {
     </>
   )
 }
+
 
 function Footer() {
   const [time, setTime] = useState<string>('--:--:--')
@@ -487,7 +490,8 @@ export default function App() {
       <ScrollToTop />
       <HashRedirect />
 
-      <Navbar setIsCommandOpen={setIsCommandOpen} />
+      <PageTransitionProvider>
+        <Navbar setIsCommandOpen={setIsCommandOpen} />
 
       <motion.main
         id="main-content"
@@ -513,14 +517,15 @@ export default function App() {
         <Footer />
       </motion.main>
 
-      <AnimatePresence>
-        {isCommandOpen && (
-          <CommandCenter
-            isOpen={isCommandOpen}
-            onClose={() => setIsCommandOpen(false)}
-          />
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {isCommandOpen && (
+            <CommandCenter
+              isOpen={isCommandOpen}
+              onClose={() => setIsCommandOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+      </PageTransitionProvider>
     </Router>
   )
 }

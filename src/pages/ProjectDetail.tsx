@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ArrowLeft, ArrowRight, Github, Globe, ExternalLink } from 'lucide-react'
 import { db } from '../firebase'
@@ -148,9 +149,9 @@ export default function ProjectDetail() {
             Project not found
           </p>
           <h1 className="text-4xl font-bold tracking-tight mt-3">Tidak ketemu.</h1>
-          <Link to="/projects" className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium">
+          <TransitionLink to="/projects" className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium">
             <ArrowLeft size={16} /> Back to projects
-          </Link>
+          </TransitionLink>
         </div>
       </main>
     )
@@ -179,12 +180,12 @@ export default function ProjectDetail() {
             <p className="text-[15px] md:text-base text-black/50 leading-relaxed mt-6 max-w-2xl">
               {project.longDesc || project.desc}
             </p>
-            <Link
+            <TransitionLink
               to="/projects"
               className="mono text-[10px] tracking-[0.2em] uppercase font-medium inline-flex items-center gap-1.5 mt-6 border-b border-black/70 pb-1 hover:text-black/60 hover:border-black/30 transition-colors"
             >
               View project archive <ArrowUpRight size={13} />
-            </Link>
+            </TransitionLink>
             {(project.liveUrl || project.githubUrl || project.fileUrl) && (
               <div className="flex flex-wrap gap-2.5 mt-6">
                 {project.liveUrl && project.liveUrl !== '#' && (
@@ -234,9 +235,9 @@ export default function ProjectDetail() {
                 <p className="mono text-[10px] tracking-[0.22em] uppercase text-black/35">
                   Related experience
                 </p>
-                <Link to="/experience" className="text-[15px] font-semibold tracking-tight mt-1.5 inline-flex items-center gap-1.5 underline decoration-black/20 underline-offset-4 hover:decoration-black">
+                <TransitionLink to="/experience" className="text-[15px] font-semibold tracking-tight mt-1.5 inline-flex items-center gap-1.5 underline decoration-black/20 underline-offset-4 hover:decoration-black">
                   {project.company || project.relatedExperience || 'Experience Archive'} <ArrowUpRight size={14} />
-                </Link>
+                </TransitionLink>
               </div>
               {techs.length > 0 && (
                 <div>
@@ -347,18 +348,18 @@ export default function ProjectDetail() {
         <div className="mt-16 md:mt-20 grid grid-cols-2 gap-4 border-t border-black/10 pt-8">
           <div>
             {prev ? (
-              <Link to={`/projects/${prev.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
+              <TransitionLink to={`/projects/${prev.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                 <span className="hidden sm:inline text-black/40 font-normal">Prev — </span>{prev.title}
-              </Link>
+              </TransitionLink>
             ) : <span />}
           </div>
           <div className="text-right">
             {next && (
-              <Link to={`/projects/${next.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
+              <TransitionLink to={`/projects/${next.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
                 <span className="hidden sm:inline text-black/40 font-normal">Next — </span>{next.title}
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </TransitionLink>
             )}
           </div>
         </div>

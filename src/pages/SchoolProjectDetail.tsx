@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import TransitionLink from '../components/TransitionLink'
 import { motion } from 'framer-motion'
 import {
   ArrowUpRight,
@@ -172,9 +173,9 @@ export default function SchoolProjectDetail() {
             School project not found
           </p>
           <h1 className="text-4xl font-bold tracking-tight mt-3">Tidak ketemu.</h1>
-          <Link to="/school-projects" className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium">
+          <TransitionLink to="/school-projects" className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium">
             <ArrowLeft size={16} /> Back to school projects
-          </Link>
+          </TransitionLink>
         </div>
       </main>
     )
@@ -212,12 +213,12 @@ export default function SchoolProjectDetail() {
             <p className="text-[15px] md:text-base text-black/50 leading-relaxed mt-5 max-w-2xl">
               {item.longDesc || item.desc}
             </p>
-            <Link
+            <TransitionLink
               to="/school-projects"
               className="mono text-[10px] tracking-[0.2em] uppercase font-medium inline-flex items-center gap-1.5 mt-6 border-b border-black/70 pb-1 hover:text-black/60 hover:border-black/30 transition-colors"
             >
               View school archive <ArrowUpRight size={13} />
-            </Link>
+            </TransitionLink>
           </motion.div>
 
           <motion.aside
@@ -454,20 +455,20 @@ export default function SchoolProjectDetail() {
         <div className="mt-16 md:mt-20 grid grid-cols-2 gap-4 border-t border-black/10 pt-8">
           <div>
             {prev ? (
-              <Link to={`/school-projects/${prev.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
+              <TransitionLink to={`/school-projects/${prev.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                 <span className="hidden sm:inline text-black/40 font-normal">Prev — </span>
                 <span className="line-clamp-1">{prev.title}</span>
-              </Link>
+              </TransitionLink>
             ) : <span />}
           </div>
           <div className="text-right">
             {next && (
-              <Link to={`/school-projects/${next.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
+              <TransitionLink to={`/school-projects/${next.id}`} className="group inline-flex items-center gap-2 text-sm font-medium">
                 <span className="hidden sm:inline text-black/40 font-normal">Next — </span>
                 <span className="line-clamp-1">{next.title}</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </TransitionLink>
             )}
           </div>
         </div>
